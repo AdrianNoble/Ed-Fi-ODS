@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -19,7 +20,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
     public class Feature_Synchronizing_extensions
     {
         [TestFixture]
-        public class When_synchronizing_entity_extensions_where_modifications_have_been_made : LegacyTestFixtureBase
+        public class When_synchronizing_entity_extensions_where_modifications_have_been_made : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceEntity;
             private FakeEntityWithExtensions _suppliedTargetEntity;
@@ -88,7 +89,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
 
         [TestFixture]
-        public class When_synchronizing_entity_extensions_where_no_modifications_have_been_made : LegacyTestFixtureBase
+        public class When_synchronizing_entity_extensions_where_no_modifications_have_been_made : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceEntity;
             private FakeEntityWithExtensions _suppliedTargetEntity;
@@ -158,7 +159,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
 
         [TestFixture]
-        public class When_synchronizing_two_entity_extensions_where_only_the_first_extension_has_modifications : LegacyTestFixtureBase
+        public class When_synchronizing_two_entity_extensions_where_only_the_first_extension_has_modifications : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceEntity;
             private FakeEntityWithExtensions _suppliedTargetEntity;
@@ -241,7 +242,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
         [TestFixture]
         public class When_synchronizing_entity_extensions_where_the_source_entity_is_not_a_synchronization_source_for_some_of_the_extensions
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceEntity;
             private FakeEntityWithExtensions _suppliedTargetEntity;
@@ -327,7 +328,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
         [TestFixture]
         public class When_synchronizing_entity_extensions_where_the_source_entity_is_a_synchronization_source_for_the_extensions_but_it_is_not_present
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceEntity;
             private FakeEntityWithExtensions _suppliedTargetEntity;
@@ -376,7 +377,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
 
         [TestFixture]
-        public class When_synchronizing_entity_extensions_where_the_target_entity_does_not_have_the_extension_present : LegacyTestFixtureBase
+        public class When_synchronizing_entity_extensions_where_the_target_entity_does_not_have_the_extension_present : TestFixtureBase
         {
             // NOTE: Given current system behavior, this should never happen - the extensions factory should 
             // create the new extension entity instance in the target list during entity initialization.
@@ -468,7 +469,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
     public class Feature_Mapping_extensions
     {
         [TestFixture]
-        public class When_mapping_extensions_between_entities : LegacyTestFixtureBase
+        public class When_mapping_extensions_between_entities : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceObject;
             private FakeEntityWithExtensions _suppliedTargetObject;
@@ -587,7 +588,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
 
         [TestFixture]
-        public class When_mapping_extensions_from_an_entity_to_a_resource : LegacyTestFixtureBase
+        public class When_mapping_extensions_from_an_entity_to_a_resource : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceObject;
             private FakeEntityWithExtensions _suppliedTargetObject;
@@ -710,7 +711,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
 
         [TestFixture]
-        public class When_mapping_extensions_from_a_resource_to_an_entity : LegacyTestFixtureBase
+        public class When_mapping_extensions_from_a_resource_to_an_entity : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceObject;
             private FakeEntityWithExtensions _suppliedTargetObject;
@@ -865,7 +866,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
         [TestFixture]
         public class When_mapping_extensions_from_a_resource_to_an_entity_where_one_extension_is_not_supported_as_a_synchronization_source
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceObject;
             private FakeEntityWithExtensions _suppliedTargetObject;
@@ -970,7 +971,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
 
         [TestFixture]
-        public class When_mapping_an_entity_without_extensions_to_a_resource : LegacyTestFixtureBase
+        public class When_mapping_an_entity_without_extensions_to_a_resource : TestFixtureBase
         {
             private FakeEntityWithExtensions _suppliedSourceObject;
             private FakeEntityWithExtensions _suppliedTargetObject;

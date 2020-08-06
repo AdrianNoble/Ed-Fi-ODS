@@ -7,13 +7,14 @@ using System;
 using System.Collections.Generic;
 using EdFi.Ods.Common.Infrastructure.Filtering;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies
 {
-    public class When_generating_aliases_using_instance_state : LegacyTestFixtureBase
+    public class When_generating_aliases_using_instance_state : TestFixtureBase
     {
         // Supplied values
 
@@ -52,7 +53,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies
         }
     }
 
-    public class When_generating_aliases_using_shared_state : LegacyTestFixtureBase
+    public class When_generating_aliases_using_shared_state : TestFixtureBase
     {
         // Supplied values
 
@@ -106,7 +107,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies
         }
     }
 
-    public class When_generating_aliases_using_multiple_generators_using_shared_state : LegacyTestFixtureBase
+    public class When_generating_aliases_using_multiple_generators_using_shared_state : TestFixtureBase
     {
         private AliasGenerator _generator1;
         private AliasGenerator _generator2;

@@ -5,6 +5,9 @@
 
 using System.ComponentModel.DataAnnotations;
 using EdFi.Ods.Common.Attributes;
+using EdFi.Ods.Api.Common.Attributes;
+using EdFi.Ods.Api.Common.Validation;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -23,7 +26,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
     }
 
     [TestFixture]
-    public class When_validating_an_object_with_a_validated_child_reference_that_is_null : LegacyTestFixtureBase
+    public class When_validating_an_object_with_a_validated_child_reference_that_is_null : TestFixtureBase
     {
         private ValidationResult validationResult;
 

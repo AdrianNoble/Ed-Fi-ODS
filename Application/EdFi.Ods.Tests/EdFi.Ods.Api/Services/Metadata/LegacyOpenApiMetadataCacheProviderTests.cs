@@ -65,7 +65,7 @@
 //         }
 //
 //         [Ignore("Needs refactoring to new OpenApiMetadata Controller")]
-//         public class When_requesting_the_sdk_gen_section_from_the_cache : LegacyTestFixtureBase
+//         public class When_requesting_the_sdk_gen_section_from_the_cache : TestFixtureBase
 //         {
 //             private ICompositesMetadataProvider _compositesMetadataProvider;
 //             private IProfileResourceModelProvider _profileResourceModelProvider;
@@ -144,7 +144,7 @@
 //         }
 //
 //         [Ignore("Needs refactoring to new OpenApiMetadata Controller")]
-//         public class When_requesting_the_swagger_ui_section_from_the_cache : LegacyTestFixtureBase
+//         public class When_requesting_the_swagger_ui_section_from_the_cache : TestFixtureBase
 //         {
 //             private ICompositesMetadataProvider _compositesMetadataProvider;
 //             private IProfileResourceModelProvider _profileResourceModelProvider;
@@ -214,7 +214,7 @@
 //         }
 //
 //         [Ignore("Needs refactoring to new OpenApiMetadata Controller")]
-//         public class When_requesting_the_other_ui_section_from_the_cache : LegacyTestFixtureBase
+//         public class When_requesting_the_other_ui_section_from_the_cache : TestFixtureBase
 //         {
 //             private ICompositesMetadataProvider _compositesMetadataProvider;
 //             private IProfileResourceModelProvider _profileResourceModelProvider;
@@ -282,7 +282,7 @@
 //         }
 //
 //         [Ignore("Needs refactoring to new OpenApiMetadata Controller")]
-//         public class When_requesting_the_profiles_section_from_the_cache : LegacyTestFixtureBase
+//         public class When_requesting_the_profiles_section_from_the_cache : TestFixtureBase
 //         {
 //             private ICompositesMetadataProvider _compositesMetadataProvider;
 //             private IProfileResourceModelProvider _profileResourceModelProvider;
@@ -364,7 +364,7 @@
 //         }
 //
 //         [Ignore("Needs refactoring to new OpenApiMetadata Controller")]
-//         public class When_requesting_the_composites_section_from_the_cache : LegacyTestFixtureBase
+//         public class When_requesting_the_composites_section_from_the_cache : TestFixtureBase
 //         {
 //             private ICompositesMetadataProvider _compositesMetadataProvider;
 //             private IProfileResourceModelProvider _profileResourceModelProvider;
@@ -445,7 +445,7 @@
 //         }
 //
 //         [Ignore("Needs refactoring to new OpenApiMetadata Controller")]
-//         public class When_requesting_the_extensions_section_from_the_cache : LegacyTestFixtureBase
+//         public class When_requesting_the_extensions_section_from_the_cache : TestFixtureBase
 //         {
 //             private ICompositesMetadataProvider _compositesMetadataProvider;
 //             private IProfileResourceModelProvider _profileResourceModelProvider;
@@ -532,7 +532,7 @@
 //         }
 //
 //         [Ignore("Needs refactoring to new OpenApiMetadata Controller")]
-//         public class When_requesting_a_section_from_the_cache_for_which_no_route_was_registered : LegacyTestFixtureBase
+//         public class When_requesting_a_section_from_the_cache_for_which_no_route_was_registered : TestFixtureBase
 //         {
 //             private ICompositesMetadataProvider _compositesMetadataProvider;
 //             private IProfileResourceModelProvider _profileResourceModelProvider;

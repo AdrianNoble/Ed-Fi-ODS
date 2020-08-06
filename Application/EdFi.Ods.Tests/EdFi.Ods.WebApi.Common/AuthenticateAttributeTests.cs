@@ -24,6 +24,7 @@ using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.InversionOfControl;
 using EdFi.Ods.Common.Security;
 using EdFi.Ods.Common.Security.Claims;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -100,7 +101,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             headers.Authorization = authorization;
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_and_no_authorization_header_is_provided : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_and_no_authorization_header_is_provided : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -136,7 +137,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_and_an_invalid_authorization_scheme_is_provided : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_and_an_invalid_authorization_scheme_is_provided : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -168,7 +169,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_and_the_authorization_parameter_is_missing : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_and_the_authorization_parameter_is_missing : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -205,7 +206,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_and_the_authorization_oauth_token_is_invalid : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_and_the_authorization_oauth_token_is_invalid : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -252,7 +253,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_using_sandbox_credentials_in_a_production_deployment : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_using_sandbox_credentials_in_a_production_deployment : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -325,7 +326,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_using_production_credentials_in_a_sandbox_deployment : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_using_production_credentials_in_a_sandbox_deployment : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -398,7 +399,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_with_valid_credentials : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_with_valid_credentials : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -472,7 +473,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_with_valid_sandbox_credentials_in_a_sandbox_deployment : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_with_valid_sandbox_credentials_in_a_sandbox_deployment : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;
@@ -546,7 +547,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
             }
         }
 
-        public class When_OnAuthentication_is_invoked_for_a_request_with_valid_production_credentials_in_a_production_deployment : LegacyTestFixtureBase
+        public class When_OnAuthentication_is_invoked_for_a_request_with_valid_production_credentials_in_a_production_deployment : TestFixtureBase
         {
             private AuthenticateAttribute _filter;
             private HttpAuthenticationContext _context;

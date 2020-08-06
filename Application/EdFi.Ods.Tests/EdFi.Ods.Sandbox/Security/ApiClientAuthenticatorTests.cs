@@ -5,6 +5,7 @@
 
 using System;
 using EdFi.Ods.Common.Security;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -13,7 +14,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 {
     public class ApiClientAuthenticatorTests
     {
-        public class When_trying_to_authenticate_using_valid_key_and_valid_secret : LegacyTestFixtureBase
+        public class When_trying_to_authenticate_using_valid_key_and_valid_secret : TestFixtureBase
         {
             private ApiClientIdentity _apiClientIdentity;
             private bool _actualResult;
@@ -68,7 +69,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_trying_to_authenticate_using_invalid_key_and_valid_secret : LegacyTestFixtureBase
+        public class When_trying_to_authenticate_using_invalid_key_and_valid_secret : TestFixtureBase
         {
             private ApiClientIdentity _apiClientIdentity;
             private bool _actualResult;
@@ -106,7 +107,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_trying_to_authenticate_using_valid_key_and_invalid_secret : LegacyTestFixtureBase
+        public class When_trying_to_authenticate_using_valid_key_and_invalid_secret : TestFixtureBase
         {
             private ApiClientIdentity _apiClientIdentity;
             private bool _actualResult;

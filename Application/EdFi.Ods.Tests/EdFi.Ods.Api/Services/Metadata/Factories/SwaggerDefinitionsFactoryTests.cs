@@ -188,7 +188,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
 
         public class
             When_creating_definitions_for_list_of_profile_resources_using_a_single_instance_or_year_specific_ods :
-                LegacyTestFixtureBase
+                TestFixtureBase
         {
             private IDictionary<string, Schema> _actualDefinitions;
             private IList<SwaggerResource> _swaggerResources;

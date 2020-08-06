@@ -12,6 +12,7 @@ using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -19,7 +20,7 @@ using Test.Common;
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
 {
     public class When_building_a_resource_based_on_a_derived_entity_with_conflicting_names
-        : LegacyTestFixtureBase
+        : TestFixtureBase
     {
         private ResourceModel _actualResourceModel;
 
@@ -326,7 +327,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
     }
 
     public class When_build_a_resource_model_with_references
-        : LegacyTestFixtureBase
+        : TestFixtureBase
     {
         private ResourceModel _actualResourceModel;
 
@@ -687,7 +688,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
         }
     }
 
-    public class When_building_a_resource_model : LegacyTestFixtureBase
+    public class When_building_a_resource_model : TestFixtureBase
     {
         private IDomainModelProvider _domainModelProvider;
         private ResourceModelProvider _resourceModelProvider;
@@ -741,7 +742,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
         }
     }
 
-    public class When_building_a_resource_model_with_no_entity : LegacyTestFixtureBase
+    public class When_building_a_resource_model_with_no_entity : TestFixtureBase
     {
         private global::EdFi.Ods.Common.Models.Resource.Resource _actualResource;
 
@@ -757,7 +758,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
         }
     }
 
-    public class When_building_a_domain_model_with_an_entity_with_an_implicit_entity_embedded_object_extension : LegacyTestFixtureBase
+    public class When_building_a_domain_model_with_an_entity_with_an_implicit_entity_embedded_object_extension : TestFixtureBase
     {
         private IDomainModelProvider _domainModelProvider;
         private ResourceModelProvider _resourceModelProvider;
@@ -941,7 +942,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
         }
     }
 
-    public class When_building_a_domain_model_with_an_entity_with_an_implicit_entity_collection_extension : LegacyTestFixtureBase
+    public class When_building_a_domain_model_with_an_entity_with_an_implicit_entity_collection_extension : TestFixtureBase
     {
         private IDomainModelProvider _domainModelProvider;
         private ResourceModelProvider _resourceModelProvider;
@@ -1131,7 +1132,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
 
     public class
         When_building_a_domain_model_with_an_entity_WITHOUT_an_explicit_entity_extension_and_aggregate_extensions_consisting_of_an_extension_collection_and_embedded_object
-        : LegacyTestFixtureBase
+        : TestFixtureBase
     {
         private IDomainModelProvider _domainModelProvider;
         private ResourceModelProvider _resourceModelProvider;
@@ -1331,7 +1332,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
 
     public class
         When_building_a_domain_model_with_an_entity_WITH_an_explicit_entity_extension_and_aggregate_extensions_consisting_of_an_extension_collection_and_embedded_object
-        : LegacyTestFixtureBase
+        : TestFixtureBase
     {
         // Supplied values
 

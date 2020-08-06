@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using EdFi.Ods.Common.Infrastructure.SqlServer;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture.SqlServer;
+using EdFi.TestFixture;
 using NHibernate;
 using NHibernate.Type;
 using NUnit.Framework;
@@ -21,7 +23,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
     public class SqlServerTableValuedParameterHelperTests
     {
         public class When_setting_value_for_a_table_valued_parameter_on_a_query_to_a_list_of_Guid_ids
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
             private List<Guid> _suppliedIds;
@@ -102,7 +104,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
         }
 
         public class When_setting_value_for_a_table_valued_parameter_on_a_query_to_a_list_of_int_ids
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
             private List<int> _suppliedIds;
@@ -183,7 +185,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
         }
 
         public class When_setting_value_for_a_table_valued_parameter_on_a_query_to_a_list_of_ids_of_an_unsupported_type
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
             private List<DateTime> _suppliedIds;

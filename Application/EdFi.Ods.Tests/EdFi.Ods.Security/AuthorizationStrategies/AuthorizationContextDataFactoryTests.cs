@@ -7,6 +7,7 @@ using System;
 using EdFi.Ods.Security.AuthorizationStrategies;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Test.Common;
 
@@ -16,7 +17,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies
     public class AuthorizationContextDataFactoryTests
     {
         public class When_creating_authorization_context_WITHOUT_an_explicit_property_name_mapping
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private RelationshipsAuthorizationContextData _actualContextData;
 
@@ -72,7 +73,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies
         }
 
         public class When_creating_authorization_context_WITH_an_explicit_property_name_mapping
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private RelationshipsAuthorizationContextData _actualContextData;
 
@@ -131,7 +132,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies
         }
 
         public class When_creating_authorization_context_WITH_an_explicit_property_name_mapping_where_named_properties_do_not_exist
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private EntityWithRoleNamedProperties _suppliedEntity;
 

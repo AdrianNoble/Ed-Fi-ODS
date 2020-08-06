@@ -16,6 +16,7 @@ using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Features.OpenApiMetadata.Controllers;
 using EdFi.Ods.Features.OpenApiMetadata.Models;
 using EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Helpers;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -25,7 +26,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
     public class OpenApiMetadataControllerTests
     {
         [TestFixture]
-        public class When_calling_the_metadata_controller : LegacyTestFixtureBase
+        public class When_calling_the_metadata_controller : TestFixtureBase
         {
             private OpenApiMetadataController _controller;
             private IOpenApiMetadataCacheProvider _openApiMetadataCacheProvider;
@@ -97,7 +98,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
         }
 
         [TestFixture]
-        public class When_calling_the_metadata_controller_with_use_reverse_proxy_and_forwarded_headers : LegacyTestFixtureBase
+        public class When_calling_the_metadata_controller_with_use_reverse_proxy_and_forwarded_headers : TestFixtureBase
         {
             private const string XForwardedProto = "X-Forwarded-Proto";
             private const string XForwardedHost = "X-Forwarded-Host";
@@ -177,7 +178,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
         }
 
         [TestFixture]
-        public class When_calling_the_metadata_controller_with_use_reverse_proxy_and_no_forwarded_headers : LegacyTestFixtureBase
+        public class When_calling_the_metadata_controller_with_use_reverse_proxy_and_no_forwarded_headers : TestFixtureBase
         {
             private OpenApiMetadataController _controller;
             private IOpenApiMetadataCacheProvider _openApiMetadataCacheProvider;

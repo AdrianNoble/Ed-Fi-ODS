@@ -133,7 +133,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
             }
         }
 
-        public class When_creating_a_swagger_document_for_list_of_resources_for_a_year_specific_ods : LegacyTestFixtureBase
+        public class When_creating_a_swagger_document_for_list_of_resources_for_a_year_specific_ods : TestFixtureBase
         {
             private IOpenApiMetadataResourceStrategy _stubbedOpenApiMetadataResourceStrategy;
             private string _actualJson;

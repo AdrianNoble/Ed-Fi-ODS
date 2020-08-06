@@ -12,6 +12,7 @@ using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -99,7 +100,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
         }
 
         public class When_building_ProfileResourceModels_for_Profiles_by_name
-            : LegacyScenarioFor<ProfileResourceModelProvider>
+            : ScenarioFor<ProfileResourceModelProvider>
         {
             private ProfileResourceModel _actualProfile1ResourceModel;
             private ProfileResourceModel _actualProfile2ResourceModel;

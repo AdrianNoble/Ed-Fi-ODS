@@ -16,6 +16,7 @@ using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Database;
 using EdFi.Ods.Common.Providers;
 using EdFi.Ods.Security.Authorization;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Shouldly;
@@ -80,7 +81,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             }
         }
 
-        public class When_retrieving_education_organization_cache_data_using_different_ODS_connection_strings : LegacyTestFixtureBase
+        public class When_retrieving_education_organization_cache_data_using_different_ODS_connection_strings : TestFixtureBase
         {
             private EducationOrganizationIdentifiers actual88ResultForString1;
             private EducationOrganizationIdentifiers actual99ResultForString1;
@@ -200,7 +201,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
 
         public class
             When_getting_education_organization_values_for_non_cached_edorg_id_in_a_synchronously_loaded_cache_and_each_value_mapper_only_returns_the_requested_value
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
             private EducationOrganizationIdentifiers suppliedEdOrgValueMap;
@@ -328,7 +329,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
 
         public class
             When_getting_ed_org_identifiers_for_non_cached_ed_org_id_in_an_asynchronously_loaded_cache_and_each_value_mapper_only_returns_the_requested_value
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
             private EducationOrganizationIdentifiers suppliedEdOrgValueMap;
@@ -455,7 +456,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             }
         }
 
-        public class When_getting_values_for_nullable_property_with_default_or_non_existant_ed_org_id : LegacyTestFixtureBase
+        public class When_getting_values_for_nullable_property_with_default_or_non_existant_ed_org_id : TestFixtureBase
         {
             // Actual results
             private EducationOrganizationIdentifiers actualEdOrgIdsFromDefault;
@@ -513,7 +514,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             }
         }
 
-        public class When_getting_ed_org_values_for_non_cached_ed_org_ed_org_is_added_to_the_cache_for_subsequent_calls : LegacyTestFixtureBase
+        public class When_getting_ed_org_values_for_non_cached_ed_org_ed_org_is_added_to_the_cache_for_subsequent_calls : TestFixtureBase
         {
             //Supplied Values
             private EducationOrganizationIdentifiers suppliedEdOrgValueMap;

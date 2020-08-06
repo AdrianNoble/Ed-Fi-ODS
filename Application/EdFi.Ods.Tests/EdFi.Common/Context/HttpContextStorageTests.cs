@@ -6,6 +6,7 @@
 using System.Web;
 using EdFi.Ods.Api.Context;
 using EdFi.Ods.Common.Context;
+using FakeItEasy;
 using Http.TestLibrary;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -29,7 +30,7 @@ namespace EdFi.Ods.Tests.EdFi.Common.Context
                 var key = "testKey";
                 var expected = "Some Text";
                 simulatedContext.SimulateRequest();
-                var contextStorage = new HttpContextStorage(MockRepository.GenerateStub<IContextStorage>());
+                var contextStorage = new HttpContextStorage(A.Fake<IContextStorage>());
 
                 var testObject = new TestObject
                                  {
@@ -50,7 +51,7 @@ namespace EdFi.Ods.Tests.EdFi.Common.Context
                 var key = "testKey";
                 var expected = "Some Text";
                 simulatedContext.SimulateRequest();
-                var contextStorage = new HttpContextStorage(MockRepository.GenerateStub<IContextStorage>());
+                var contextStorage = new HttpContextStorage(A.Fake<IContextStorage>());
                 contextStorage.SetValue(key, expected);
                 var actual = HttpContext.Current.Items[key];
                 actual.ShouldBe(expected);

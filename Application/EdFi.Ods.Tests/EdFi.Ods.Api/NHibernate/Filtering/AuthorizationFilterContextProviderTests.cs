@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Security.Authorization.Filtering;
+using EdFi.TestFixture;
 using NHibernate;
 using NUnit.Framework;
 using Test.Common;
@@ -16,7 +17,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Filtering
     [TestFixture]
     public class AuthorizationFilterContextProviderTests
     {
-        public class When_setting_and_getting_authorization_filter_context : LegacyScenarioFor<AuthorizationFilterContextProvider>
+        public class When_setting_and_getting_authorization_filter_context : ScenarioFor<AuthorizationFilterContextProvider>
         {
             protected override void Arrange()
             {

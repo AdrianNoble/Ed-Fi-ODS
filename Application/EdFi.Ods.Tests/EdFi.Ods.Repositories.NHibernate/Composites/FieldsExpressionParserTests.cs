@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using EdFi.Ods.Features.Composites.Infrastructure;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -13,7 +14,7 @@ using Test.Common;
 namespace EdFi.Ods.Tests.EdFi.Ods.Repositories.NHibernate.Composites
 {
     public class When_parsing_an_expression_that_includes_one_member_with_children
-        : LegacyScenarioFor<FieldsExpressionParser>
+        : ScenarioFor<FieldsExpressionParser>
     {
         [Assert]
         public void Should_parse_expressions_that_select_top_level_properties()

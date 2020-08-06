@@ -21,6 +21,8 @@ using EdFi.Ods.Entities.NHibernate.StaffLeaveAggregate.TestExtension;
 using EdFi.Ods.Features.Container.Installers;
 using EdFi.Ods.Tests.TestExtension;
 using EdFi.Ods.Tests.TestExtension.Controllers;
+using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -31,7 +33,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Extensibility
     public class EdFiExtensionsInstallerTests
     {
         [Ignore("These tests are failing due to an exception that is not captured and need to be rewritten")]
-        public class When_installing_an_extension_assembly_with_an_Entity_extension_and_an_aggregate_extension_and_an_API_controller : LegacyTestFixtureBase
+        public class When_installing_an_extension_assembly_with_an_Entity_extension_and_an_aggregate_extension_and_an_API_controller : TestFixtureBase
         {
             private const string ExcludedExtensionSources = "ExcludedExtensionSources";
             private IWindsorContainer _container;
@@ -45,7 +47,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Extensibility
             {
                 AssemblyLoader.EnsureLoaded<Marker_EdFi_Ods_Test_TestExtension>();
 
-                _registrarStub = mocks.DynamicMock<IEntityExtensionRegistrar>();
+                _registrarStub =A.Fake<IEntityExtensionRegistrar>();
 
                 _assembliesProviderStub = Stub<IAssembliesProvider>();
 
@@ -71,7 +73,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Extensibility
                              .Instance(_domainModelProvider));
 
                 _configValueStub = Stub<IConfigValueProvider>();
-
+                
                 _configValueStub.Stub(x => x.GetValue(ExcludedExtensionSources))
                                 .Return(default(string));
 
@@ -86,7 +88,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Extensibility
             protected override void Act()
             {
                 new EdFiExtensionsInstaller(_assembliesProviderStub, _configValueProviderStub)
-                   .Install(_container, mocks.Stub<IConfigurationStore>());
+                   .Install(_container, Stub<IConfigurationStore>());
             }
 
             [Test]
@@ -144,7 +146,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Extensibility
         }
 
         [Ignore("These tests are failing due to an exception that is being thrown, and need to be rewritten")]
-        public class When_installing_an_excluded_extension_source : LegacyTestFixtureBase
+        public class When_installing_an_excluded_extension_source : TestFixtureBase
         {
             private const string ExcludedExtensionSources = "ExcludedExtensionSources";
             private IWindsorContainer _container;

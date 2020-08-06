@@ -8,6 +8,7 @@ using System.Data;
 using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -16,7 +17,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
 {
     public class AssociationValidatorTests
     {
-        public class When_AssociationValidator_detects_a_faulty_association_schema : LegacyTestFixtureBase
+        public class When_AssociationValidator_detects_a_faulty_association_schema : TestFixtureBase
         {
             private DomainModelBuilder domainModelBuilder;
 
@@ -137,7 +138,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
             }
         }
 
-        public class When_AssociationValidator_detects_a_good_association_schema : LegacyTestFixtureBase
+        public class When_AssociationValidator_detects_a_good_association_schema : TestFixtureBase
         {
             private DomainModel _domainModel;
             private DomainModelBuilder domainModelBuilder;

@@ -4,6 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using EdFi.Ods.Common.Security;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -13,7 +14,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
     public class When_calling_SecureHashAwareSecretVerifier_VerifySecret
     {
         public class Using_a_valid_secret
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private bool _actualResponse;
             private ISecretVerifier _secretVerifier;
@@ -72,7 +73,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
         }
 
         public class Usning_a_invalid_secret
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private bool _actualResponse;
             private ISecretVerifier _secretVerifier;
@@ -141,7 +142,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
         }
 
         public class When_handling_valid_non_hashed_secrets
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private bool _actualResponse;
             private ISecretVerifier _secretVerifier;
@@ -173,7 +174,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
         }
 
         public class When_handling_invalid_non_hashed_secrets
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private bool _actualResponse;
             private ISecretVerifier _secretVerifier;

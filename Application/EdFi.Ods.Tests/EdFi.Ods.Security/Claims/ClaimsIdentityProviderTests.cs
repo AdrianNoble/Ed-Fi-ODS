@@ -16,12 +16,13 @@ using FakeItEasy;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
+using EdFi.TestFixture;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Security.Claims
 {
     public class ClaimsIdentityProviderTests
     {
-        public class When_creating_a_ClaimsIdentity_with_no_API_key_context_available : LegacyTestFixtureBase
+        public class When_creating_a_ClaimsIdentity_with_no_API_key_context_available : TestFixtureBase
         {
             // Supplied values
 
@@ -49,7 +50,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Claims
             }
         }
 
-        public class When_creating_a_ClaimsIdentity_for_a_caller_with_associated_education_organizations : LegacyTestFixtureBase
+        public class When_creating_a_ClaimsIdentity_for_a_caller_with_associated_education_organizations : TestFixtureBase
         {
             // Supplied values
             private readonly List<int> _suppliedEducationOrganizationIds = new List<int>
@@ -328,7 +329,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Claims
             }
         }
 
-        public class When_creating_a_ClaimsIdentity_for_a_caller_with_empty_namespace_prefix : LegacyTestFixtureBase
+        public class When_creating_a_ClaimsIdentity_for_a_caller_with_empty_namespace_prefix : TestFixtureBase
         {
             // Supplied values
             private readonly List<int> _suppliedEducationOrganizationIds = new List<int>

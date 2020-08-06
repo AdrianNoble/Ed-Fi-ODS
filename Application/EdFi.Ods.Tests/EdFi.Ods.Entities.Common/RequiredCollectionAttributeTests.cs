@@ -8,6 +8,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using EdFi.Ods.Api.Validation;
 using EdFi.Ods.Common.Attributes;
+using EdFi.Ods.Api.Common.Attributes;
+using EdFi.Ods.Api.Common.Validation;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Test.Common;
 
@@ -23,7 +26,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
         private class CollectionTestObject { }
 
-        public class When_validating_collection_with_one_item_for_RequiredCollection : LegacyTestFixtureBase
+        public class When_validating_collection_with_one_item_for_RequiredCollection : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualResults;
 
@@ -50,7 +53,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             }
         }
 
-        public class When_validating_collection_with_more_than_one_item_for_RequiredCollection : LegacyTestFixtureBase
+        public class When_validating_collection_with_more_than_one_item_for_RequiredCollection : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualResults;
 
@@ -79,7 +82,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             }
         }
 
-        public class When_validating_null_collection_for_RequiredCollection : LegacyTestFixtureBase
+        public class When_validating_null_collection_for_RequiredCollection : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualResults;
 
@@ -109,7 +112,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             }
         }
 
-        public class When_validating_empty_collection_for_RequiredCollection : LegacyTestFixtureBase
+        public class When_validating_empty_collection_for_RequiredCollection : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualResults;
 

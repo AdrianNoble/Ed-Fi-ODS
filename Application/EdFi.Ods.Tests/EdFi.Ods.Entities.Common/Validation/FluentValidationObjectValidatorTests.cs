@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using EdFi.Ods.Common.Validation;
+using EdFi.TestFixture;
 using FluentValidation;
 using NUnit.Framework;
 using Test.Common;
@@ -89,7 +90,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Validation
         }
 
         public class When_explicitly_validating_an_object
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualValidationResults;
 
@@ -122,7 +123,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Validation
         }
 
         public class When_explicitly_validating_an_object_that_does_not_have_any_ruleset_validations_defined_for_the_object_type
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualValidationResults;
 
@@ -154,7 +155,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Validation
         }
 
         public class When_validating_an_object
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualValidationResults;
 

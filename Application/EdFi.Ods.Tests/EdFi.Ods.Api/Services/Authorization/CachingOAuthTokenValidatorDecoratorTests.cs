@@ -11,6 +11,7 @@ using EdFi.Ods.Api.Services.Authorization;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Extensions;
+using EdFi.TestFixture;
 using Rhino.Mocks;
 using Shouldly;
 using Test.Common;
@@ -19,7 +20,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
 {
     public class CachingOAuthTokenValidatorDecoratorTests
     {
-        public class When_requesting_API_client_details_for_a_valid_token_that_are_not_in_cache : LegacyTestFixtureBase
+        public class When_requesting_API_client_details_for_a_valid_token_that_are_not_in_cache : TestFixtureBase
         {
             // Supplied values
             private readonly string _suppliedApiToken = Guid.NewGuid()
@@ -109,7 +110,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
             }
         }
 
-        public class When_requesting_API_client_details_for_an_INVALID_token_that_are_not_in_cache : LegacyTestFixtureBase
+        public class When_requesting_API_client_details_for_an_INVALID_token_that_are_not_in_cache : TestFixtureBase
         {
             // Supplied values
             private readonly string _suppliedInvalidApiToken = Guid.NewGuid()
@@ -197,7 +198,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
             }
         }
 
-        public class When_requesting_API_client_details_that_are_already_in_cache : LegacyTestFixtureBase
+        public class When_requesting_API_client_details_that_are_already_in_cache : TestFixtureBase
         {
             // Supplied values
             private readonly string _suppliedApiToken = Guid.NewGuid()
@@ -222,7 +223,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
 
                 // Fake the cache to return the details
                 _cacheProvider = Stub<ICacheProvider>();
-
+               
                 _cacheProvider.Stub(
                                    x =>
                                        x.TryGetCachedObject(

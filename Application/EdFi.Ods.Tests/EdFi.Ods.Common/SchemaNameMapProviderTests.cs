@@ -9,6 +9,7 @@ using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -55,7 +56,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             return new SchemaNameMapProvider(schemaDefinitions);
         }
 
-        public class When_mapping_schema_names : LegacyTestFixtureBase
+        public class When_mapping_schema_names : TestFixtureBase
         {
             private string _suppliedPhysicalName;
             private string _suppliedLogicalName;
@@ -96,7 +97,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_mapping_schema_names_based_on_a_mixed_cased_hyphenated_logical_name : LegacyTestFixtureBase
+        public class When_mapping_schema_names_based_on_a_mixed_cased_hyphenated_logical_name : TestFixtureBase
         {
             private SchemaNameMap _actualSchemaNameMapByLogicalName;
 
@@ -123,7 +124,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_mapping_schema_names_based_on_a_lower_cased_hyphenated_logical_name : LegacyTestFixtureBase
+        public class When_mapping_schema_names_based_on_a_lower_cased_hyphenated_logical_name : TestFixtureBase
         {
             private SchemaNameMap _actualSchemaNameMapByLogicalName;
 
@@ -150,7 +151,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_mapping_schema_names_based_on_a_logical_name_containing_spaces : LegacyTestFixtureBase
+        public class When_mapping_schema_names_based_on_a_logical_name_containing_spaces : TestFixtureBase
         {
             private SchemaNameMap _actualSchemaNameMapByLogicalName;
 
@@ -177,7 +178,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_mapping_schema_names_based_on_a_logical_name_that_looks_like_a_state_abbreviation : LegacyTestFixtureBase
+        public class When_mapping_schema_names_based_on_a_logical_name_that_looks_like_a_state_abbreviation : TestFixtureBase
         {
             private SchemaNameMap _actualSchemaNameMapByLogicalName;
 
@@ -204,7 +205,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_mapping_schema_names_based_on_a_logical_name_with_a_single_character_name : LegacyTestFixtureBase
+        public class When_mapping_schema_names_based_on_a_logical_name_with_a_single_character_name : TestFixtureBase
         {
             private SchemaNameMap _actualSchemaNameMapByLogicalName;
 
@@ -231,7 +232,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_initializing_the_schema_name_map_provider_with_a_null_logical_name : LegacyTestFixtureBase
+        public class When_initializing_the_schema_name_map_provider_with_a_null_logical_name : TestFixtureBase
         {
             protected override void Act()
             {
@@ -245,7 +246,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_initializing_the_schema_name_map_provider_with_an_empty_logical_name : LegacyTestFixtureBase
+        public class When_initializing_the_schema_name_map_provider_with_an_empty_logical_name : TestFixtureBase
         {
             protected override void Act()
             {
@@ -259,7 +260,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_initializing_the_schema_name_map_provider_with_a_null_physical_name : LegacyTestFixtureBase
+        public class When_initializing_the_schema_name_map_provider_with_a_null_physical_name : TestFixtureBase
         {
             protected override void Act()
             {
@@ -273,7 +274,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
             }
         }
 
-        public class When_initializing_the_schema_name_map_provider_with_an_empty_physical_name : LegacyTestFixtureBase
+        public class When_initializing_the_schema_name_map_provider_with_an_empty_physical_name : TestFixtureBase
         {
             protected override void Act()
             {

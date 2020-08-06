@@ -10,13 +10,14 @@ using EdFi.Ods.Tests.TestExtension;
 using EdFi.Ods.Tests._Extensions;
 using NUnit.Framework;
 using Test.Common;
+using EdFi.TestFixture;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models
 {
     public class DomainModelDefinitionsJsonEmbeddedResourceProviderTests
     {
         public class When_getting_domain_model_definitions_from_valid_extension_assembly
-            : LegacyScenarioFor<
+            : ScenarioFor<
                 DomainModelDefinitionsJsonEmbeddedResourceProvider>
         {
             private DomainModelDefinitions _domainModelDefinitions;
@@ -40,7 +41,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models
         }
 
         public class When_getting_domain_model_definitions_from_non_extension_assembly
-            : LegacyScenarioFor<
+            : ScenarioFor<
                 DomainModelDefinitionsJsonEmbeddedResourceProvider>
         {
             protected override void Arrange()

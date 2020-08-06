@@ -8,6 +8,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using EdFi.Ods.Api.Attributes;
 using EdFi.Ods.Api.Validation;
+using EdFi.Ods.Api.Common.Attributes;
+using EdFi.Ods.Api.Common.Validation;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Test.Common;
 
@@ -24,7 +27,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         public string Name { get; set; }
     }
 
-    public class When_validating_empty_string_for_NoDangerousText : LegacyTestFixtureBase
+    public class When_validating_empty_string_for_NoDangerousText : TestFixtureBase
     {
         private ICollection<ValidationResult> _actualResults;
 
@@ -46,7 +49,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
     }
 
-    public class When_validating_string_with_safe_content_for_NoDangerousText : LegacyTestFixtureBase
+    public class When_validating_string_with_safe_content_for_NoDangerousText : TestFixtureBase
     {
         private ICollection<ValidationResult> _actualResults;
 
@@ -68,7 +71,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
     }
 
-    public class When_validating_string_with_dangerous_content_for_NoDangerousText : LegacyTestFixtureBase
+    public class When_validating_string_with_dangerous_content_for_NoDangerousText : TestFixtureBase
     {
         private ICollection<ValidationResult> _actualResults;
 
@@ -95,7 +98,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
     }
 
-    public class When_validating_innocuous_string_that_contains_an_embedded_Javascript_event_name_for_NoDangerousText : LegacyTestFixtureBase
+    public class When_validating_innocuous_string_that_contains_an_embedded_Javascript_event_name_for_NoDangerousText : TestFixtureBase
     {
         private ICollection<ValidationResult> _actualResults;
 
@@ -117,7 +120,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
     }
 
-    public class When_validating_a_sample_dangerous_string_from_Arizona_API_security_assessment_report_for_NoDangerousText : LegacyTestFixtureBase
+    public class When_validating_a_sample_dangerous_string_from_Arizona_API_security_assessment_report_for_NoDangerousText : TestFixtureBase
     {
         private ICollection<ValidationResult> _actualResults;
 

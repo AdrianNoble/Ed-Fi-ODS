@@ -9,6 +9,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using EdFi.Ods.Common.ChainOfResponsibility;
 using EdFi.Ods.Common.InversionOfControl;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Test.Common;
 
@@ -131,7 +132,7 @@ namespace EdFi.Ods.Tests.EdFi.Common
             }
         }
 
-        public class When_resolving_a_chain_of_responsibility_using_IoC : LegacyTestFixtureBase
+        public class When_resolving_a_chain_of_responsibility_using_IoC : TestFixtureBase
         {
             // Supplied values
 
@@ -274,7 +275,7 @@ namespace EdFi.Ods.Tests.EdFi.Common
             }
         }
 
-        public class When_resolving_a_chain_of_responsibility_with_base_class_using_IoC : LegacyTestFixtureBase
+        public class When_resolving_a_chain_of_responsibility_with_base_class_using_IoC : TestFixtureBase
         {
             // Supplied values
 
@@ -398,7 +399,7 @@ namespace EdFi.Ods.Tests.EdFi.Common
                 }
             }
 
-            public class When_using_the_legacy_ChainOfResponsiblityRegistrar_to_register_a_chain : LegacyTestFixtureBase
+            public class When_using_the_legacy_ChainOfResponsiblityRegistrar_to_register_a_chain : TestFixtureBase
             {
                 // Supplied values
 
@@ -545,7 +546,7 @@ namespace EdFi.Ods.Tests.EdFi.Common
                 }
             }
 
-            public class When_using_the_chain_of_responsibility_with_different_method_signatures : LegacyTestFixtureBase
+            public class When_using_the_chain_of_responsibility_with_different_method_signatures : TestFixtureBase
             {
                 private ISomethingWithMethodOverLoads _actualSomethingProvider;
                 private int _actualCallForFirstResult1;

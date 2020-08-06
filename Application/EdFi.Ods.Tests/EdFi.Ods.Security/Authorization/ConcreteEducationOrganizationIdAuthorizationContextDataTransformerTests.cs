@@ -11,6 +11,7 @@ using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Security.Authorization;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using Rhino.Mocks;
 using Shouldly;
 using Test.Common;
@@ -18,7 +19,7 @@ using Test.Common;
 namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
 {
     public class Feature_Converting_EducationOrganizationId_to_appropriate_concrete_type
-        : LegacyTestFixtureBase
+        : TestFixtureBase
     {
         private static IEducationOrganizationCache Given_a_cache_that_returns_all_identifiers_as_type(string educationOrganizationType)
         {
@@ -42,7 +43,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             return contextData;
         }
 
-        public class When_attempting_to_convert_a_context_with_a_null_education_organization_identifier : LegacyTestFixtureBase
+        public class When_attempting_to_convert_a_context_with_a_null_education_organization_identifier : TestFixtureBase
         {
             // Supplied values
             private RelationshipsAuthorizationContextData _suppliedContextData;
@@ -80,7 +81,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
         }
 
         public class When_converting_a_known_identifier_that_is_an_unhandled_type
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Actual values
             protected RelationshipsAuthorizationContextData _actualContextData;
@@ -105,7 +106,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
         }
 
         public class When_converting_an_unknown_identifier
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Actual values
             protected RelationshipsAuthorizationContextData _actualContextData;
@@ -131,7 +132,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
         }
 
         public abstract class When_converting_a_known_identifier_of_a_known_type
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
 

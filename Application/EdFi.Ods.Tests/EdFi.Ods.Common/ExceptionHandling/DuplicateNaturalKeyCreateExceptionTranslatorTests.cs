@@ -6,12 +6,14 @@
 using System;
 using System.Collections.Generic;
 using EdFi.Ods.Api.Common.ExceptionHandling;
+using EdFi.Ods.Api.Common.ExceptionHandling.Translators.SqlServer;
 using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Api.ExceptionHandling;
 using EdFi.Ods.Api.ExceptionHandling.Translators.SqlServer;
 using EdFi.Ods.Api.Models;
 using EdFi.Ods.Api.Providers;
+using EdFi.TestFixture;
 using NHibernate.Exceptions;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -23,7 +25,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
     public class DuplicateNaturalKeyCreateExceptionTranslatorTests
     {
         [TestFixture]
-        public class When_a_regular_exception_is_thrown : LegacyTestFixtureBase
+        public class When_a_regular_exception_is_thrown : TestFixtureBase
         {
             private Exception exception;
             private bool result;
@@ -49,7 +51,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
         [TestFixture]
         public class When_a_generic_ADO_exception_is_thrown_without_an_inner_exception
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private Exception exception;
             private bool wasHandled;
@@ -75,7 +77,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
         [TestFixture]
         public class When_a_generic_ADO_exception_is_thrown_with_an_inner_exception_with_the_wrong_message
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private Exception exception;
             private bool wasHandled;
@@ -103,7 +105,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
         }
 
         [TestFixture]
-        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_SQL_exception_primary_key_violation : LegacyTestFixtureBase
+        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_SQL_exception_primary_key_violation : TestFixtureBase
         {
             private IDatabaseMetadataProvider suppliedMetadataProvider;
             private Exception exception;
@@ -162,7 +164,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
         }
 
         [TestFixture]
-        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_SQL_exception_primary_key_violation_for_unknown_index : LegacyTestFixtureBase
+        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_SQL_exception_primary_key_violation_for_unknown_index : TestFixtureBase
         {
             private IDatabaseMetadataProvider suppliedMetadataProvider;
             private Exception exception;
@@ -203,7 +205,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
         [TestFixture]
         public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_SQL_exception_primary_key_violation_and_a_backwards_PK_name
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private IDatabaseMetadataProvider suppliedMetadataProvider;
             private Exception exception;
@@ -236,7 +238,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
         }
 
         [TestFixture]
-        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_exception_of_the_wrong_type : LegacyTestFixtureBase
+        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_exception_of_the_wrong_type : TestFixtureBase
         {
             private Exception exception;
             private bool result;

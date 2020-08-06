@@ -9,6 +9,7 @@ using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -17,7 +18,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
 {
     public class EntityValidatorTests
     {
-        public class When_building_a_domain_model_with_an_entity_using_an_undefined_schema : LegacyTestFixtureBase
+        public class When_building_a_domain_model_with_an_entity_using_an_undefined_schema : TestFixtureBase
         {
             private DomainModelBuilder _domainModelBuilder;
 
@@ -119,7 +120,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
             }
         }
 
-        public class When_building_a_domain_model_with_all_entities_using_defined_schemas : LegacyTestFixtureBase
+        public class When_building_a_domain_model_with_all_entities_using_defined_schemas : TestFixtureBase
         {
             private DomainModelBuilder _domainModelBuilder;
             private DomainModel _domainModel;

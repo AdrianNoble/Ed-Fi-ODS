@@ -28,6 +28,7 @@ using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
+using EdFi.TestFixture;
 
 // ReSharper disable InconsistentNaming
 
@@ -79,7 +80,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
         public class Using_client_credentials_grant
         {
             [TestFixture]
-            public class With_valid_key_and_secret : LegacyTestFixtureBase
+            public class With_valid_key_and_secret : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -218,7 +219,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class With_valid_key_and_secret_provided_using_Basic_Authorization_header : LegacyTestFixtureBase
+            public class With_valid_key_and_secret_provided_using_Basic_Authorization_header : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -368,7 +369,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class With_a_scope_matching_an_associated_EdOrgId : LegacyTestFixtureBase
+            public class With_a_scope_matching_an_associated_EdOrgId : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -522,7 +523,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class With_a_scope_not_matching_an_associated_EdOrgId : LegacyTestFixtureBase
+            public class With_a_scope_not_matching_an_associated_EdOrgId : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -646,7 +647,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class With_a_scope_that_is_not_a_number : LegacyTestFixtureBase
+            public class With_a_scope_that_is_not_a_number : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -771,7 +772,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
             [TestFixture]
             public class With_valid_key_and_secret_provided_using_Basic_Authorization_header_and_the_client_id_is_provided_in_the_body_as_well
-                : LegacyTestFixtureBase
+                : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -910,7 +911,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
             [TestFixture]
             public class With_valid_key_and_secret_provided_using_Basic_Authorization_header_and_the_client_secret_is_provided_in_the_body_as_well
-                : LegacyTestFixtureBase
+                : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1049,7 +1050,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
             [TestFixture]
             public class With_valid_key_and_secret_provided_using_Basic_Authorization_header_and_an_invalid_client_Id_is_provided_in_the_body_as_well
-                : LegacyTestFixtureBase
+                : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1113,7 +1114,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             [TestFixture]
             public class
                 With_valid_key_and_secret_provided_using_Basic_Authorization_header_and_an_invalid_client_secret_is_provided_in_the_body_as_well
-                : LegacyTestFixtureBase
+                : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1176,7 +1177,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class Using_digest_authorization : LegacyTestFixtureBase
+            public class Using_digest_authorization : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1248,7 +1249,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class Using_basic_authorization_with_no_value : LegacyTestFixtureBase
+            public class Using_basic_authorization_with_no_value : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1312,7 +1313,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class Using_basic_authorization_with_invalid_value : LegacyTestFixtureBase
+            public class Using_basic_authorization_with_invalid_value : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1376,7 +1377,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class Using_basic_authorization_with_unencoded_value : LegacyTestFixtureBase
+            public class Using_basic_authorization_with_unencoded_value : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1440,7 +1441,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class With_an_incorrect_client_id_and_secret : LegacyTestFixtureBase
+            public class With_an_incorrect_client_id_and_secret : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1510,7 +1511,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class With_an_empty_secret : LegacyTestFixtureBase
+            public class With_an_empty_secret : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;
@@ -1578,7 +1579,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             }
 
             [TestFixture]
-            public class With_a_missing_secret : LegacyTestFixtureBase
+            public class With_a_missing_secret : TestFixtureBase
             {
                 private IClientAppRepo _clientAppRepo;
                 private IApiClientAuthenticator _apiClientAuthenticator;

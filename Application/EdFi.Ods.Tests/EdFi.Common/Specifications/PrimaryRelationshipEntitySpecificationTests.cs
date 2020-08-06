@@ -4,6 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using EdFi.Ods.Common.Specifications;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Test.Common;
 
@@ -13,7 +14,7 @@ namespace EdFi.Ods.Tests.EdFi.Common.Specifications
     public class PrimaryRelationshipEntitySpecificationTests
     {
         [TestFixture]
-        public class When_determining_if_an_entity_or_resource_is_a_primaryRelationship : LegacyTestFixtureBase
+        public class When_determining_if_an_entity_or_resource_is_a_primaryRelationship : TestFixtureBase
         {
             [Assert]
             public void Should_return_true_for_staffEducationOrganizationAssignmentAssociation_entity()

@@ -10,6 +10,7 @@ using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Tests.TestExtension;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -19,7 +20,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Domain
     [TestFixture]
     public class DomainModelTests
     {
-        public class When_constructing_a_DomainModel_with_definitions_arguments : LegacyTestFixtureBase
+        public class When_constructing_a_DomainModel_with_definitions_arguments : TestFixtureBase
         {
             private AggregateDefinition _agDefinition;
             private EntityDefinition _entityDefinition1;
@@ -234,7 +235,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Domain
             }
         }
 
-        public class When_constructing_a_domain_model_with_aggregate_extensions_present : LegacyTestFixtureBase
+        public class When_constructing_a_domain_model_with_aggregate_extensions_present : TestFixtureBase
         {
             private IDomainModelDefinitionsProvider _extensionDefinitionsProvider;
             private DomainModel _domainModel;

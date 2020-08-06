@@ -12,6 +12,7 @@ using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Shouldly;
@@ -22,7 +23,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
     public class Feature_building_claims_authorization_segments
     {
         public class When_building_a_single_segment_for_a_claimset_that_has_no_education_organization_identifiers
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
 
@@ -49,7 +50,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
         }
 
         public class When_building_a_single_segment_for_a_Local_Education_Agency_that_does_not_exist
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
 
@@ -76,7 +77,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
         }
 
         public class When_building_a_single_segment_for_two_Local_Education_Agencies_where_one_exists_and_one_does_not
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
 
@@ -108,7 +109,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
         }
 
         public class When_building_segments_using_a_string_array_of_2_property_names
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
 
@@ -161,7 +162,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
         }
 
         public class When_building_segments_using_2_calls_with_individual_property_names
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
 
@@ -211,7 +212,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
         }
 
         public class When_building_segments_using_2_calls_with_individual_property_names_and_one_with_an_authorization_path_modifier
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
 
@@ -345,7 +346,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
 
     public class
         When_building_authorization_segments_for_LocalEducationAgency_claims_to_be_associated_with_a_StaffUniqueId_and_a_simple_value_association_rule_for_the_contextual_School_to_be_associated_with_the_StaffUniqueId
-        : LegacyTestFixtureBase
+        : TestFixtureBase
     {
         private ClaimsAuthorizationSegment _actualLocalEducationAgencySegment;
 
@@ -474,7 +475,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
 
     public class
         When_building_authorization_segments_for_LocalEducationAgency_claims_to_be_associated_with_a_Student_with_an_alternative_authorization_path
-        : LegacyTestFixtureBase
+        : TestFixtureBase
     {
         private ClaimsAuthorizationSegment _actualLocalEducationAgencySegment;
 

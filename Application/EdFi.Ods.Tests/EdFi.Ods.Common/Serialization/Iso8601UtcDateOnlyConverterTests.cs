@@ -5,6 +5,7 @@
 
 using System;
 using EdFi.Ods.Common.Serialization;
+using EdFi.TestFixture;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Shouldly;
@@ -27,7 +28,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Serialization
         [TestFixture]
         public class
             When_serializing_and_deserializing_datetime_values_from_JSON_to_nullable_or_non_nullable_datetimes :
-                LegacyTestFixtureBase
+                TestFixtureBase
         {
             private DateTimes datetimes;
             private string serializedJson;
@@ -60,7 +61,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Serialization
         }
 
         [TestFixture]
-        public class When_deserializing_null_values_to_nullable_datetime_value_from_JSON : LegacyTestFixtureBase
+        public class When_deserializing_null_values_to_nullable_datetime_value_from_JSON : TestFixtureBase
         {
             private DateTimes nullableDateTimes;
             private string serializedJsonForNullableDateTimes;
@@ -165,7 +166,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Serialization
             }
         }
 
-        public class When_deserializing_datetime_values_with_invalid_format : LegacyTestFixtureBase
+        public class When_deserializing_datetime_values_with_invalid_format : TestFixtureBase
         {
             private Exception expectedException;
             private DateTimes deserializedObject;

@@ -9,13 +9,14 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
 using EdFi.Ods.Api.Services.Filters;
 using EdFi.Ods.Common.Context;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
 {
-    public class SchoolYearContextFilterTests : LegacyTestFixtureBase
+    public class SchoolYearContextFilterTests : TestFixtureBase
     {
         protected SchoolYearContextFilter _schoolYearContextFilter;
         protected ISchoolYearContextProvider _schoolYearContextProvider;

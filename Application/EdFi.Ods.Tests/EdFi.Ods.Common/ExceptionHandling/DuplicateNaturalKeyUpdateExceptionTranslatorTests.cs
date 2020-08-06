@@ -5,9 +5,11 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using EdFi.Ods.Api.Common.ExceptionHandling.Translators;
 using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Api.ExceptionHandling.Translators;
 using EdFi.Ods.Api.Models;
+using EdFi.TestFixture;
 using NHibernate;
 using NHibernate.Exceptions;
 using NUnit.Framework;
@@ -20,7 +22,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
     {
         [TestFixture]
         [SuppressMessage("ReSharper", "InconsistentNaming")]
-        public class When_a_regular_exception_is_thrown : LegacyTestFixtureBase
+        public class When_a_regular_exception_is_thrown : TestFixtureBase
         {
             private Exception exception;
             private bool result;
@@ -46,7 +48,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
         [TestFixture]
         public class When_a_generic_ADO_exception_is_thrown_without_an_inner_exception
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private Exception exception;
             private bool wasHandled;
@@ -72,7 +74,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
         [TestFixture]
         public class When_a_generic_ADO_exception_is_thrown_with_an_inner_exception_with_the_wrong_message
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private Exception exception;
             private bool wasHandled;
@@ -100,7 +102,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
         }
 
         [TestFixture]
-        public class When_an_nHibernate_StaleObjectState_exception_is_thrown : LegacyTestFixtureBase
+        public class When_an_nHibernate_StaleObjectState_exception_is_thrown : TestFixtureBase
         {
             private Exception exception;
             private bool result;
@@ -144,7 +146,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
         }
 
         [TestFixture]
-        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_exception_of_the_wrong_type : LegacyTestFixtureBase
+        public class When_an_nHibernate_ADO_exception_is_thrown_with_an_inner_exception_of_the_wrong_type : TestFixtureBase
         {
             private Exception exception;
             private bool result;

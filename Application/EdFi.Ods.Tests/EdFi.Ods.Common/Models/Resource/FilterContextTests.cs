@@ -13,6 +13,7 @@ using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -257,7 +258,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
         }
 
         public class When_creating_a_child_filter_context_for_a_child_collection_that_includes_only_certain_members
-            : LegacyScenarioFor<FilterContext>
+            : ScenarioFor<FilterContext>
         {
             private FilterContext _actualFilterContext;
 
@@ -317,7 +318,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
         }
 
         public class When_creating_a_child_filter_context_for_a_child_embedded_object_that_includes_all_members
-            : LegacyScenarioFor<FilterContext>
+            : ScenarioFor<FilterContext>
         {
             private FilterContext _actualFilterContext;
 
@@ -378,7 +379,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
 
         [Description("Test to ensure that the Extension node (in the xml) is ignored.")]
         public class When_creating_a_child_filter_context_with_extensions
-            : LegacyScenarioFor<FilterContext>
+            : ScenarioFor<FilterContext>
         {
             private FilterContext _actualFilterContext;
 
@@ -428,7 +429,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
 
         [Description("Test to extract a filter-context for an entity extension")]
         public class When_creating_a_extension_filter_context_find_entity_extension
-            : LegacyScenarioFor<FilterContext>
+            : ScenarioFor<FilterContext>
         {
             private FilterContext _actualFilterContext;
 

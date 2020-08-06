@@ -9,6 +9,7 @@ using EdFi.Ods.Api.Common.Models.Resources.BellSchedule.EdFi;
 using EdFi.Ods.Api.Common.Models.Resources.StaffEducationOrganizationAssignmentAssociation.EdFi;
 using EdFi.Ods.Api.Common.Models.Resources.StudentSchoolAttendanceEvent.EdFi;
 using EdFi.Ods.Entities.Common.EdFi;
+using EdFi.TestFixture;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Shouldly;
@@ -19,7 +20,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Resources
     public class ResourceModelReferenceTests
     {
         public class When_initalizing_a_model_with_an_optional_reference_where_none_of_the_optional_references_properties_are_explicitly_set
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             // Supplied values
             private StaffEducationOrganizationAssignmentAssociation _model;
@@ -80,7 +81,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Resources
             }
         }
 
-        public class When_setting_and_getting_properties_for_an_optional_reference_on_a_model : LegacyTestFixtureBase
+        public class When_setting_and_getting_properties_for_an_optional_reference_on_a_model : TestFixtureBase
         {
             private StaffEducationOrganizationAssignmentAssociation _model;
             private IStaffEducationOrganizationAssignmentAssociation _modelInterface;
@@ -194,7 +195,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Resources
             }
         }
 
-        public class When_deserializing_a_model_with_a_reference_based_on_a_composite_key : LegacyTestFixtureBase
+        public class When_deserializing_a_model_with_a_reference_based_on_a_composite_key : TestFixtureBase
         {
             private StudentSchoolAttendanceEvent _model;
 
@@ -240,7 +241,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Resources
             }
         }
 
-        public class When_deserializing_a_model_with_a_reference_based_on_a_composite_key_with_backReference_presence : LegacyTestFixtureBase
+        public class When_deserializing_a_model_with_a_reference_based_on_a_composite_key_with_backReference_presence : TestFixtureBase
         {
             private BellSchedule _model;
             /* C# initializer helper

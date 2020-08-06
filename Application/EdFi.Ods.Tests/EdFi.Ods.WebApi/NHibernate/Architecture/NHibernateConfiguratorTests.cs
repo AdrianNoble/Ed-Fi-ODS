@@ -19,6 +19,7 @@ using EdFi.Ods.Common.Providers;
 using EdFi.Ods.Common.Providers.Criteria;
 using EdFi.Ods.Standard;
 using EdFi.Ods.Tests.TestExtension;
+using EdFi.TestFixture;
 using NHibernate.Cfg;
 using NHibernate.Mapping;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.NHibernate.Architecture
     internal class NHibernateConfiguratorTests
     {
         [Ignore("Broken Tests")]
-        public class When_configurating_nHibernate_extensions : LegacyTestFixtureBase
+        public class When_configurating_nHibernate_extensions : TestFixtureBase
         {
             private WindsorContainerEx _container;
             private Configuration _configuration;

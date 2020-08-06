@@ -12,6 +12,7 @@ using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NHibernate;
 using NHibernate.Metadata;
 using Rhino.Mocks;
@@ -81,7 +82,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
         public class TestEntityType { }
 
         public class When_converting_to_filters_from_an_empty_segments_collection
-            : LegacyScenarioFor<AuthorizationSegmentsToFiltersConverter>
+            : ScenarioFor<AuthorizationSegmentsToFiltersConverter>
         {
             private IReadOnlyList<AuthorizationFilterDetails> _actualFilters;
 
@@ -98,7 +99,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
         }
 
         public class When_converting_to_filters_from_a_single_segment_for_a_LocalEducationAgency_claim_to_SchoolId
-            : LegacyScenarioFor<AuthorizationSegmentsToFiltersConverter>
+            : ScenarioFor<AuthorizationSegmentsToFiltersConverter>
         {
             private IReadOnlyList<AuthorizationFilterDetails> _actualFilters;
 
@@ -159,7 +160,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
 
         public class
             When_converting_to_filters_from_a_single_segment_for_a_LocalEducationAgency_claim_to_a_StudentUSI_using_an_authorization_path_modifier
-            : LegacyScenarioFor<AuthorizationSegmentsToFiltersConverter>
+            : ScenarioFor<AuthorizationSegmentsToFiltersConverter>
         {
             private IReadOnlyList<AuthorizationFilterDetails> _actualFilters;
 
@@ -220,7 +221,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
         }
 
         public class When_converting_to_filters_from_segments_that_have_multiple_education_organization_types
-            : LegacyScenarioFor<AuthorizationSegmentsToFiltersConverter>
+            : ScenarioFor<AuthorizationSegmentsToFiltersConverter>
         {
             // Supplied values
 
@@ -277,7 +278,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
         }
 
         public class When_converting_to_filters_from_a_segment_that_have_the_same_endpoint_types
-            : LegacyScenarioFor<AuthorizationSegmentsToFiltersConverter>
+            : ScenarioFor<AuthorizationSegmentsToFiltersConverter>
         {
             private IReadOnlyList<AuthorizationFilterDetails> _actualFilters;
 
@@ -331,7 +332,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
         }
 
         public class When_converting_to_filters_from_multiple_segments_with_the_same_target_types
-            : LegacyScenarioFor<AuthorizationSegmentsToFiltersConverter>
+            : ScenarioFor<AuthorizationSegmentsToFiltersConverter>
         {
             private IReadOnlyList<AuthorizationFilterDetails> _actualFilters;
 
@@ -377,7 +378,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
         }
 
         public class When_converting_to_filters_from_a_segment_with_a_target_endpoint_that_is_a_uniqueId_for_an_entity_WITHOUT_a_uniqueId_property
-            : LegacyScenarioFor<AuthorizationSegmentsToFiltersConverter>
+            : ScenarioFor<AuthorizationSegmentsToFiltersConverter>
         {
             private IReadOnlyList<AuthorizationFilterDetails> _actualFilters;
 

@@ -58,7 +58,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Validation
         }
 
         public class When_validating_an_object_that_is_an_IDictionary_containing_objects_that_do_not_implement_IList
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private ICollection<ValidationResult> _actualResults;
 

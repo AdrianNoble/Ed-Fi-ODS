@@ -9,13 +9,14 @@ using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
 {
-    public class When_building_a_domain_model_containing_an_aggregate_using_an_undefined_schema : LegacyTestFixtureBase
+    public class When_building_a_domain_model_containing_an_aggregate_using_an_undefined_schema : TestFixtureBase
     {
         private DomainModelBuilder _domainModelBuilder;
 
@@ -96,7 +97,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
         }
     }
 
-    public class When_building_a_domain_model_containing_an_aggregate_using_a_defined_schema : LegacyTestFixtureBase
+    public class When_building_a_domain_model_containing_an_aggregate_using_a_defined_schema : TestFixtureBase
     {
         private DomainModel _domainModel;
         private DomainModelBuilder domainModelBuilder;

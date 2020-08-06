@@ -130,7 +130,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
             }
         }
 
-        public class When_Generating_Extension_Only_Document : LegacyTestFixtureBase
+        public class When_Generating_Extension_Only_Document : TestFixtureBase
         {
             private SwaggerDocumentFactory _extensionOnlySwaggerDocumentFactory;
             private SdkGenExtensionResourceStrategy _resourceStrategy;
@@ -243,7 +243,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
             }
         }
 
-        public class When_Generating_Sdk_Gen_EdFi_Only_Document : LegacyTestFixtureBase
+        public class When_Generating_Sdk_Gen_EdFi_Only_Document : TestFixtureBase
         {
             private SwaggerDefinitionsFactory _genericSwaggerDefinitionFactory;
             private SwaggerDocumentContext _swaggerDocumentContext;
@@ -328,7 +328,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
             }
         }
 
-        public class When_Generating_Sdk_Gen_All_Document : LegacyTestFixtureBase
+        public class When_Generating_Sdk_Gen_All_Document : TestFixtureBase
         {
             private SwaggerDefinitionsFactory _genericSwaggerDefinitionFactory;
             private SwaggerDocumentContext _swaggerDocumentContext;

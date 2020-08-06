@@ -25,6 +25,7 @@ using EdFi.Ods.Common.Models.Graphs;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Features.AggregateDependencies;
 using EdFi.Ods.Features.OpenApiMetadata.Controllers;
+using EdFi.TestFixture;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using QuickGraph;
@@ -36,7 +37,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
     [TestFixture]
     public class AggregateDependencyControllerTests
     {
-        public class When_getting_the_dependencies_for_loading_data : LegacyTestFixtureBase
+        public class When_getting_the_dependencies_for_loading_data : TestFixtureBase
         {
             private IResourceLoadGraphFactory _resourceLoadGraphFactory;
             private AggregateDependencyController _controller;
@@ -82,7 +83,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
             }
         }
 
-        public class When_getting_the_dependency_graph : LegacyTestFixtureBase
+        public class When_getting_the_dependency_graph : TestFixtureBase
         {
             private IResourceLoadGraphFactory _resourceLoadGraphFactory;
             private AggregateDependencyController _controller;

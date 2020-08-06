@@ -33,7 +33,7 @@ using Test.Common;
 namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
 {
     [TestFixture]
-    public class GetEntitiesByIds : LegacyTestFixtureBase
+    public class GetEntitiesByIds : TestFixtureBase
     {
         public class When_getting_entities_by_ids_and_the_aggregate_root_is_derived
             : TestFixtureBase
@@ -125,7 +125,7 @@ Actual:
             }
         }
 
-        public class When_getting_entities_by_ids_and_aggregate_extension_collections_exist_in_the_aggregate : LegacyTestFixtureBase
+        public class When_getting_entities_by_ids_and_aggregate_extension_collections_exist_in_the_aggregate : TestFixtureBase
         {
             private ISessionFactoryImplementor _sessionFactory;
             private IDomainModelProvider _domainModelProvider;
@@ -197,7 +197,7 @@ Actual:
             }
         }
 
-        public class When_getting_entities_by_ids_and_deeply_nested_child_collections_exist_in_the_aggregate : LegacyTestFixtureBase
+        public class When_getting_entities_by_ids_and_deeply_nested_child_collections_exist_in_the_aggregate : TestFixtureBase
         {
             private ISessionFactoryImplementor _sessionFactory;
             private IDomainModelProvider _domainModelProvider;

@@ -10,6 +10,8 @@ using EdFi.Ods.Api.Models.Tokens;
 using EdFi.Ods.Api.Services.Authentication.ClientCredentials;
 using EdFi.Ods.Common.Security;
 using EdFi.Ods.Sandbox.Repositories;
+using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
@@ -26,7 +28,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
         private static readonly ApiClientAuthenticatorHelper _apiClientAuthenticatorHelper = new ApiClientAuthenticatorHelper();
 
         public class When_handling_a_valid_token_request
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private readonly HttpRequestMessage _httpRequest = null;
             private TokenRequest _tokenRequest;
@@ -42,14 +44,12 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
                                     ApiClientId = 0
                                 };
 
-                _clientAppRepo = mocks.Stub<IClientAppRepo>();
+                _clientAppRepo = A.Fake<IClientAppRepo>();
 
-                _clientAppRepo.Expect(c => c.GetClient(Arg<string>.Is.Anything))
-                              .Return(apiClient);
+                A.CallTo(() => _clientAppRepo.GetClient(A<string>._)).Returns(apiClient);
 
-                _clientAppRepo.Expect(c => c.AddClientAccessToken(0))
-                              .Return(new ClientAccessToken());
-
+                A.CallTo(() => _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._)).Returns(new ClientAccessToken());
+               
                 _tokenRequest = new TokenRequest
                                 {
                                     Client_id = ClientId, Client_secret = ClientSecret
@@ -80,7 +80,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             [Assert]
             public void Should_call_get_client_from_the_database_once()
             {
-                _clientAppRepo.AssertWasCalled(
+               _clientAppRepo.AssertWasCalled(
                     x => x.GetClient(Arg<string>.Is.Equal(ClientId)),
                     x => x.Repeat.Once());
             }
@@ -103,7 +103,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
         }
 
         public class When_handling_an_invalid_token_request
-            : LegacyTestFixtureBase
+            : TestFixtureBase
         {
             private readonly HttpRequestMessage _httpRequest = null;
             private IClientAppRepo _clientAppRepo;
@@ -114,14 +114,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
 
             protected override void Arrange()
             {
-                _clientAppRepo = MockRepository.GenerateStub<IClientAppRepo>();
+                _clientAppRepo = A.Fake<IClientAppRepo>();
 
                 _tokenRequest = new TokenRequest
                                 {
                                     Client_id = ClientId, Client_secret = ClientSecret
                                 };
 
-                _apiClientAuthenticator = MockRepository.GenerateStub<IApiClientAuthenticator>();
+                _apiClientAuthenticator = A.Fake<IApiClientAuthenticator>();
                 ApiClientIdentity apiClientIdentity;
 
                 _apiClientAuthenticator

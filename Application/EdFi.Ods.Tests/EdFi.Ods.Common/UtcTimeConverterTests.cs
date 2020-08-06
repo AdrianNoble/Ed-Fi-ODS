@@ -5,6 +5,7 @@
 
 using System;
 using EdFi.Ods.Common;
+using EdFi.TestFixture;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Shouldly;
@@ -57,7 +58,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
         }
 
         [TestFixture]
-        public class When_serializing_and_deserializing_time_values_from_JSON_to_nullable_or_non_nullable_times : LegacyTestFixtureBase
+        public class When_serializing_and_deserializing_time_values_from_JSON_to_nullable_or_non_nullable_times : TestFixtureBase
         {
             private Times times;
             private NullableTimes nullableTimes;
@@ -176,7 +177,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
         }
 
         [TestFixture]
-        public class When_deserializing_null_values_to_nullable_time_value_from_JSON : LegacyTestFixtureBase
+        public class When_deserializing_null_values_to_nullable_time_value_from_JSON : TestFixtureBase
         {
             private NullableTimes nullableTimes;
             private string serializedJsonForNullableTimes;

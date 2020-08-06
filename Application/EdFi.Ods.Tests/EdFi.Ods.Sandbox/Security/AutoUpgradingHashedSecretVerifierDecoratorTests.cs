@@ -11,6 +11,7 @@ using EdFi.Ods.Common.Security.Helpers;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Test.Common;
+using EdFi.TestFixture;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 {
@@ -22,7 +23,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
         protected const string Algorithm = "MySuperSecretAlgorithm";
         protected const string Key = "MyKey";
 
-        public class When_using_valid_secret_that_is_hashed_with_current_config : LegacyTestFixtureBase
+        public class When_using_valid_secret_that_is_hashed_with_current_config : TestFixtureBase
         {
             private IApiClientSecretProvider _apiClientSecretProvider;
             private AutoUpgradingHashedSecretVerifierDecorator _autoUpgradingHashedSecretVerifierDecorator;
@@ -93,7 +94,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_using_invalid_secret : LegacyTestFixtureBase
+        public class When_using_invalid_secret : TestFixtureBase
         {
             private IApiClientSecretProvider _apiClientSecretProvider;
             private AutoUpgradingHashedSecretVerifierDecorator _autoUpgradingHashedSecretVerifierDecorator;
@@ -168,7 +169,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_using_valid_secret_that_is_not_hashed : LegacyTestFixtureBase
+        public class When_using_valid_secret_that_is_not_hashed : TestFixtureBase
         {
             private IApiClientSecretProvider _apiClientSecretProvider;
             private AutoUpgradingHashedSecretVerifierDecorator _autoUpgradingHashedSecretVerifierDecorator;
@@ -231,7 +232,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_using_valid_secret_that_is_hashed_with_different_iterations : LegacyTestFixtureBase
+        public class When_using_valid_secret_that_is_hashed_with_different_iterations : TestFixtureBase
         {
             private IApiClientSecretProvider _apiClientSecretProvider;
             private AutoUpgradingHashedSecretVerifierDecorator _autoUpgradingHashedSecretVerifierDecorator;
@@ -306,7 +307,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_using_valid_secret_that_is_hashed_with_different_hash_algorithm : LegacyTestFixtureBase
+        public class When_using_valid_secret_that_is_hashed_with_different_hash_algorithm : TestFixtureBase
         {
             private IApiClientSecretProvider _apiClientSecretProvider;
             private AutoUpgradingHashedSecretVerifierDecorator _autoUpgradingHashedSecretVerifierDecorator;
@@ -381,7 +382,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_using_valid_secret_that_is_hashed_with_different_salt_size : LegacyTestFixtureBase
+        public class When_using_valid_secret_that_is_hashed_with_different_salt_size : TestFixtureBase
         {
             private IApiClientSecretProvider _apiClientSecretProvider;
             private AutoUpgradingHashedSecretVerifierDecorator _autoUpgradingHashedSecretVerifierDecorator;
@@ -456,7 +457,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             }
         }
 
-        public class When_upgrading_a_valid_secret_that_was_hashed_with_GetHashCode_that_is_valid : LegacyTestFixtureBase
+        public class When_upgrading_a_valid_secret_that_was_hashed_with_GetHashCode_that_is_valid : TestFixtureBase
         {
             private IApiClientSecretProvider _apiClientSecretProvider;
             private AutoUpgradingHashedSecretVerifierDecorator _autoUpgradingHashedSecretVerifierDecorator;
