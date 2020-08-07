@@ -26,9 +26,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 using EdFi.TestFixture;
+using FakeItEasy;
 
 // ReSharper disable InconsistentNaming
 
@@ -103,19 +103,19 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                     _suppliedAccessToken = Guid.NewGuid();
                     _suppliedTTL = TimeSpan.FromMinutes(30);
 
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-
+                    _clientAppRepo = A.Fake<IClientAppRepo>();
+                    
                     // Simulate a successful lookup of the client id/secret
-                    _clientAppRepo.Expect(x => x.GetClient(Arg<string>.Is.Anything))
-                                  .Return(_suppliedClient);
+                    A.CallTo(()=> _clientAppRepo.GetClient(A<string>._)).Returns(_suppliedClient);
 
-                    _clientAppRepo.Expect(x => x.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything))
-                                  .Return(
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(A<int>._,A<string>._))
+                        .Returns(
                                        new ClientAccessToken(_suppliedTTL)
                                        {
-                                           ApiClient = _suppliedClient, Id = _suppliedAccessToken
+                                           ApiClient = _suppliedClient,
+                                           Id = _suppliedAccessToken
                                        });
-
+                   
                     _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);

@@ -11,10 +11,11 @@ using System.Linq;
 using EdFi.Ods.Common.Infrastructure.SqlServer;
 using EdFi.Ods.Api.Common.Infrastructure.Architecture.SqlServer;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NHibernate;
 using NHibernate.Type;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Shouldly;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
@@ -34,7 +35,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
 
             protected override void Arrange()
             {
-                _query = Stub<IQuery>();
+                _query = A.Fake<IQuery>();
 
                 _suppliedIds = new List<Guid>
                                {
@@ -54,38 +55,28 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_call_the_SetParameter_method_exactly_once()
             {
-                _query.AssertWasCalled(
-                    x => x.SetParameter(null, null, null),
-                    options => options.IgnoreArguments()
-                                      .Repeat.Once());
+                A.CallTo(() => _query.SetParameter(null, null, null)).MustHaveHappenedOnceExactly();
             }
 
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_the_supplied_name()
             {
-                _query.AssertWasCalled(
-                    x => x.SetParameter(
-                        Arg<string>.Is.Equal(_suppliedParameterName),
-                        Arg<IEnumerable>.Is.Anything,
-                        Arg<IType>.Is.Anything));
+                A.CallTo(() => _query.SetParameter(_suppliedParameterName, A<IEnumerable>._, A<IType>._)).MustHaveHappened();
             }
 
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_a_DataTable_containing_the_supplied_ids()
             {
-                _query.AssertWasCalled(
-                    x =>
-                        x.SetParameter(
-                            Arg<string>.Is.Anything,
-                            Arg<object>.Matches(arg => IdsMatch(arg)),
-                            Arg<IType>.Is.Anything));
+                A.CallTo(() => _query.SetParameter(A<string>._,
+                               A<object>.That.Matches(arg => IdsMatch(arg)),
+                               A<IType>._)).MustHaveHappened();
             }
 
             private bool IdsMatch(object arg)
             {
-                var actualIds = ((DataTable) arg).Rows
+                var actualIds = ((DataTable)arg).Rows
                                                  .Cast<DataRow>()
-                                                 .Select(row => (Guid) row["Id"]);
+                                                 .Select(row => (Guid)row["Id"]);
 
                 Assert.That(actualIds, Is.EquivalentTo(_suppliedIds));
 
@@ -95,11 +86,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_an_IType_that_is_an_instance_of_the_custom_SqlStructured()
             {
-                _query.AssertWasCalled(
-                    x => x.SetParameter(
-                        Arg<string>.Is.Anything,
-                        Arg<IEnumerable>.Is.Anything,
-                        Arg<IType>.Matches(arg => arg.GetType() == typeof(SqlServerStructured<Guid>))));
+                A.CallTo(() => _query.SetParameter(A<string>._,
+                              A<object>._,
+                              A<IType>.That.Matches(arg => arg.GetType() == typeof(SqlServerStructured<Guid>))))
+                              .MustHaveHappened();
             }
         }
 
@@ -135,38 +125,32 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_call_the_SetParameter_method_exactly_once()
             {
-                _query.AssertWasCalled(
-                    x => x.SetParameter(null, null, null),
-                    options => options.IgnoreArguments()
-                                      .Repeat.Once());
+                A.CallTo(() => _query.SetParameter(null, null, null))
+                               .WithAnyArguments()
+                               .MustHaveHappenedOnceExactly();
             }
 
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_the_supplied_name()
             {
-                _query.AssertWasCalled(
-                    x => x.SetParameter(
-                        Arg<string>.Is.Equal(_suppliedParameterName),
-                        Arg<IEnumerable>.Is.Anything,
-                        Arg<IType>.Is.Anything));
+                A.CallTo(() => _query.SetParameter(A<string>.That.IsEqualTo(_suppliedParameterName),
+                               A<IEnumerable>._,
+                               A<IType>._)).MustHaveHappened();
             }
 
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_a_DataTable_containing_the_supplied_ids()
             {
-                _query.AssertWasCalled(
-                    x =>
-                        x.SetParameter(
-                            Arg<string>.Is.Anything,
-                            Arg<object>.Matches(arg => IdsMatch(arg)),
-                            Arg<IType>.Is.Anything));
+                A.CallTo(() => _query.SetParameter(A<string>._,
+                               A<object>.That.Matches(arg => IdsMatch(arg)),
+                               A<IType>._)).MustHaveHappened();
             }
 
             private bool IdsMatch(object arg)
             {
-                var actualIds = ((DataTable) arg).Rows
+                var actualIds = ((DataTable)arg).Rows
                                                  .Cast<DataRow>()
-                                                 .Select(row => (int) row["Id"]);
+                                                 .Select(row => (int)row["Id"]);
 
                 Assert.That(actualIds, Is.EquivalentTo(_suppliedIds));
 
@@ -176,11 +160,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_an_IType_that_is_an_instance_of_the_custom_SqlStructured()
             {
-                _query.AssertWasCalled(
-                    x => x.SetParameter(
-                        Arg<string>.Is.Anything,
-                        Arg<IEnumerable>.Is.Anything,
-                        Arg<IType>.Matches(arg => arg.GetType() == typeof(SqlServerStructured<int>))));
+                A.CallTo(() => _query.SetParameter(A<string>._,
+                               A<IEnumerable>._,
+                               A<IType>.That.Matches(arg => arg.GetType() == typeof(SqlServerStructured<int>)))).MustHaveHappened(); ;
             }
         }
 
@@ -216,15 +198,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_not_call_the_SetParameter_method()
             {
-                _query.AssertWasNotCalled(
-                    x => x.SetParameter(null, null, null),
-                    options => options.IgnoreArguments());
+                A.CallTo(() => _query.SetParameter(null, null, null))
+                               .WithAnyArguments().MustHaveHappened();
             }
 
             [Assert]
             public void Should_pass_the_call_through_to_the_SetParameterList_method()
             {
-                _query.AssertWasCalled(x => x.SetParameterList(_suppliedParameterName, _suppliedIds));
+                A.CallTo(() => _query.SetParameter(_suppliedParameterName, _suppliedIds)).MustHaveHappened();
             }
         }
     }

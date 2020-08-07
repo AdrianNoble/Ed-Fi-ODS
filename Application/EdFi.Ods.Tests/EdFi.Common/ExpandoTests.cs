@@ -6,8 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Web.Script.Serialization;
 using EdFi.Ods.Common.Expando;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace EdFi.Ods.Tests.EdFi.Common
@@ -114,7 +114,7 @@ namespace EdFi.Ods.Tests.EdFi.Common
             // You can access dynamic properties either as dynamic or via IDictionary
             Assert.AreEqual(exd.Company, ex["Company"] as string, "Company doesn't match");
             Assert.AreEqual(exd.Address, ex["Address"] as string, "Address doesn't match");
-            
+
             // Accessing dynamic properties is case insensitive
             Assert.AreEqual(exd.COMPANY, ex["company"] as string, "Company doesn't match");
             Assert.AreEqual(exd.address, ex["ADDRESS"] as string, "Address doesn't match");
@@ -169,8 +169,7 @@ namespace EdFi.Ods.Tests.EdFi.Common
             ex.Count = 10;
             ex.Completed = DateTime.Now.AddHours(2);
 
-            JavaScriptSerializer ser = new JavaScriptSerializer();
-            string json = ser.Serialize(ex);
+            string json = JsonConvert.SerializeObject(ex);
 
             Console.WriteLine(json);
         }
@@ -216,14 +215,13 @@ namespace EdFi.Ods.Tests.EdFi.Common
             exd.Count = 10;
             exd.Completed = DateTime.Now.AddHours(2);
 
-            JavaScriptSerializer ser = new JavaScriptSerializer();
             Console.WriteLine("*** Serialized Native object:");
-            Console.WriteLine(ser.Serialize(ex));
+            Console.WriteLine(JsonConvert.SerializeObject(ex));
             Console.WriteLine();
 
             Console.WriteLine();
             Console.WriteLine("*** Serialized Dynamic object:");
-            Console.WriteLine(ser.Serialize(exd));
+            Console.WriteLine(JsonConvert.SerializeObject(exd));
             Console.WriteLine();
         }
 
