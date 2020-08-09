@@ -11,8 +11,8 @@ using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Tests.TestExtension;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Domain
@@ -85,9 +85,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Domain
                     false);
 
                 _domainModelDefinitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-                _domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                               .Return(
+                 
+                A.CallTo(()=> _domainModelDefinitionsProvider.GetDomainModelDefinitions())
+                                                   .Returns(
                                                     new DomainModelDefinitions(
                                                         _schemaDefinition,
                                                         new[]
@@ -102,7 +102,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Domain
                                                         {
                                                             _associateDefinition
                                                         }));
-            }
+
+           }
 
             protected override void Act()
             {

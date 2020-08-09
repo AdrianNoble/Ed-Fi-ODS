@@ -9,9 +9,8 @@ using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
 {
@@ -114,10 +113,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
                     entityDefinitions,
                     associationDefinitions);
 
-                var domainModelDefinitionsProvider = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
-
-                domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                              .Return(modelDefinitions);
+                var domainModelDefinitionsProvider = A.Fake<IDomainModelDefinitionsProvider>();
+                A.CallTo(()=> domainModelDefinitionsProvider.GetDomainModelDefinitions())
+                                              .Returns(modelDefinitions);
 
                 DomainModelBuilder builder = new DomainModelBuilder();
 
@@ -234,10 +232,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Validation
                     entityDefinitions,
                     associationDefinitions);
 
-                var domainModelDefinitionsProvider = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
-
-                domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                              .Return(modelDefinitions);
+                var domainModelDefinitionsProvider = A.Fake<IDomainModelDefinitionsProvider>();
+                A.CallTo(()=> domainModelDefinitionsProvider.GetDomainModelDefinitions())
+                                              .Returns(modelDefinitions);
 
                 DomainModelBuilder builder = new DomainModelBuilder();
 

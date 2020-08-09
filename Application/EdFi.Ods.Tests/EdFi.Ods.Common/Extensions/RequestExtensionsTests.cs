@@ -163,7 +163,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Extensions
             protected override void Arrange()
             {
                 _request = new HttpRequestMessage();
-
+                
                 _request.SetRequestContext(
                     new HttpRequestContext
                     {

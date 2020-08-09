@@ -4,16 +4,16 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using EdFi.Ods.Common;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Shouldly;
-using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.CommonUtils.Enumerations
 {
     public class EnumerationTests
     {
         [TestFixture]
-        public class When_enumeration_has_values : TestBase
+        public class When_enumeration_has_values : TestFixtureBase
         {
             private TestEnumeration[] _results;
 
@@ -72,7 +72,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.CommonUtils.Enumerations
         }
 
         [TestFixture]
-        public class When_enumeration_has_value_with_null_id : TestBase
+        public class When_enumeration_has_value_with_null_id : TestFixtureBase
         {
             private TestEnumeration[] _results;
 
@@ -140,7 +140,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.CommonUtils.Enumerations
         }
 
         [TestFixture]
-        public class When_ids_are_equal : TestBase
+        public class When_ids_are_equal : TestFixtureBase
         {
             private class EqualsEnumeration : LegacyEnumeration<EqualsEnumeration, int>
             {
@@ -186,7 +186,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.CommonUtils.Enumerations
         }
 
         [TestFixture]
-        public class When_ids_are_not_equal : TestBase
+        public class When_ids_are_not_equal : TestFixtureBase
         {
             private class EqualsEnumeration : LegacyEnumeration<EqualsEnumeration, int>
             {

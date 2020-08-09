@@ -14,8 +14,8 @@ using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 using Resource_Resource = EdFi.Ods.Common.Models.Resource.Resource;
 
@@ -139,10 +139,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 entityDefinitions,
                 associationDefinitions);
 
-            var domainModelDefinitionsProvider = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
-
-            domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                          .Return(modelDefinitions);
+            var domainModelDefinitionsProvider = A.Fake<IDomainModelDefinitionsProvider>();
+            A.CallTo(()=> domainModelDefinitionsProvider.GetDomainModelDefinitions())
+                                          .Returns(modelDefinitions);
 
             return domainModelDefinitionsProvider;
         }
@@ -278,15 +277,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 Given((ResourceClassBase) GetTestResourceForWithAnExtension());
 
                 Given<IMemberFilter>();
+                var resourcemember = A.Fake<IResourceMembersFilterProvider>();
+                A.CallTo(()=> resourcemember.GetMemberFilter(A<ResourceClassBase>._,A<XElement>._)).Returns(The<IMemberFilter>());
 
-                Given<IResourceMembersFilterProvider>()
-                   .Stub(
-                        x =>
-                            x.GetMemberFilter(
-                                Arg<ResourceClassBase>.Is.Anything,
-                                Arg<XElement>.Is.Anything
-                            ))
-                   .Return(The<IMemberFilter>());
             }
 
             protected override void Act()

@@ -13,8 +13,8 @@ using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 using Resource_Resource = EdFi.Ods.Common.Models.Resource.Resource;
 
@@ -229,10 +229,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 entityDefinitions,
                 associationDefinitions);
 
-            var domainModelDefinitionsProvider = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
+            var domainModelDefinitionsProvider = A.Fake<IDomainModelDefinitionsProvider>();
 
-            domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                          .Return(modelDefinitions);
+            A.CallTo(()=> domainModelDefinitionsProvider.GetDomainModelDefinitions())
+                                                        .Returns(modelDefinitions);
 
             return domainModelDefinitionsProvider;
         }
@@ -316,11 +316,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 entityDefinitions2,
                 associationDefinitions2);
 
-            var domainModelDefinitionsProvider = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
 
-            domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                          .Return(modelDefinitions2);
-
+            var domainModelDefinitionsProvider = A.Fake<IDomainModelDefinitionsProvider>();
+            A.CallTo(()=> domainModelDefinitionsProvider.GetDomainModelDefinitions()).Returns(modelDefinitions2);
+         
             return domainModelDefinitionsProvider;
         }
 

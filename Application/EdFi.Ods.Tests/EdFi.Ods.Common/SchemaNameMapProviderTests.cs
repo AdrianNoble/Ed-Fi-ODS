@@ -10,8 +10,8 @@ using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Tests._Extensions;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common
@@ -23,10 +23,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
 
         private static SchemaNameMapProvider GetSchemaNameMapProvider(string logicalSchemaName, string physicalSchemaName)
         {
-            var domainModelDefinitionsProvider = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
-
-            domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                          .Return(
+            var domainModelDefinitionsProvider = A.Fake<IDomainModelDefinitionsProvider>();
+            A.CallTo(()=> domainModelDefinitionsProvider.GetDomainModelDefinitions())
+                                          .Returns(
                                                new DomainModelDefinitions(
                                                    new SchemaDefinition(logicalSchemaName, physicalSchemaName),
                                                    new AggregateDefinition[0],
@@ -34,10 +33,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common
                                                    new AssociationDefinition[0]));
 
             // Add a second schema to demonstrate correct matching with multiple schema entries
-            var domainModelDefinitionsProvider2 = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
-
-            domainModelDefinitionsProvider2.Stub(x => x.GetDomainModelDefinitions())
-                                           .Return(
+            var domainModelDefinitionsProvider2 = A.Fake<IDomainModelDefinitionsProvider>();
+            A.CallTo(()=> domainModelDefinitionsProvider2.GetDomainModelDefinitions())
+                                           .Returns(
                                                 new DomainModelDefinitions(
                                                     new SchemaDefinition("AnotherSchema", "another"),
                                                     new AggregateDefinition[0],

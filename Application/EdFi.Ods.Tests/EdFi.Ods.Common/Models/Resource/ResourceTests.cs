@@ -13,8 +13,8 @@ using EdFi.Ods.Common.Models.Definitions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
@@ -698,9 +698,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
         protected override void Arrange()
         {
             var definitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-            definitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                               .Return(
+            A.CallTo(()=> definitionsProvider.GetDomainModelDefinitions())
+                               .Returns(
                                     new DomainModelDefinitions(
                                         new SchemaDefinition("schema1", "schema1"),
                                         new[]
@@ -778,8 +777,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
             //
             var definitionsProvider = Stub<IDomainModelDefinitionsProvider>();
 
-            definitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                               .Return(
+            A.CallTo(() => definitionsProvider.GetDomainModelDefinitions())
+                               .Returns(
                                     new DomainModelDefinitions(
                                         new SchemaDefinition(_edfiLogicalName, _edfiSchema),
                                         new[]
@@ -809,8 +808,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
 
             var extensionDefinitionsProvider = Stub<IDomainModelDefinitionsProvider>();
 
-            extensionDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                        .Return(
+            A.CallTo(() => extensionDefinitionsProvider.GetDomainModelDefinitions())
+                                        .Returns(
                                              new DomainModelDefinitions(
                                                  new SchemaDefinition("schemaX", "schemaX"),
                                                  new AggregateDefinition[]
@@ -959,9 +958,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
             //             (Entity1) --⪪ (ExtensionEntity1)
             //
             var definitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-            definitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                               .Return(
+            A.CallTo(()=> definitionsProvider.GetDomainModelDefinitions())
+                                .Returns(
                                     new DomainModelDefinitions(
                                         new SchemaDefinition(_edfiLogicalName, _edfiSchema),
                                         new[]
@@ -982,9 +980,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                                         { }));
 
             var extensionDefinitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-            extensionDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                        .Return(
+            A.CallTo(()=> extensionDefinitionsProvider.GetDomainModelDefinitions())
+                                           .Returns(
                                              new DomainModelDefinitions(
                                                  new SchemaDefinition("schemaX", "schemaX"),
                                                  new AggregateDefinition[0]
@@ -1151,9 +1148,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
             //                 +---- (ExtensionEmbeddedObject1)
             //
             var definitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-            definitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                               .Return(
+            A.CallTo(()=> definitionsProvider.GetDomainModelDefinitions())
+                            .Returns(
                                     new DomainModelDefinitions(
                                         new SchemaDefinition(_edfiLogicalName, _edfiSchema),
                                         new[]
@@ -1174,9 +1170,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                                         { }));
 
             var extensionDefinitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-            extensionDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                        .Return(
+            A.CallTo(()=> extensionDefinitionsProvider.GetDomainModelDefinitions())
+                                        .Returns(
                                              new DomainModelDefinitions(
                                                  new SchemaDefinition("schemaX", "schemaX"),
                                                  new AggregateDefinition[0]
@@ -1359,9 +1354,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
             //       (Entity1Extension)
             //
             var definitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-            definitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                               .Return(
+            A.CallTo(()=> definitionsProvider.GetDomainModelDefinitions())
+                               .Returns(
                                     new DomainModelDefinitions(
                                         new SchemaDefinition(_edfiLogicalName, _edfiSchema),
                                         new[]
@@ -1382,9 +1376,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                                         { }));
 
             var extensionDefinitionsProvider = Stub<IDomainModelDefinitionsProvider>();
-
-            extensionDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                        .Return(
+            A.CallTo(()=> extensionDefinitionsProvider.GetDomainModelDefinitions())
+                                        .Returns(
                                              new DomainModelDefinitions(
                                                  new SchemaDefinition("schemaX", "schemaX"),
                                                  new AggregateDefinition[0]

@@ -247,6 +247,135 @@ namespace EdFi.TestFixture
         }
 
         [OneTimeSetUp]
+        public void RunOnceBeforeAny()
+        {
+            // Scenario initialization
+            BeforeScenario();
+
+            // Allow fixture to arrange the state for the test
+            Arrange();
+
+            // Get a list of uninitialized stubs
+            var uninitializedArgDisplayNames = _constructorArgs
+                .Select(
+                    (x, i) => new
+                    {
+                        Arg = x,
+                        Index = i
+                    })
+                .Where(x => !x.Arg.IsValueCreated)
+                .Select(x => _constructorArgDisplayNames[x.Index])
+                .ToList();
+
+            var uninitializedPropertyDisplayNames = _propertyArgDisplayNames.ToList();
+
+            var uninitializedDependencyNames = uninitializedArgDisplayNames.Concat(uninitializedPropertyDisplayNames);
+
+            // Prepare the test subject
+            TestSubject = (TSystemUnderTest)_constructor.Invoke(
+                (from a in _constructorArgs
+                 select a.Value)
+                .ToArray());
+
+            // Inject property dependencies
+            var propertyDependencies = GetPropertyDependencies();
+
+            foreach (var propertyDependency in propertyDependencies)
+            {
+                var setter = propertyDependency.GetSetMethod();
+
+                if (setter == null)
+                {
+                    throw new Exception(
+                        string.Format(
+                            "Unable to find property setter for '{0}' on type '{1}'.",
+                            propertyDependency.Name,
+                            propertyDependency.DeclaringType.Name));
+                }
+
+                object dependencyValue = _mocksByType[propertyDependency.PropertyType]
+                    .Value;
+
+                setter.Invoke(
+                    TestSubject,
+                    new[] { dependencyValue });
+            }
+
+            // Execute the behavior
+            try
+            {
+                // Execute the behavior
+                Act();
+            }
+            catch (Exception ex)
+            {
+                ActualException = ex;
+            }
+            finally
+            {
+                if (uninitializedDependencyNames.Any())
+                {
+                    Console.WriteLine(
+                        "The following dependencies were only stubbed for the test:\r\n    {0}\r\n",
+                        string.Join("\r\n    ", uninitializedDependencyNames));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the object whose behavior is the subject of the specification.
+        /// </summary>
+        public TSystemUnderTest TestSubject { get; private set; }
+
+        protected virtual void BeforeScenario() { }
+
+        protected TDependency The<TDependency>()
+           where TDependency : class
+        {
+            Lazy<object> dependency;
+
+            if (!_mocksByType.TryGetValue(typeof(TDependency), out dependency))
+            {
+                object firstFromCollection = null;
+
+                try
+                {
+                    firstFromCollection = The_first<TDependency>();
+                }
+                catch { }
+
+                if (firstFromCollection == null)
+                {
+                    throw new Exception(string.Format("Unable to find a stub of type '{0}'.", typeof(TDependency).Name));
+                }
+
+                return (TDependency)firstFromCollection;
+            }
+
+            return (TDependency)dependency.Value;
+        }
+
+        protected TDependency The_first<TDependency>()
+          where TDependency : class
+        {
+            dynamic list = GetDependencyList<TDependency>();
+
+            return (TDependency)list[0];
+        }
+
+        private dynamic GetDependencyList<TDependency>()
+          where TDependency : class
+        {
+            dynamic list;
+
+            if (!_collectionsByType.TryGetValue(typeof(TDependency), out list))
+            {
+                throw new Exception(string.Format("Unable to find a list of stubs of type '{0}'.", typeof(TDependency).Name));
+            }
+
+            return list;
+        }
+        [OneTimeSetUp]
         public void TestFixtureSetup()
         {
             // Allow fixture to arrange the state for the test

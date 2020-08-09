@@ -6,6 +6,7 @@
 using System.Linq;
 using EdFi.Ods.Api.Validation;
 using EdFi.Ods.Entities.NHibernate.SexDescriptorAggregate.EdFi;
+using EdFi.TestFixture;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -15,7 +16,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
     public class DescriptorNamespaceValidatorTests
     {
         [TestFixture]
-        public class When_validating_descriptor_namespace_is_empty : TestBase
+        public class When_validating_descriptor_namespace_is_empty : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -37,7 +38,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_is_whitespace : TestBase
+        public class When_validating_descriptor_namespace_is_whitespace : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -59,7 +60,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_has_invalid_format : TestBase
+        public class When_validating_descriptor_namespace_has_invalid_format : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -82,7 +83,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_no_organization_name : TestBase
+        public class When_validating_descriptor_namespace_with_no_organization_name : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -105,7 +106,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_no_descriptor_name : TestBase
+        public class When_validating_descriptor_namespace_with_no_descriptor_name : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -128,7 +129,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_invalid_scheme : TestBase
+        public class When_validating_descriptor_namespace_with_invalid_scheme : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -150,7 +151,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_invalid_organization_name : TestBase
+        public class When_validating_descriptor_namespace_with_invalid_organization_name : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -173,7 +174,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_invalid_descriptor_name : TestBase
+        public class When_validating_descriptor_namespace_with_invalid_descriptor_name : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -196,7 +197,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_code_value_is_empty : TestBase
+        public class When_validating_descriptor_code_value_is_empty : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -218,7 +219,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_code_value_is_whitespace : TestBase
+        public class When_validating_descriptor_code_value_is_whitespace : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -240,7 +241,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_with_invalid_code_value : TestBase
+        public class When_validating_descriptor_with_invalid_code_value : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -262,7 +263,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_no_code_value_or_namespace : TestBase
+        public class When_validating_descriptor_namespace_with_no_code_value_or_namespace : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -288,7 +289,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_invalid_code_value_and_invalid_namespace_format : TestBase
+        public class When_validating_descriptor_namespace_with_invalid_code_value_and_invalid_namespace_format : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -315,7 +316,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_namespace_with_invalid_code_value_and_scheme_and_organization_name_and_descriptor_name : TestBase
+        public class When_validating_descriptor_namespace_with_invalid_code_value_and_scheme_and_organization_name_and_descriptor_name : TestFixtureBase
         {
             [Test]
             public void Should_return_validation_error()
@@ -351,7 +352,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
         }
 
         [TestFixture]
-        public class When_validating_descriptor_with_valid_namespace_and_code_value : TestBase
+        public class When_validating_descriptor_with_valid_namespace_and_code_value : TestFixtureBase
         {
             [Test]
             public void Should_return_valid()
