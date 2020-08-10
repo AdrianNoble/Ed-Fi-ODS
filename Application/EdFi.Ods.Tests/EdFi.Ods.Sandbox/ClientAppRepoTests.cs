@@ -13,6 +13,7 @@ using NUnit.Framework;
 using Shouldly;
 using EdFi.Ods.Sandbox.Repositories;
 using EdFi.Ods.Sandbox.Provisioners;
+using Microsoft.Extensions.Configuration;
 
 // ReSharper disable once InconsistentNaming
 namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox
@@ -29,7 +30,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox
             public void Setup()
             {
 
-                var configValueProviderStub = A.Fake<IConfigValueProvider>();
+                var configValueProviderStub = A.Fake<IConfigurationRoot>();
                 var usersContext = A.Fake<IUsersContext>();
 
 

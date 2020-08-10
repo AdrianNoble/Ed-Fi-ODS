@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-
+#if NETFRAMEWORK
 using System.Net.Http;
 using System.Web.Http;
 using EdFi.Admin.DataAccess.Models;
@@ -13,7 +13,6 @@ using EdFi.Ods.Sandbox.Repositories;
 using EdFi.TestFixture;
 using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 // ReSharper disable InconsistentNaming
@@ -173,3 +172,4 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
         }
     }
 }
+#endif

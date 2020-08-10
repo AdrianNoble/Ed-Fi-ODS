@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-
+#if NETFRAMEWORk
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,6 @@ using EdFi.Ods.Common.Providers;
 using EdFi.Ods.Security.Authorization;
 using EdFi.TestFixture;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shouldly;
 using Test.Common;
 
@@ -96,10 +95,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                                         MemoryCache = new MemoryCache("IsolatedForUnitTest")
                                     };
 
-                var configValueProvider = mocks.Stub<IConfigValueProvider>();
+                var configValueProvider = Stub<IConfigValueProvider>();
 
                 // Create Faked dependencies
-                var connectionStringProvider = new FakeConnectionStringProvider();
+                var connectionStringProvider = new IOdsDatabaseConnectionStringProvider();
 
                 var educationOrganizationCacheDataProvider =
                     new FakeEducationOrganizationCacheDataProvider(connectionStringProvider);
@@ -589,3 +588,4 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
         }
     }
 }
+#endif

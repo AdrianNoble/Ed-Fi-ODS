@@ -6,9 +6,8 @@
 using System;
 using EdFi.Ods.Common.Security;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 {
@@ -27,25 +26,25 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
                                          Key = "MyKey"
                                      };
 
-                var apiClientIdentityProvider = mocks.Stub<IApiClientIdentityProvider>();
+                var apiClientIdentityProvider = Stub<IApiClientIdentityProvider>();
 
-                apiClientIdentityProvider.Stub(x => x.GetApiClientIdentity("MyKey"))
-                                         .Return(_apiClientIdentity);
+                A.CallTo(()=> apiClientIdentityProvider.GetApiClientIdentity("MyKey"))
+                                         .Returns(_apiClientIdentity);
 
                 var apiClientSecret = new ApiClientSecret
                                       {
                                           Secret = "MySecret"
                                       };
 
-                var apiClientSecretProvider = mocks.Stub<IApiClientSecretProvider>();
+                var apiClientSecretProvider = Stub<IApiClientSecretProvider>();
 
-                apiClientSecretProvider.Expect(x => x.GetSecret("MyKey"))
-                                       .Return(apiClientSecret);
+                A.CallTo(() => apiClientSecretProvider.GetSecret("MyKey"))
+                                        .Returns(apiClientSecret);
 
-                var secretVerifier = mocks.Stub<ISecretVerifier>();
+                var secretVerifier = Stub<ISecretVerifier>();
 
-                secretVerifier.Expect(x => x.VerifySecret("MyKey", "MySecret", apiClientSecret))
-                              .Return(true);
+                A.CallTo(() => secretVerifier.VerifySecret("MyKey", "MySecret", apiClientSecret))
+                                        .Returns(true);
 
                 _apiClientAuthenticator = new ApiClientAuthenticator(apiClientIdentityProvider, apiClientSecretProvider, secretVerifier);
             }
@@ -77,14 +76,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
             protected override void Arrange()
             {
-                var apiClientIdentityProvider = mocks.Stub<IApiClientIdentityProvider>();
+                var apiClientIdentityProvider = Stub<IApiClientIdentityProvider>();
 
-                var apiClientSecretProvider = mocks.Stub<IApiClientSecretProvider>();
+                var apiClientSecretProvider = Stub<IApiClientSecretProvider>();
 
-                apiClientSecretProvider.Expect(x => x.GetSecret("MyInvalidKey"))
-                                       .Throw(new ArgumentException());
+                A.CallTo(() => apiClientSecretProvider.GetSecret("MyInvalidKey")).Throws(new ArgumentException());
 
-                var secretVerifier = mocks.Stub<ISecretVerifier>();
+
+                var secretVerifier = Stub<ISecretVerifier>();
 
                 _apiClientAuthenticator = new ApiClientAuthenticator(apiClientIdentityProvider, apiClientSecretProvider, secretVerifier);
             }
@@ -120,17 +119,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
                                           Secret = "MySecret"
                                       };
 
-                var apiClientSecretProvider = mocks.Stub<IApiClientSecretProvider>();
+                var apiClientSecretProvider = Stub<IApiClientSecretProvider>();
 
-                apiClientSecretProvider.Stub(x => x.GetSecret("MyKey"))
-                                       .Return(apiClientSecret);
+                A.CallTo(()=> apiClientSecretProvider.GetSecret("MyKey"))
+                             .Returns(apiClientSecret);
 
-                var secretVerifier = mocks.Stub<ISecretVerifier>();
+                var secretVerifier = Stub<ISecretVerifier>();
 
-                secretVerifier.Expect(x => x.VerifySecret("MyKey", "MyInvalidSecret", apiClientSecret))
-                              .Return(false);
+                A.CallTo(() => secretVerifier.VerifySecret("MyKey", "MyInvalidSecret", apiClientSecret))
+                              .Returns(false);
 
-                var apiClientIdentityProvider = mocks.Stub<IApiClientIdentityProvider>();
+                var apiClientIdentityProvider = Stub<IApiClientIdentityProvider>();
 
                 _apiClientAuthenticator = new ApiClientAuthenticator(apiClientIdentityProvider, apiClientSecretProvider, secretVerifier);
             }

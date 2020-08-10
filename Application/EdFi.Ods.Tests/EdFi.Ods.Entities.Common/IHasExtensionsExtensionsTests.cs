@@ -10,8 +10,8 @@ using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Tests._Extensions;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
@@ -34,10 +34,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             {
                 _suppliedSourceEntityExtension = Stub<ISynchronizable>();
 
-                _suppliedSourceEntityExtension
-                   .Expect(x => x.Synchronize(Arg<object>.Is.Anything))
-                   .Return(true);
-
+                A.CallTo(() => _suppliedSourceEntityExtension.Synchronize(A<object>._)).Returns(true);
+              
                 // Source extension entry, mapped from the resource object, will be an ArrayList of "transient" entities
                 var sourceExtensions = new Dictionary<string, object>
                                        {
@@ -74,11 +72,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
             [Assert]
             public void
-                Should_obtain_the_target_entity_extension_from_the_list_and_use_it_as_the_synchronization_target_for_the_source_entity_extension()
+            Should_obtain_the_target_entity_extension_from_the_list_and_use_it_as_the_synchronization_target_for_the_source_entity_extension()
             {
-                _suppliedSourceEntityExtension.AssertWasCalled(
-                    x => x.Synchronize(Arg<string>.Is.Equal(_suppliedTargetEntityExtension)),
-                    options => options.Repeat.Times(1));
+                A.CallTo(() => _suppliedSourceEntityExtension.Synchronize(_suppliedTargetEntityExtension)).MustHaveHappenedOnceExactly();
             }
 
             [Assert]
@@ -104,9 +100,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 _suppliedSourceEntityExtension = Stub<ISynchronizable>();
 
                 // No modifications have been made
-                _suppliedSourceEntityExtension
-                   .Expect(x => x.Synchronize(Arg<object>.Is.Anything))
-                   .Return(false);
+                A.CallTo(()=> _suppliedSourceEntityExtension.Synchronize(A<object>._))
+                             .Returns(false);
 
                 // Source extension entry, mapped from the resource object, will be a "transient" entity
                 var sourceExtensions = new Dictionary<string, object>
@@ -144,11 +139,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
             [Assert]
             public void
-                Should_obtain_the_target_entity_extension_from_the_list_and_use_it_as_the_synchronization_target_for_the_source_entity_extension()
+            Should_obtain_the_target_entity_extension_from_the_list_and_use_it_as_the_synchronization_target_for_the_source_entity_extension()
             {
-                _suppliedSourceEntityExtension.AssertWasCalled(
-                    x => x.Synchronize(Arg<string>.Is.Equal(_suppliedTargetEntityExtension)),
-                    options => options.Repeat.Times(1));
+                A.CallTo(() => _suppliedSourceEntityExtension.Synchronize(_suppliedTargetEntityExtension))
+                    .MustHaveHappenedOnceExactly();
             }
 
             [Assert]
@@ -177,15 +171,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 _suppliedSourceEntityExtension2 = Stub<ISynchronizable>();
 
                 // First extension has modifications
-                _suppliedSourceEntityExtension1
-                   .Expect(x => x.Synchronize(Arg<object>.Is.Anything))
-                   .Return(true);
+                A.CallTo(() => _suppliedSourceEntityExtension1.Synchronize(A<object>._)).Returns(true);
 
                 // Second extension has no modifications, but should not overwrite state
-                _suppliedSourceEntityExtension2
-                   .Expect(x => x.Synchronize(Arg<object>.Is.Anything))
-                   .Return(false);
-
+                A.CallTo(() => _suppliedSourceEntityExtension2.Synchronize(A<object>._)).Returns(false);
+              
                 // Source extension entry, mapped from the resource object, will be a ArrayList of "transient" entities
                 var sourceExtensions = new Dictionary<string, object>
                                        {
@@ -257,9 +247,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 _suppliedSourceEntityExtension1 = Stub<ISynchronizable>();
                 _suppliedSourceEntityExtension2 = Stub<ISynchronizable>();
 
-                _suppliedSourceEntityExtension1
-                   .Expect(x => x.Synchronize(Arg<object>.Is.Anything))
-                   .Return(true);
+                A.CallTo(() => _suppliedSourceEntityExtension1.Synchronize(A<object>._)).Returns(true);
 
                 // Source extension entry, mapped from the resource object, will be an ArrayList of "transient" entities
                 var sourceExtensions = new Dictionary<string, object>
@@ -314,15 +302,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             [Assert]
             public void Should_attempt_to_synchronize_extensions_that_are_supported_as_a_synchronization_source()
             {
-                _suppliedSourceEntityExtension1.AssertWasCalled(
-                    x => x.Synchronize(Arg<string>.Is.Equal(_suppliedTargetEntityExtension1)),
-                    options => options.Repeat.Times(1));
+                A.CallTo(() => _suppliedSourceEntityExtension1.Synchronize(_suppliedTargetEntityExtension1)).MustHaveHappenedOnceExactly();
             }
 
             [Assert]
             public void Should_not_attempt_to_synchronize_extensions_that_are_not_supported_as_a_synchronization_source()
             {
-                _suppliedSourceEntityExtension2.AssertWasNotCalled(x => x.Synchronize(Arg<string>.Is.Anything));
+                A.CallTo(() => _suppliedSourceEntityExtension2.Synchronize(A<string>._)).MustNotHaveHappened();
             }
         }
 
@@ -340,10 +326,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             {
                 _suppliedSourceEntityExtension1 = Stub<ISynchronizable>();
 
-                _suppliedSourceEntityExtension1
-                   .Expect(x => x.Synchronize(Arg<object>.Is.Anything))
-                   .Return(true);
-
+                A.CallTo(() => _suppliedSourceEntityExtension1.Synchronize(A<object>._)).Returns(true);
+             
                 // Source extension entry, mapped from the resource object, will be a "transient" entity
                 var sourceExtensions = new Dictionary<string, object>();
                 _suppliedSourceEntity = new FakeEntityWithExtensions(sourceExtensions);
@@ -396,10 +380,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 _suppliedSourceEntityExtension1 = Stub<ISynchronizable>();
                 _suppliedSourceEntityExtension2 = Stub<ISynchronizable>();
 
-                _suppliedSourceEntityExtension1
-                   .Expect(x => x.Synchronize(Arg<object>.Is.Anything))
-                   .Return(true);
-
+                A.CallTo(() => _suppliedSourceEntityExtension1.Synchronize(A<object>._)).Returns(true);
+             
                 // Source extension entry, mapped from the resource object, will be an ArrayList of "transient" entities
                 var sourceExtensions = new Dictionary<string, object>
                                        {
@@ -443,15 +425,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             [Assert]
             public void Should_attempt_to_synchronize_extensions_that_are_present_on_the_target()
             {
-                _suppliedSourceEntityExtension1.AssertWasCalled(
-                    x => x.Synchronize(Arg<string>.Is.Equal(_suppliedTargetEntityExtension1)),
-                    options => options.Repeat.Times(1));
+                 A.CallTo(() => _suppliedSourceEntityExtension1.Synchronize(_suppliedTargetEntityExtension1)).MustHaveHappened();
             }
 
             [Assert]
             public void Should_not_attempt_to_synchronize_extensions_that_are_not_present_on_the_target()
             {
-                _suppliedSourceEntityExtension2.AssertWasNotCalled(x => x.Synchronize(Arg<string>.Is.Anything), options => options.Repeat.Times(1));
+                A.CallTo(() => _suppliedSourceEntityExtension2.Synchronize(A<string>._)).MustNotHaveHappened();
             }
         }
     }
@@ -482,8 +462,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
             protected override void Arrange()
             {
-                _suppliedSourceExtension1Object = MockRepository.GenerateStub<IMappableExtensionEntity>();
-                _suppliedSourceExtension2Object = MockRepository.GenerateStub<IMappableExtensionEntity>();
+                _suppliedSourceExtension1Object = Stub<IMappableExtensionEntity>();
+                _suppliedSourceExtension2Object = Stub<IMappableExtensionEntity>();
 
                 // Entity extensions are always wrapped in a list, due to NHibernate mappings
                 var sourceExtensions = new Dictionary<string, object>
@@ -510,9 +490,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 IHasExtensionsExtensions.CreateTargetExtensionObject
                     = (t, x) =>
                       {
-                          var targetExtensionObjectMock = mocks.Stub<IMappableExtensionEntity>();
-                          targetExtensionObjectMock.Replay();
-
+                          var targetExtensionObjectMock = Stub<IMappableExtensionEntity>();
+                         
                           _suppliedTargetExtensionObjectByExtensionName.Add(x, targetExtensionObjectMock);
 
                           return targetExtensionObjectMock;
@@ -533,18 +512,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                         // Get the created target extension object
                         var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension1"];
 
-                        _suppliedSourceExtension1Object.AssertWasCalled(
-                            x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                            options => options.Repeat.Times(1));
+                        A.CallTo(() => _suppliedSourceExtension1Object.Map(A<object>.That.Equals(expectedTarget)))
+                        .MustHaveHappenedOnceExactly();
                     },
                     () =>
                     {
                         // Get the created target extension object
                         var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension2"];
 
-                        _suppliedSourceExtension2Object.AssertWasCalled(
-                            x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                            options => options.Repeat.Times(1));
+                        A.CallTo(() => _suppliedSourceExtension2Object.Map(A<object>.That.Equals(expectedTarget)))
+                       .MustHaveHappenedOnceExactly();
+
                     });
             }
 
@@ -553,7 +531,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             {
                 foreach (IMappableExtensionEntity targetExtensionObject in _suppliedTargetExtensionObjectByExtensionName.Values)
                 {
-                    targetExtensionObject.AssertWasCalled(x => x.SetParent(Arg<object>.Is.Same(_suppliedTargetObject)));
+                    A.CallTo(() => targetExtensionObject.SetParent(A<object>.That.IsSameAs(_suppliedTargetObject))).MustHaveHappened();
                 }
 
                 // Make sure something was verified
@@ -603,14 +581,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
             protected override void Arrange()
             {
-                _suppliedSourceExtension1Object = MockRepository.GenerateStub<IMappableExtensionEntity>();
-                _suppliedSourceExtension2Object = MockRepository.GenerateStub<IMappableExtensionEntity>();
-                _suppliedEmptyImplicitSourceExtensionObject = MockRepository.GenerateStub<IMappableImplicitExtensionEntity>();
-                _suppliedNonEmptyImplicitSourceExtensionObject = MockRepository.GenerateStub<IMappableImplicitExtensionEntity>();
+                _suppliedSourceExtension1Object = Stub<IMappableExtensionEntity>();
+                _suppliedSourceExtension2Object = Stub<IMappableExtensionEntity>();
+                _suppliedEmptyImplicitSourceExtensionObject = Stub<IMappableImplicitExtensionEntity>();
+                _suppliedNonEmptyImplicitSourceExtensionObject = Stub<IMappableImplicitExtensionEntity>();
 
-                _suppliedEmptyImplicitSourceExtensionObject.Expect(x => x.IsEmpty()).Return(true);
-                _suppliedNonEmptyImplicitSourceExtensionObject.Expect(x => x.IsEmpty()).Return(false);
-
+                A.CallTo(() => _suppliedEmptyImplicitSourceExtensionObject.IsEmpty()).Returns(true);
+                A.CallTo(() => _suppliedNonEmptyImplicitSourceExtensionObject.IsEmpty()).Returns(false);
+               
                 // Entity extensions are always wrapped in a list, due to NHibernate mappings
                 var sourceExtensions = new Dictionary<string, object>
                 {
@@ -628,9 +606,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 IHasExtensionsExtensions.CreateTargetExtensionObject
                     = (t, x) =>
                       {
-                          var targetExtensionObjectMock = mocks.Stub<IMappableResource>();
-                          targetExtensionObjectMock.Replay();
-
+                          var targetExtensionObjectMock = Stub<IMappableResource>();
+                          
                           _suppliedTargetExtensionObjectByExtensionName.Add(x, targetExtensionObjectMock);
 
                           return targetExtensionObjectMock;
@@ -651,18 +628,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                         // Get the created target extension object
                         var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension1"];
 
-                        _suppliedSourceExtension1Object.AssertWasCalled(
-                            x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                            options => options.Repeat.Times(1));
+                        A.CallTo(() => _suppliedSourceExtension1Object.Map(A<object>.That
+                            .IsSameAs(expectedTarget))).MustHaveHappenedOnceExactly();
+                      
                     },
                     () =>
                     {
                         // Get the created target extension object
                         var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension2"];
 
-                        _suppliedSourceExtension2Object.AssertWasCalled(
-                            x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                            options => options.Repeat.Times(1));
+                        A.CallTo(() => _suppliedSourceExtension2Object.Map(A<object>.That
+                          .IsSameAs(expectedTarget))).MustHaveHappenedOnceExactly();
                     });
             }
 
@@ -672,9 +648,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 // Get the created target extension object
                 var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["NonEmptyImplicitExtension"];
 
-                _suppliedNonEmptyImplicitSourceExtensionObject.AssertWasCalled(
-                    x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                    options => options.Repeat.Times(1));
+                A.CallTo(() => _suppliedNonEmptyImplicitSourceExtensionObject.Map(A<object>.That
+                          .IsSameAs(expectedTarget))).MustHaveHappenedOnceExactly();
+               
             }
 
             [Assert]
@@ -725,9 +701,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
             protected override void Arrange()
             {
-                _suppliedSourceExtension1Object = MockRepository.GenerateStub<IMappableResource>();
-                _suppliedSourceExtension2Object = MockRepository.GenerateStub<IMappableResource>();
-                _suppliedUnsupportedExtensionObject = MockRepository.GenerateStub<IMappableResource>();
+                _suppliedSourceExtension1Object = Stub<IMappableResource>();
+                _suppliedSourceExtension2Object = Stub<IMappableResource>();
+                _suppliedUnsupportedExtensionObject = Stub<IMappableResource>();
 
                 var sourceExtensions = new Dictionary<string, object>
                                        {
@@ -751,9 +727,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 IHasExtensionsExtensions.CreateTargetExtensionObject
                     = (t, x) =>
                       {
-                          var targetExtensionObjectMock = mocks.Stub<IMappableExtensionEntity>();
-                          targetExtensionObjectMock.Replay();
-
+                          var targetExtensionObjectMock = Stub<IMappableExtensionEntity>();
+                          
                           _suppliedTargetExtensionObjectByExtensionName.Add(x, targetExtensionObjectMock);
 
                           return targetExtensionObjectMock;
@@ -774,25 +749,24 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                         // Get the created target extension object
                         var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension1"];
 
-                        _suppliedSourceExtension1Object.AssertWasCalled(
-                            x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                            options => options.Repeat.Times(1));
+                        A.CallTo(() => _suppliedSourceExtension1Object.Map(A<object>.That
+                                  .IsSameAs(expectedTarget))).MustHaveHappenedOnceExactly();
+                       
                     },
                     () =>
                     {
                         // Get the created target extension object
                         var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension2"];
 
-                        _suppliedSourceExtension2Object.AssertWasCalled(
-                            x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                            options => options.Repeat.Times(1));
+                        A.CallTo(() => _suppliedSourceExtension2Object.Map(A<object>.That
+                                 .IsSameAs(expectedTarget))).MustHaveHappenedOnceExactly();
                     });
             }
 
             [Assert]
             public void Should_NOT_map_the_unsupported_source_extension_object()
             {
-                _suppliedUnsupportedExtensionObject.AssertWasNotCalled(x => x.Map(Arg<object>.Is.Anything));
+                A.CallTo(() => _suppliedUnsupportedExtensionObject.Map(A<object>._));
             }
 
             [Assert]
@@ -830,7 +804,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             {
                 foreach (IMappableExtensionEntity targetExtensionObject in _suppliedTargetExtensionObjectByExtensionName.Values)
                 {
-                    targetExtensionObject.AssertWasCalled(x => x.SetParent(Arg<object>.Is.Same(_suppliedTargetObject)));
+                    A.CallTo(() => targetExtensionObject.SetParent(A<object>.That.IsSameAs(_suppliedTargetObject)));
                 }
 
                 // Make sure something was verified
@@ -879,8 +853,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
 
             protected override void Arrange()
             {
-                _suppliedSourceExtension1Object = MockRepository.GenerateStub<IMappableResource>();
-                _suppliedSourceExtension2Object = MockRepository.GenerateStub<IMappableResource>();
+                _suppliedSourceExtension1Object = Stub<IMappableResource>();
+                _suppliedSourceExtension2Object = Stub<IMappableResource>();
 
                 var sourceExtensions = new Dictionary<string, object>
                                        {
@@ -902,9 +876,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 IHasExtensionsExtensions.CreateTargetExtensionObject
                     = (t, x) =>
                       {
-                          var targetExtensionObjectMock = mocks.Stub<IMappableExtensionEntity>();
-                          targetExtensionObjectMock.Replay();
-
+                          var targetExtensionObjectMock = Stub<IMappableExtensionEntity>();
+                         
                           _suppliedTargetExtensionObjectByExtensionName.Add(x, targetExtensionObjectMock);
 
                           return targetExtensionObjectMock;
@@ -922,9 +895,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
                 // Get the created target extension object
                 var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension1"];
 
-                _suppliedSourceExtension1Object.AssertWasCalled(
-                    x => x.Map(Arg<object>.Is.Same(expectedTarget)),
-                    options => options.Repeat.Times(1));
+                A.CallTo(() => _suppliedSourceExtension1Object.Map(A<object>.That.IsSameAs(expectedTarget))).MustHaveHappened();
+             
             }
 
             [Assert]
@@ -940,7 +912,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             [Assert]
             public void Should_not_attempt_to_map_the_unsupported_source_extension_object()
             {
-                _suppliedSourceExtension2Object.AssertWasNotCalled(x => x.Map(Arg<object>.Is.Anything));
+                A.CallTo(() => _suppliedSourceExtension2Object.Map(A<object>._)).MustNotHaveHappened();
             }
 
             [Assert]

@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-
+#if NETFRAMEWORK
 using System;
 using System.Net;
 using System.Net.Http;
@@ -13,6 +13,7 @@ using EdFi.Ods.Api.Infrastructure.Pipelines.Factories;
 using EdFi.Ods.Api.Services.Controllers.Students.EdFi;
 using EdFi.Ods.Api.Services.Extensions;
 using EdFi.Ods.Common.Extensions;
+using EdFi.TestFixture;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Shouldly;
@@ -40,8 +41,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Controllers
                 _id = Guid.NewGuid();
 
                 _responseMessage = controller.Delete(_id)
-                    .GetResultSafely()
-                    .ExecuteAsync(new CancellationToken())
+                    .GetResultSafely().ExecuteResultAsync
+                    (new CancellationToken())
                     .GetResultSafely();
             }
 
@@ -230,3 +231,4 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Controllers
         }
     }
 }
+#endif

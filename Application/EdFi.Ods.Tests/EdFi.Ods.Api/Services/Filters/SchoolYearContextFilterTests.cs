@@ -10,8 +10,8 @@ using System.Web.Http.Routing;
 using EdFi.Ods.Api.Services.Filters;
 using EdFi.Ods.Common.Context;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
@@ -45,7 +45,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
 
         protected override void Arrange()
         {
-            _schoolYearContextProvider = MockRepository.GenerateMock<ISchoolYearContextProvider>();
+            _schoolYearContextProvider = A.Fake<ISchoolYearContextProvider>();
             _schoolYearContextFilter = new SchoolYearContextFilter(_schoolYearContextProvider);
             _httpActionContext = GetActionContext();
         }
@@ -66,7 +66,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
             [Test]
             public void Should_Not_Parse_School_Year()
             {
-                _schoolYearContextProvider.AssertWasNotCalled(x => x.SetSchoolYear(Arg<int>.Is.Anything));
+                A.CallTo(() => _schoolYearContextProvider.SetSchoolYear(A<int>._)).MustNotHaveHappened();
             }
         }
 
@@ -81,7 +81,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
             [Test]
             public void Should_Not_Parse_InValid_School_Year()
             {
-                _schoolYearContextProvider.AssertWasNotCalled(x => x.SetSchoolYear(Arg<int>.Is.Anything));
+               A.CallTo(() => _schoolYearContextProvider.SetSchoolYear(A<int>._)).MustNotHaveHappened();
             }
         }
 
@@ -96,7 +96,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
             [Test]
             public void Should_Not_Parse_School_Year()
             {
-                _schoolYearContextProvider.AssertWasNotCalled(x => x.SetSchoolYear(Arg<int>.Is.Anything));
+                A.CallTo(() => _schoolYearContextProvider.SetSchoolYear(A<int>._)).MustNotHaveHappened();
             }
         }
 
@@ -111,7 +111,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
             [Test]
             public void Should_Not_Parse_School_Year()
             {
-                _schoolYearContextProvider.AssertWasNotCalled(x => x.SetSchoolYear(Arg<int>.Is.Anything));
+                A.CallTo(() => _schoolYearContextProvider.SetSchoolYear(A<int>._)).MustNotHaveHappened();
             }
         }
 
@@ -126,7 +126,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
             [Test]
             public void Should_Not_Parse_School_Year()
             {
-                _schoolYearContextProvider.AssertWasNotCalled(x => x.SetSchoolYear(Arg<int>.Is.Anything));
+               A.CallTo(() => _schoolYearContextProvider.SetSchoolYear(A<int>._)).MustNotHaveHappened();
             }
         }
     }

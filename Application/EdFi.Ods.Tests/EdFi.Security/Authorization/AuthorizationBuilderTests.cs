@@ -13,8 +13,8 @@ using EdFi.Ods.Common.Security.Claims;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Ods.Tests._Extensions;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shouldly;
 using Test.Common;
 
@@ -272,15 +272,15 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
 
         private static IEducationOrganizationCache Given_a_cache_that_indicates_no_organizations_exist()
         {
-            return MockRepository.GenerateStub<IEducationOrganizationCache>();
+            return A.Fake<IEducationOrganizationCache>();
         }
 
         private static IEducationOrganizationCache Given_a_cache_that_indicates_all_education_organizations_exist_and_are_schools()
         {
-            var educationOrganizationCache = MockRepository.GenerateStub<IEducationOrganizationCache>();
+            var educationOrganizationCache = A.Fake<IEducationOrganizationCache>();
 
-            educationOrganizationCache.Stub(x => x.GetEducationOrganizationIdentifiers(Arg<int>.Is.Anything))
-                                      .Return(new EducationOrganizationIdentifiers(0, "School"));
+            A.CallTo(() => educationOrganizationCache.GetEducationOrganizationIdentifiers(A<int>._))
+                                      .Returns(new EducationOrganizationIdentifiers(0, "School"));
 
             return educationOrganizationCache;
         }
@@ -303,10 +303,10 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
         private static IEducationOrganizationCache Given_a_cache_that_indicates_the_only_EducationOrganizationId_that_exists_is(
             int educationOrganizationId)
         {
-            var educationOrganizationCache = MockRepository.GenerateStub<IEducationOrganizationCache>();
+            var educationOrganizationCache = A.Fake<IEducationOrganizationCache>();
 
-            educationOrganizationCache.Stub(x => x.GetEducationOrganizationIdentifiers(educationOrganizationId))
-                                      .Return(
+            A.CallTo(() => educationOrganizationCache.GetEducationOrganizationIdentifiers(educationOrganizationId))
+                                      .Returns(
                                            new EducationOrganizationIdentifiers(educationOrganizationId, "LocalEducationAgency"));
 
             return educationOrganizationCache;
@@ -398,10 +398,10 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
 
             _educationOrganizationCache = Stub<IEducationOrganizationCache>();
 
-            _educationOrganizationCache.Stub(
-                                            x =>
-                                                x.GetEducationOrganizationIdentifiers(Arg<int>.Is.Anything))
-                                       .Return(new EducationOrganizationIdentifiers(0, "LocalEducationAgency"));
+            A.CallTo(
+                                            () =>
+                                                _educationOrganizationCache.GetEducationOrganizationIdentifiers(A<int>._))
+                                       .Returns(new EducationOrganizationIdentifiers(0, "LocalEducationAgency"));
         }
 
         protected override void ExecuteBehavior()
@@ -513,10 +513,10 @@ namespace EdFi.Ods.Tests.EdFi.Security.Authorization
 
             _educationOrganizationCache = Stub<IEducationOrganizationCache>();
 
-            _educationOrganizationCache.Stub(
-                                            x =>
-                                                x.GetEducationOrganizationIdentifiers(Arg<int>.Is.Anything))
-                                       .Return(new EducationOrganizationIdentifiers(0, "LocalEducationAgency"));
+            A.CallTo(
+                                            () =>
+                                                _educationOrganizationCache.GetEducationOrganizationIdentifiers(A<int>._))
+                                       .Returns(new EducationOrganizationIdentifiers(0, "LocalEducationAgency"));
         }
 
         protected override void ExecuteBehavior()

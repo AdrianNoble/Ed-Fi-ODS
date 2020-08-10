@@ -115,7 +115,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Conventions
                     () => Assert.That(ActualException.GetType(), Is.EqualTo(typeof(ArgumentNullException))),
                     () => Assert.That(
                         ActualException.Message.Replace(Environment.NewLine, " "),
-                        Is.EqualTo("Value cannot be null. Parameter name: resourceSchemaProperCaseName")));
+                        Is.EqualTo("Value cannot be null. (Parameter 'resourceSchemaProperCaseName')")));
             }
         }
 
@@ -133,7 +133,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Conventions
                     () => Assert.That(ActualException.GetType(), Is.EqualTo(typeof(ArgumentNullException))),
                     () => Assert.That(
                         ActualException.Message.Replace(Environment.NewLine, " "),
-                        Is.EqualTo("Value cannot be null. Parameter name: resourceName")));
+                        Is.EqualTo("Value cannot be null. (Parameter 'resourceName')")));
             }
         }
 

@@ -13,8 +13,8 @@ using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Tests._Extensions;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
@@ -108,9 +108,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
             protected override void Arrange()
             {
                 // Initialize dependencies
-                Given<IProfileMetadataProvider>()
-                   .Stub(x => x.GetProfileDefinition("Profile1"))
-                   .Return(
+                var profileprovider = A.Fake<IProfileMetadataProvider>();
+               
+                A.CallTo(()=> profileprovider.GetProfileDefinition("Profile1"))
+                   .Returns(
                         XElement.Parse(
                             @"
                             <Profile name='Profile1'>
@@ -124,9 +125,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
                                 </Resource>
                             </Profile>"));
 
-                Given<IProfileMetadataProvider>()
-                   .Stub(x => x.GetProfileDefinition("Profile2"))
-                   .Return(
+                var profilemetadataprovider = A.Fake<IProfileMetadataProvider>();
+
+                A.CallTo(() => profilemetadataprovider.GetProfileDefinition("Profile2"))
+                        .Returns(
                         XElement.Parse(
                             @"
                             <Profile name='Profile2'>
@@ -142,13 +144,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
                                 </Resource>
                             </Profile>"));
 
-                Given<IProfileMetadataProvider>()
-                   .Stub(x => x.GetProfileDefinition("ProfileX"))
-                   .Throw(new KeyNotFoundException());
 
-                Given<IResourceModelProvider>()
-                   .Stub(x => x.GetResourceModel())
-                   .Return(GetTestResourceModel());
+                A.CallTo(() => profilemetadataprovider.GetProfileDefinition("ProfileX"))
+                    .Throws(new KeyNotFoundException());
+
+                var resourcemodelaprovider = A.Fake<IResourceModelProvider>();
+
+                A.CallTo(() => resourcemodelaprovider.GetResourceModel())
+                   .Returns(GetTestResourceModel());
             }
 
             protected override void Act()

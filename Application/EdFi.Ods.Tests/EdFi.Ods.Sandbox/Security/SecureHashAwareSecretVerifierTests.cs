@@ -5,8 +5,8 @@
 
 using EdFi.Ods.Common.Security;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
@@ -33,15 +33,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
                                                               }
                                  };
 
-                var packedHashConverter = mocks.Stub<IPackedHashConverter>();
+                var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(phc => phc.GetPackedHash("MyHashedSecret"))
-                                   .Return(packedHash);
+                A.CallTo(() => packedHashConverter.GetPackedHash("MyHashedSecret"))
+                                   .Returns(packedHash);
 
-                var secureHasher = mocks.Stub<ISecureHasher>();
+                var secureHasher = Stub<ISecureHasher>();
 
-                secureHasher.Stub(
-                                 sh => sh.ComputeHash(
+                A.CallTo(
+                                 () => secureHasher.ComputeHash(
                                      "MySecret",
                                      123,
                                      321,
@@ -49,7 +49,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
                                      {
                                          100, 200, 201
                                      }))
-                            .Return(packedHash);
+                            .Returns(packedHash);
 
                 _secretVerifier = new SecureHashAwareSecretVerifier(packedHashConverter, secureHasher);
             }
@@ -80,10 +80,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
             protected override void Arrange()
             {
-                var packedHashConverter = mocks.Stub<IPackedHashConverter>();
+                var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(phc => phc.GetPackedHash("MyHashedSecret"))
-                                   .Return(
+                A.CallTo(() => packedHashConverter.GetPackedHash("MyHashedSecret"))
+                                   .Returns(
                                         new PackedHash
                                         {
                                             Format = 1, HashAlgorithm = 123, HashBytes = new byte[]
@@ -96,10 +96,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
                                                                      }
                                         });
 
-                var secureHasher = mocks.Stub<ISecureHasher>();
+                var secureHasher = Stub<ISecureHasher>();
 
-                secureHasher.Stub(
-                                 sh => sh.ComputeHash(
+                A.CallTo(
+                                 () => secureHasher.ComputeHash(
                                      "MyDifferentSecret",
                                      123,
                                      321,
@@ -107,7 +107,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
                                      {
                                          100, 200, 201
                                      }))
-                            .Return(
+                            .Returns(
                                  new PackedHash
                                  {
                                      Format = 1, HashAlgorithm = 123, HashBytes = new byte[]
@@ -149,8 +149,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
             protected override void Arrange()
             {
-                var packedHashConverter = mocks.Stub<IPackedHashConverter>();
-                var secureHasher = mocks.Stub<ISecureHasher>();
+                var packedHashConverter = Stub<IPackedHashConverter>();
+                var secureHasher = Stub<ISecureHasher>();
 
                 _secretVerifier = new SecureHashAwareSecretVerifier(packedHashConverter, secureHasher);
             }
@@ -181,8 +181,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
             protected override void Arrange()
             {
-                var packedHashConverter = mocks.Stub<IPackedHashConverter>();
-                var secureHasher = mocks.Stub<ISecureHasher>();
+                var packedHashConverter = Stub<IPackedHashConverter>();
+                var secureHasher = Stub<ISecureHasher>();
 
                 _secretVerifier = new SecureHashAwareSecretVerifier(packedHashConverter, secureHasher);
             }

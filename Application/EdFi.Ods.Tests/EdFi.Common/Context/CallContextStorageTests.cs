@@ -45,8 +45,9 @@ namespace EdFi.Ods.Tests.EdFi.Common.Context
                 var key = "testKey";
                 var expected = "Some Text";
                 var contextStorage = new CallContextStorage();
+              
                 contextStorage.SetValue(key, expected);
-                var actual = Shouldly.CallContext.LogicalGetData(key);
+                var actual = contextStorage.GetValue<string>(key);
                 actual.ShouldBe(expected);
             }
         }

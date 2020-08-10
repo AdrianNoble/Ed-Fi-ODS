@@ -55,13 +55,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_call_the_SetParameter_method_exactly_once()
             {
-                A.CallTo(() => _query.SetParameter(null, null, null)).MustHaveHappenedOnceExactly();
+                A.CallTo(() => _query.SetParameter(A<string>._, A<object>._, A<IType>._)).MustHaveHappenedOnceExactly();
             }
 
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_the_supplied_name()
             {
-                A.CallTo(() => _query.SetParameter(_suppliedParameterName, A<IEnumerable>._, A<IType>._)).MustHaveHappened();
+                 A.CallTo(() => _query.SetParameter(_suppliedParameterName, A<object>._, A<IType>._)).MustHaveHappened();
             }
 
             [Assert]
@@ -134,7 +134,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             public void Should_set_the_parameter_value_on_the_query_using_the_supplied_name()
             {
                 A.CallTo(() => _query.SetParameter(A<string>.That.IsEqualTo(_suppliedParameterName),
-                               A<IEnumerable>._,
+                               A<object>._,
                                A<IType>._)).MustHaveHappened();
             }
 
@@ -161,7 +161,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             public void Should_set_the_parameter_value_on_the_query_using_an_IType_that_is_an_instance_of_the_custom_SqlStructured()
             {
                 A.CallTo(() => _query.SetParameter(A<string>._,
-                               A<IEnumerable>._,
+                               A<object>._,
                                A<IType>.That.Matches(arg => arg.GetType() == typeof(SqlServerStructured<int>)))).MustHaveHappened(); ;
             }
         }
@@ -199,7 +199,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             public void Should_not_call_the_SetParameter_method()
             {
                 A.CallTo(() => _query.SetParameter(null, null, null))
-                               .WithAnyArguments().MustHaveHappened();
+                               .WithAnyArguments().MustNotHaveHappened();
             }
 
             [Assert]

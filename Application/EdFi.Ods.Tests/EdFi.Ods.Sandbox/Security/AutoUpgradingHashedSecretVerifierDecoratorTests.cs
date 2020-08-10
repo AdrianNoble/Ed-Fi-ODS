@@ -9,9 +9,8 @@ using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Security;
 using EdFi.Ods.Common.Security.Helpers;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Test.Common;
 using EdFi.TestFixture;
+using FakeItEasy;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 {
@@ -41,13 +40,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var next = Stub<ISecretVerifier>();
 
-                next.Stub(x => x.VerifySecret(Key, Secret, _apiClientSecret))
-                    .Return(true);
+                A.CallTo(() => next.VerifySecret(Key, Secret, _apiClientSecret))
+                    .Returns(true);
 
                 var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(x => x.GetPackedHash(Secret))
-                                   .Return(
+                A.CallTo(() => packedHashConverter.GetPackedHash(Secret))
+                                   .Returns(
                                         new PackedHash
                                         {
                                             Format = 0, HashAlgorithm = HashHelper.GetSha256Hash(Algorithm).ToInt32(), HashBytes = new byte[]
@@ -63,8 +62,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var configProvider = Stub<IHashConfigurationProvider>();
 
-                configProvider.Stub(x => x.GetHashConfiguration())
-                              .Return(
+                A.CallTo(() => configProvider.GetHashConfiguration())
+                              .Returns(
                                    new HashConfiguration
                                    {
                                        Algorithm = Algorithm, Iterations = 321, SaltSize = 40
@@ -84,7 +83,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             [Test]
             public virtual void Should_not_save_new_password()
             {
-                _apiClientSecretProvider.AssertWasNotCalled(x => x.SetSecret(Key, _apiClientSecret));
+                A.CallTo(() => _apiClientSecretProvider.SetSecret(Key, _apiClientSecret)).MustNotHaveHappened();
             }
 
             [Test]
@@ -109,13 +108,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var next = Stub<ISecretVerifier>();
 
-                next.Stub(x => x.VerifySecret(Key, Secret, _apiClientSecret))
-                    .Return(false);
+                A.CallTo(() => next.VerifySecret(Key, Secret, _apiClientSecret))
+                    .Returns(false);
 
                 var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(x => x.GetPackedHash(Secret))
-                                   .Return(
+                A.CallTo(() => packedHashConverter.GetPackedHash(Secret))
+                                   .Returns(
                                         new PackedHash
                                         {
                                             Format = 0, HashAlgorithm = HashHelper.GetSha256Hash(Algorithm).ToInt32(), HashBytes = new byte[]
@@ -131,13 +130,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var securePackedHashProvider = Stub<ISecurePackedHashProvider>();
 
-                securePackedHashProvider.Stub(x => x.ComputePackedHashString(Secret, 123, 321, 12))
-                                        .Return("");
+                A.CallTo(() => securePackedHashProvider.ComputePackedHashString(Secret, 123, 321, 12))
+                                        .Returns("");
 
                 var configProvider = Stub<IHashConfigurationProvider>();
 
-                configProvider.Stub(x => x.GetHashConfiguration())
-                              .Return(
+                A.CallTo(() => configProvider.GetHashConfiguration())
+                              .Returns(
                                    new HashConfiguration
                                    {
                                        Algorithm = Algorithm, Iterations = 321, SaltSize = 5
@@ -159,7 +158,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             [Test]
             public virtual void Should_not_save()
             {
-                _apiClientSecretProvider.AssertWasNotCalled(x => x.SetSecret(Key, _apiClientSecret));
+                A.CallTo(() => _apiClientSecretProvider.SetSecret(Key, _apiClientSecret)).MustNotHaveHappened();
             }
 
             [Test]
@@ -183,23 +182,23 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var next = Stub<ISecretVerifier>();
 
-                next.Stub(x => x.VerifySecret(Key, Secret, _apiClientSecret))
-                    .Return(true);
+                A.CallTo(() => next.VerifySecret(Key, Secret, _apiClientSecret))
+                    .Returns(true);
 
                 var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(x => x.GetPackedHash(Secret))
-                                   .Throw(new FormatException());
+                 A.CallTo(() => packedHashConverter.GetPackedHash(Secret))
+                                   .Throws(new FormatException());
 
                 var securePackedHashProvider = Stub<ISecurePackedHashProvider>();
 
-                securePackedHashProvider.Stub(x => x.ComputePackedHashString(Secret, 123, 321, 12))
-                                        .Return("");
+                A.CallTo(() => securePackedHashProvider.ComputePackedHashString(Secret, 123, 321, 12))
+                                        .Returns("");
 
                 var configProvider = Stub<IHashConfigurationProvider>();
 
-                configProvider.Stub(x => x.GetHashConfiguration())
-                              .Return(
+                A.CallTo(() => configProvider.GetHashConfiguration())
+                              .Returns(
                                    new HashConfiguration
                                    {
                                        Algorithm = Algorithm, Iterations = 321, SaltSize = 5
@@ -228,7 +227,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             [Test]
             public virtual void Should_save_new_secret()
             {
-                _apiClientSecretProvider.AssertWasCalled(x => x.SetSecret(Key, _apiClientSecret), o => o.Repeat.Once());
+                A.CallTo(() => _apiClientSecretProvider.SetSecret(Key, _apiClientSecret)).MustHaveHappenedOnceExactly();
             }
         }
 
@@ -246,13 +245,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var next = Stub<ISecretVerifier>();
 
-                next.Stub(x => x.VerifySecret(Key, Secret, _apiClientSecret))
-                    .Return(true);
+                A.CallTo(() => next.VerifySecret(Key, Secret, _apiClientSecret))
+                    .Returns(true);
 
                 var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(x => x.GetPackedHash(Secret))
-                                   .Return(
+                A.CallTo(() => packedHashConverter.GetPackedHash(Secret))
+                                   .Returns(
                                         new PackedHash
                                         {
                                             Format = 0, HashAlgorithm = HashHelper.GetSha256Hash(Algorithm).ToInt32(), HashBytes = new byte[]
@@ -268,13 +267,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var securePackedHashProvider = Stub<ISecurePackedHashProvider>();
 
-                securePackedHashProvider.Stub(x => x.ComputePackedHashString(Secret, 123, 321, 12))
-                                        .Return("");
+                A.CallTo(() => securePackedHashProvider.ComputePackedHashString(Secret, 123, 321, 12))
+                                        .Returns("");
 
                 var configProvider = Stub<IHashConfigurationProvider>();
 
-                configProvider.Stub(x => x.GetHashConfiguration())
-                              .Return(
+                A.CallTo(() => configProvider.GetHashConfiguration())
+                              .Returns(
                                    new HashConfiguration
                                    {
                                        Algorithm = Algorithm, Iterations = 321, SaltSize = 5
@@ -303,7 +302,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             [Test]
             public virtual void Should_save_new_secret()
             {
-                _apiClientSecretProvider.AssertWasCalled(x => x.SetSecret(Key, _apiClientSecret), o => o.Repeat.Once());
+                A.CallTo(() => _apiClientSecretProvider.SetSecret(Key, _apiClientSecret)).MustHaveHappened();
             }
         }
 
@@ -321,13 +320,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var next = Stub<ISecretVerifier>();
 
-                next.Stub(x => x.VerifySecret(Key, Secret, _apiClientSecret))
-                    .Return(true);
+                A.CallTo(() => next.VerifySecret(Key, Secret, _apiClientSecret))
+                    .Returns(true);
 
                 var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(x => x.GetPackedHash(Secret))
-                                   .Return(
+                A.CallTo(() => packedHashConverter.GetPackedHash(Secret))
+                                   .Returns(
                                         new PackedHash
                                         {
                                             Format = 0, HashAlgorithm = HashHelper.GetSha256Hash(Algorithm).ToInt32(), HashBytes = new byte[]
@@ -343,13 +342,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var securePackedHashProvider = Stub<ISecurePackedHashProvider>();
 
-                securePackedHashProvider.Stub(x => x.ComputePackedHashString(Secret, 123, 321, 12))
-                                        .Return("");
+                A.CallTo(() => securePackedHashProvider.ComputePackedHashString(Secret, 123, 321, 12))
+                                        .Returns("");
 
                 var configProvider = Stub<IHashConfigurationProvider>();
 
-                configProvider.Stub(x => x.GetHashConfiguration())
-                              .Return(
+                A.CallTo(() => configProvider.GetHashConfiguration())
+                              .Returns(
                                    new HashConfiguration
                                    {
                                        Algorithm = "MyNEWSuperSecretAlgorithm", Iterations = 321, SaltSize = 40
@@ -378,7 +377,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             [Test]
             public virtual void Should_save_new_secret()
             {
-                _apiClientSecretProvider.AssertWasCalled(x => x.SetSecret(Key, _apiClientSecret), o => o.Repeat.Once());
+                A.CallTo(() => _apiClientSecretProvider.SetSecret(Key, _apiClientSecret)).MustHaveHappenedOnceExactly();
             }
         }
 
@@ -396,13 +395,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var next = Stub<ISecretVerifier>();
 
-                next.Stub(x => x.VerifySecret(Key, Secret, _apiClientSecret))
-                    .Return(true);
+                A.CallTo(() => next.VerifySecret(Key, Secret, _apiClientSecret))
+                    .Returns(true);
 
                 var packedHashConverter = Stub<IPackedHashConverter>();
 
-                packedHashConverter.Stub(x => x.GetPackedHash(Secret))
-                                   .Return(
+                A.CallTo(() => packedHashConverter.GetPackedHash(Secret))
+                                   .Returns(
                                         new PackedHash
                                         {
                                             Format = 0, HashAlgorithm = HashHelper.GetSha256Hash(Algorithm).ToInt32(), HashBytes = new byte[]
@@ -418,13 +417,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var securePackedHashProvider = Stub<ISecurePackedHashProvider>();
 
-                securePackedHashProvider.Stub(x => x.ComputePackedHashString(Secret, 123, 321, 12))
-                                        .Return("");
+                A.CallTo(() => securePackedHashProvider.ComputePackedHashString(Secret, 123, 321, 12))
+                                        .Returns("");
 
                 var configProvider = Stub<IHashConfigurationProvider>();
 
-                configProvider.Stub(x => x.GetHashConfiguration())
-                              .Return(
+                A.CallTo(() => configProvider.GetHashConfiguration())
+                              .Returns(
                                    new HashConfiguration
                                    {
                                        Algorithm = Algorithm, Iterations = 321, SaltSize = 48
@@ -453,7 +452,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             [Test]
             public virtual void Should_save_new_secret()
             {
-                _apiClientSecretProvider.AssertWasCalled(x => x.SetSecret(Key, _apiClientSecret), o => o.Repeat.Once());
+                A.CallTo(() => _apiClientSecretProvider.SetSecret(Key, _apiClientSecret)).MustHaveHappened();
             }
         }
 
@@ -515,14 +514,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
             {
                 var config = _configProvider.GetHashConfiguration();
 
-                _securePackedHashProvider.AssertWasCalled(x => x.ComputePackedHashString(Secret,
-                    config.GetAlgorithmHashCode(), config.Iterations, config.GetSaltSizeInBytes()));
+                A.CallTo(() => _securePackedHashProvider.ComputePackedHashString(Secret,
+                    config.GetAlgorithmHashCode(), config.Iterations, config.GetSaltSizeInBytes())).MustHaveHappened();
             }
 
             [Test]
             public void Should_persist_the_packedhash()
             {
-                _apiClientSecretProvider.AssertWasCalled(x=> x.SetSecret(Arg<string>.Is.NotNull, Arg<ApiClientSecret>.Is.Equal(_apiClientSecret)));
+                A.CallTo(()=> _apiClientSecretProvider.SetSecret(A<string>.That.IsNotNull(), A<ApiClientSecret>.That.IsEqualTo(_apiClientSecret)));
             }
 
             [Test]

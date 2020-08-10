@@ -76,6 +76,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
             {
                 object objects = null;
                 A.CallTo(() => _cacheProvider.TryGetCachedObject(A<string>._, out objects)).ShouldBe(null);
+                
             }
 
             [Assert]
@@ -162,7 +163,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
             public void Should_NOT_try_save_returned_details_into_cache()
             {
                 A.CallTo(() => _cacheProvider.Insert(A<string>._,
-                               A<ApiClientDetails>.That.IsSameAs(_suppliedInvalidClientDetails),
+                               A<object>.That.IsSameAs(_suppliedInvalidClientDetails),
                                A<DateTime>._,A<TimeSpan>._)).MustHaveHappened();
             }
 

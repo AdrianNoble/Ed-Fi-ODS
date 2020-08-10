@@ -12,7 +12,7 @@ using EdFi.Ods.Security.Authorization;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Ods.Tests._Extensions;
 using EdFi.TestFixture;
-using Rhino.Mocks;
+using FakeItEasy;
 using Shouldly;
 using Test.Common;
 
@@ -23,17 +23,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
     {
         private static IEducationOrganizationCache Given_a_cache_that_returns_all_identifiers_as_type(string educationOrganizationType)
         {
-            var cache = MockRepository.GenerateStub<IEducationOrganizationCache>();
+            var cache =A.Fake<IEducationOrganizationCache>();
 
-            cache.Stub(x => x.GetEducationOrganizationIdentifiers(Arg<int>.Is.Anything))
-                 .Return(new EducationOrganizationIdentifiers(0, educationOrganizationType));
+            A.CallTo(() => cache.GetEducationOrganizationIdentifiers(A<int>._))
+                 .Returns(new EducationOrganizationIdentifiers(0, educationOrganizationType));
 
             return cache;
         }
 
         private static IEducationOrganizationCache Given_a_cache_that_returns_no_identifiers()
         {
-            return MockRepository.GenerateStub<IEducationOrganizationCache>();
+            return A.Fake<IEducationOrganizationCache>();
         }
 
         private static RelationshipsAuthorizationContextData Given_context_data_for_EducationOrganizationId_of_999()
@@ -74,9 +74,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             [Assert]
             public void Should_not_try_to_look_the_identifier_up_in_the_cache()
             {
-                _educationOrganizationCache.AssertWasNotCalled(
-                    x =>
-                        x.GetEducationOrganizationIdentifiers(Arg<int>.Is.Anything));
+                A.CallTo(
+                    () =>
+                        _educationOrganizationCache.GetEducationOrganizationIdentifiers(A<int>._));
             }
         }
 

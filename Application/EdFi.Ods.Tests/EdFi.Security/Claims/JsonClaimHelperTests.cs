@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using EdFi.Ods.Common.Security.Claims;
+using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -17,7 +19,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Claims
     public class JsonClaimHelperTests
     {
         [TestFixture]
-        public class When_serializing_from_EdFiClaimValue_to_Json_claim : TestBase
+        public class When_serializing_from_EdFiClaimValue_to_Json_claim : TestFixtureBase
         {
             private const string SuppliedClaimType = "claimType";
 
@@ -64,8 +66,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Claims
                     {
                         1, 2
                     });
-
-                var thrown = TestForException<Exception>(() => JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue));
+                var thrown = A.CallTo(() => JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue));
                 thrown.ShouldBeNull();
             }
 
@@ -73,13 +74,13 @@ namespace EdFi.Ods.Tests.EdFi.Security.Claims
             public void Should_have_no_errors_when_suppling_only_the_action()
             {
                 var suppliedEdFiClaimValue = new EdFiResourceClaimValue("action");
-                var thrown = TestForException<Exception>(() => JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue));
+                var thrown = A.CallTo(() => JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue));
                 thrown.ShouldBeNull();
             }
         }
 
         [TestFixture]
-        public class When_deserializing_from_a_Json_claim_to_EdFiClaimValue : TestBase
+        public class When_deserializing_from_a_Json_claim_to_EdFiClaimValue : TestFixtureBase
         {
             private const string ExpectedClaimType = "claimType";
             private const string ExpectedAction = "action";
@@ -121,7 +122,7 @@ namespace EdFi.Ods.Tests.EdFi.Security.Claims
             {
                 var suppliedEdFiClaimValue = new EdFiResourceClaimValue(ExpectedAction);
                 var claim = JsonClaimHelper.CreateClaim(ExpectedClaimType, suppliedEdFiClaimValue);
-                var thrown = TestForException<Exception>(() => claim.ToEdFiResourceClaimValue());
+                var thrown = A.CallTo(() => claim.ToEdFiResourceClaimValue());
                 thrown.ShouldBeNull();
             }
         }

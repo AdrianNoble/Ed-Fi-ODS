@@ -225,10 +225,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 entityDefinitions2,
                 associationDefinitions2);
 
-            var domainModelDefinitionsProvider = MockRepository.GenerateStub<IDomainModelDefinitionsProvider>();
-
-            domainModelDefinitionsProvider.Stub(x => x.GetDomainModelDefinitions())
-                                          .Return(modelDefinitions2);
+            var domainModelDefinitionsProvider = A.Fake<IDomainModelDefinitionsProvider>();
+            A.CallTo(()=> domainModelDefinitionsProvider.GetDomainModelDefinitions())
+                          .Returns(modelDefinitions2);
 
             return domainModelDefinitionsProvider;
         }
@@ -277,6 +276,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 Given((ResourceClassBase) GetTestResourceForWithAnExtension());
 
                 Given<IMemberFilter>();
+               
                 var resourcemember = A.Fake<IResourceMembersFilterProvider>();
                 A.CallTo(()=> resourcemember.GetMemberFilter(A<ResourceClassBase>._,A<XElement>._)).Returns(The<IMemberFilter>());
 
@@ -331,15 +331,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 Given((ResourceClassBase) GetTestResourceForWithAnExtension());
 
                 Given<IMemberFilter>();
-
-                Given<IResourceMembersFilterProvider>()
-                   .Stub(
-                        x =>
-                            x.GetMemberFilter(
-                                Arg<ResourceClassBase>.Is.Anything,
-                                Arg<XElement>.Is.Anything
-                            ))
-                   .Return(The<IMemberFilter>());
+              
+                var resourceMembersFilterProvider = A.Fake<IResourceMembersFilterProvider>();
+                A.CallTo(()=> resourceMembersFilterProvider
+                .GetMemberFilter(A<ResourceClassBase>._,A<XElement>._))
+                                   .Returns(The<IMemberFilter>());
             }
 
             protected override void Act()
@@ -395,15 +391,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 Given((ResourceClassBase) GetTestResourceForWithAnExtension());
 
                 Given<IMemberFilter>();
-
-                Given<IResourceMembersFilterProvider>()
-                   .Stub(
-                        x =>
-                            x.GetMemberFilter(
-                                Arg<ResourceClassBase>.Is.Anything,
-                                Arg<XElement>.Is.Anything
-                            ))
-                   .Return(The<IMemberFilter>());
+               
+                var resourceMembersFilterProvider = A.Fake<IResourceMembersFilterProvider>();
+                A.CallTo(()=> resourceMembersFilterProvider.GetMemberFilter(A<ResourceClassBase>._,A<XElement>._))
+                            .Returns(The<IMemberFilter>());
             }
 
             protected override void Act()
@@ -445,15 +436,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 Given((ResourceClassBase) GetTestResourceForWithAnExtension());
 
                 Given<IMemberFilter>();
+                
+                var resourceMembersFilterProvider = A.Fake<IResourceMembersFilterProvider>();
+                A.CallTo(() => resourceMembersFilterProvider.GetMemberFilter(A<ResourceClassBase>._, A<XElement>._))
+                            .Returns(The<IMemberFilter>());
 
-                Given<IResourceMembersFilterProvider>()
-                   .Stub(
-                        x =>
-                            x.GetMemberFilter(
-                                Arg<ResourceClassBase>.Is.Anything,
-                                Arg<XElement>.Is.Anything
-                            ))
-                   .Return(The<IMemberFilter>());
             }
 
             protected override void Act()
@@ -495,7 +482,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
             [Test]
             public void Should_return_a_FilterContext_that_uses_the_member_filter_returned_by_the_supplied_filter_provider()
             {
-                Assert.That(_actualFilterContext.MemberFilter, Is.SameAs(The<IMemberFilter>()));
+                Assert.AreEqual(_actualFilterContext.MemberFilter ,  The<IMemberFilter>());
             }
         }
     }

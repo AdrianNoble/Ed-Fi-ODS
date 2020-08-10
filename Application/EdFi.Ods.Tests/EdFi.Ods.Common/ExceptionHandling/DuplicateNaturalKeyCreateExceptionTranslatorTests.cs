@@ -14,11 +14,10 @@ using EdFi.Ods.Api.ExceptionHandling.Translators.SqlServer;
 using EdFi.Ods.Api.Models;
 using EdFi.Ods.Api.Providers;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NHibernate.Exceptions;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shouldly;
-using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 {
@@ -37,7 +36,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
             protected override void ExecuteBehavior()
             {
-                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(mocks.StrictMock<IDatabaseMetadataProvider>());
+                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(Stub<IDatabaseMetadataProvider>());
                 RESTError actualError;
                 result = translator.TryTranslateMessage(exception, out actualError);
             }
@@ -64,7 +63,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
             protected override void ExecuteBehavior()
             {
-                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(mocks.StrictMock<IDatabaseMetadataProvider>());
+                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(Stub<IDatabaseMetadataProvider>());
                 wasHandled = translator.TryTranslateMessage(exception, out actualError);
             }
 
@@ -93,7 +92,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
             protected override void ExecuteBehavior()
             {
-                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(mocks.StrictMock<IDatabaseMetadataProvider>());
+                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(Stub<IDatabaseMetadataProvider>());
                 wasHandled = translator.TryTranslateMessage(exception, out actualError);
             }
 
@@ -118,10 +117,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
                     "Violation of PRIMARY KEY constraint 'PK_Session'. Cannot insert duplicate key in object 'edfi.Session'. The duplicate key value is (900007, 9, 2014). \r\nThe statement has been terminated.";
 
                 exception = NHibernateExceptionBuilder.CreateException("Generic SQL Exception message...", mess);
-                suppliedMetadataProvider = mocks.StrictMock<IDatabaseMetadataProvider>();
-
-                SetupResult.For(suppliedMetadataProvider.GetIndexDetails("PK_Session"))
-                           .Return(
+                suppliedMetadataProvider = Stub<IDatabaseMetadataProvider>();
+                A.CallTo(()=> suppliedMetadataProvider.GetIndexDetails("PK_Session"))
+                           .Returns(
                                 new IndexDetails
                                 {
                                     IndexName = "SomeIndexName", TableName = "Session", ColumnNames = new List<string>
@@ -177,10 +175,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
                     "Violation of PRIMARY KEY constraint 'PK_Session'. Cannot insert duplicate key in object 'edfi.Session'. The duplicate key value is (900007, 9, 2014). \r\nThe statement has been terminated.";
 
                 exception = NHibernateExceptionBuilder.CreateException("Generic SQL Exception message...", mess);
-                suppliedMetadataProvider = mocks.StrictMock<IDatabaseMetadataProvider>();
-
-                SetupResult.For(suppliedMetadataProvider.GetIndexDetails("PK_Session"))
-                           .Return(null);
+                suppliedMetadataProvider = Stub<IDatabaseMetadataProvider>();
+                A.CallTo(()=> suppliedMetadataProvider.GetIndexDetails("PK_Session"))
+                           .Returns(null);
             }
 
             protected override void ExecuteBehavior()
@@ -218,10 +215,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
                     "Violation of PRIMARY KEY constraint 'BackwardsPkName_PK'. Cannot insert duplicate key in object 'edfi.Session'. The duplicate key value is (900007, 9, 2014). \r\nThe statement has been terminated.";
 
                 exception = NHibernateExceptionBuilder.CreateException("Generic exception message", mess);
-                suppliedMetadataProvider = mocks.StrictMock<IDatabaseMetadataProvider>();
-
-                SetupResult.For(suppliedMetadataProvider.GetIndexDetails("BackwardsPkName_PK"))
-                           .Return(null);
+                suppliedMetadataProvider = Stub<IDatabaseMetadataProvider>();
+                A.CallTo(()=> suppliedMetadataProvider.GetIndexDetails("BackwardsPkName_PK"))
+                              .Returns(null);
             }
 
             protected override void ExecuteBehavior()
@@ -255,7 +251,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 
             protected override void ExecuteBehavior()
             {
-                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(mocks.StrictMock<IDatabaseMetadataProvider>());
+                var translator = new DuplicateNaturalKeyCreateExceptionTranslator(Stub<IDatabaseMetadataProvider>());
                 result = translator.TryTranslateMessage(exception, out actualError);
             }
 

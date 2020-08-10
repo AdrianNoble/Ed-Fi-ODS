@@ -1,4 +1,5 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+﻿#if NETFRAMEWORK
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
@@ -25,14 +26,13 @@ using EdFi.Ods.Entities.Common.EdFi;
 using EdFi.Ods.Security.Authorization.ContextDataProviders.EdFi;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Security.DataAccess.Repositories;
-using EdFi.Ods.Security.Container.Installers;
 using EdFi.Ods.Standard;
 using NHibernate;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shouldly;
 using Test.Common;
 using Test.Common._Stubs;
+using EdFi.TestFixture;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Security.Utilities.CastleWindsor
 {
@@ -48,7 +48,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Utilities.CastleWindsor
     public class SecurityComponentsInstallerTests
     {
         [TestFixture]
-        public class When_registering_in_the_container : TestBase
+        public class When_registering_in_the_container : TestFixtureBase
         {
             private IWindsorContainer testContainer;
 
@@ -146,3 +146,4 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Utilities.CastleWindsor
         }
     }
 }
+#endif

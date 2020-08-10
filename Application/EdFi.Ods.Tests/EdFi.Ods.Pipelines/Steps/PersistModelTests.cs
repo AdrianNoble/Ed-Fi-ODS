@@ -12,9 +12,10 @@ using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Tests.EdFi.Ods.Common._Stubs.Repositories;
 using EdFi.Ods.Tests._Builders;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shouldly;
 using Test.Common;
+using EdFi.TestFixture;
+using FakeItEasy;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
 {
@@ -45,7 +46,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
         }
 
         [TestFixture]
-        public class When_resource_is_neither_updated_nor_created : TestBase
+        public class When_resource_is_neither_updated_nor_created : TestFixtureBase
         {
             private readonly PutResult _putResult = new PutResult();
 
@@ -92,7 +93,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
         }
 
         [TestFixture]
-        public class When_resource_is_created : TestBase
+        public class When_resource_is_created : TestFixtureBase
         {
             private readonly PutResult _putResult = new PutResult();
 
@@ -139,7 +140,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
         }
 
         [TestFixture]
-        public class When_resource_is_modified : TestBase
+        public class When_resource_is_modified : TestFixtureBase
         {
             private readonly PutResult _putResult = new PutResult();
 
@@ -186,7 +187,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
         }
 
         [TestFixture]
-        public class When_the_respository_throws_an_exception : TestBase
+        public class When_the_respository_throws_an_exception : TestFixtureBase
         {
             private readonly PutResult _putResult = new PutResult();
 
@@ -221,7 +222,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
         }
 
         [TestFixture]
-        public class When_etag_provider_throws_an_exception : TestBase
+        public class When_etag_provider_throws_an_exception : TestFixtureBase
         {
             private readonly PutResult _putResult = new PutResult();
 
@@ -238,10 +239,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
 
                 var eTagProvider = Stub<IETagProvider>();
 
-                eTagProvider.Stub(x => x.GetETag(null))
-                            .IgnoreArguments()
-                            .Throw(new Exception("Some Fun Exception"));
-
+                A.CallTo(() => eTagProvider.GetETag(null)).Throws(new Exception("Some Fun Exception"));
+                
                 StubRepository<AccountEntity> repository = New.StubRepository<AccountEntity>()
                                                               .ResourceIsNeverCreatedOrModified;
 
