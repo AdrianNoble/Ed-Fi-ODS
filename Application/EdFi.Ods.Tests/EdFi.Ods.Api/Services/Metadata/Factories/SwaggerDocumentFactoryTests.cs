@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System.Linq;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Models;
@@ -14,7 +14,6 @@ using EdFi.TestFixture;
 using FakeItEasy;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
@@ -150,8 +149,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
 
                 _stubbedOpenApiMetadataResourceStrategy = Stub<IOpenApiMetadataResourceStrategy>();
 
-                _stubbedOpenApiMetadataResourceStrategy.Stub(x => x.GetFilteredResources(Arg<SwaggerDocumentContext>.Is.Anything))
-                                                       .Return(swaggerResources);
+                A.CallTo(() => _stubbedOpenApiMetadataResourceStrategy.GetFilteredResources(A<SwaggerDocumentContext>._))
+                                                       .Returns(swaggerResources);
             }
 
             protected override void Act()
@@ -181,9 +180,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
             [Assert]
             public void Should_filter_the_resources()
             {
-                _stubbedOpenApiMetadataResourceStrategy.AssertWasCalled(
-                    x => x.GetFilteredResources(Arg<SwaggerDocumentContext>.Is.Equal(_swaggerDocumentContext)),
-                    x => x.Repeat.Once());
+                A.CallTo(
+                    () => _stubbedOpenApiMetadataResourceStrategy.GetFilteredResources(A<SwaggerDocumentContext>.That.IsEqualTo(_swaggerDocumentContext))).MustHaveHappened();
             }
 
             [Assert]
@@ -242,4 +240,3 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Factories
         }
     }
 }
-#endif

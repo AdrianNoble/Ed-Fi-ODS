@@ -62,8 +62,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
             protected override void Act()
             {
                 var actioncontext = new ActionContext();
-                
-                _actualResult = _controller.Get().ExecuteResultAsync(CancellationToken.None).GetResultSafely();
+
+                Task t = _controller.Get().ExecuteResultAsync(actioncontext);
+              
+
             }
 
             [Test]
@@ -110,7 +112,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
 
             protected override void Act()
             {
-                _actualResult = _controller.Get().ExecuteResultAsync(CancellationToken.None).GetResultSafely();
+                _actualResult = _controller.Get().ExecuteResultAsync().GetResultSafely();
                 _actualResultContent = _actualResult.Content.ReadAsStringAsync().GetResultSafely();
             }
 

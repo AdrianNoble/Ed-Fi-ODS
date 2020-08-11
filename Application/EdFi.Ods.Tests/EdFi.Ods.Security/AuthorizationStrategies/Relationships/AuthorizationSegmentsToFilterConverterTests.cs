@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +12,13 @@ using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 using EdFi.Ods.Tests._Extensions;
+using EdFi.Ods.Tests.EdFi.Ods.Common._Stubs.Repositories;
 using EdFi.TestFixture;
+using FakeItEasy;
+using FakeItEasy.Configuration;
+using FakeItEasy.Creation;
 using NHibernate;
 using NHibernate.Metadata;
-using Rhino.Mocks;
-using Rhino.Mocks.Interfaces;
 using Shouldly;
 using Test.Common;
 
@@ -27,19 +29,19 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
     // -------------------------------------------------------
     public static class Feature_Converting_segments_to_filters_Extensions
     {
-        public static IMethodOptions<IClassMetadata> that_given_entity_type(
+        public static IReturnValueArgumentValidationConfiguration<IClassMetadata> that_given_entity_type(
             this ISessionFactory dependency,
             Type entity)
         {
-            return dependency.Stub(x => x.GetClassMetadata(entity));
+            return A.CallTo(() => dependency.GetClassMetadata(entity));
         }
 
         public static IClassMetadata that_returns_property_names(
             this IClassMetadata dependency,
             string[] propertyNames)
         {
-            dependency.Stub(x => x.PropertyNames)
-                      .Return(propertyNames);
+            A.CallTo(() => dependency.PropertyNames)
+                      .Returns(propertyNames);
 
             return dependency;
         }
@@ -48,17 +50,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
             this IEducationOrganizationCache dependency,
             string educationOrganizationType)
         {
-            dependency.Stub(x => x.GetEducationOrganizationIdentifiers(999))
-                      .Return(new EducationOrganizationIdentifiers(999, educationOrganizationType));
+            A.CallTo(() => dependency.GetEducationOrganizationIdentifiers(999))
+                      .Returns(new EducationOrganizationIdentifiers(999, educationOrganizationType));
 
             return dependency;
         }
 
-        public static IMethodOptions<EducationOrganizationIdentifiers> that_given_education_organization_id(
+        public static IReturnValueArgumentValidationConfiguration<EducationOrganizationIdentifiers> that_given_education_organization_id(
             this IEducationOrganizationCache dependency,
             int identifier)
         {
-            return dependency.Stub(x => x.GetEducationOrganizationIdentifiers(identifier));
+            return A.CallTo(() => dependency.GetEducationOrganizationIdentifiers(identifier));
         }
     }
 
@@ -111,7 +113,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
 
                 Given<ISessionFactory>()
                    .that_given_entity_type(Supplied("entityType", typeof(TestEntityType)))
-                   .returns(The<IClassMetadata>());
+                   .Returns(The<IClassMetadata>());
 
                 Given<IEducationOrganizationCache>()
                    .that_returns_everything_as_an_education_organization_type_of("LocalEducationAgency");
@@ -172,7 +174,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
 
                 Given<ISessionFactory>()
                    .that_given_entity_type(Supplied("entityType", typeof(TestEntityType)))
-                   .returns(The<IClassMetadata>());
+                   .Returns(The<IClassMetadata>());
 
                 Given<IEducationOrganizationCache>()
                    .that_returns_everything_as_an_education_organization_type_of("LocalEducationAgency");
@@ -234,11 +236,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
             {
                 Given<IEducationOrganizationCache>()
                    .that_given_education_organization_id(999)
-                   .returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
+                   .Returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
 
                 Given<IEducationOrganizationCache>()
                    .that_given_education_organization_id(1000)
-                   .returns(new EducationOrganizationIdentifiers(1000, "School"));
+                   .Returns(new EducationOrganizationIdentifiers(1000, "School"));
 
                 var builder = Given_an_authorization_builder_with_claim_assigned_education_organization_ids(
                     The<IEducationOrganizationCache>(),
@@ -286,7 +288,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
             {
                 Given<IEducationOrganizationCache>()
                    .that_given_education_organization_id(999)
-                   .returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
+                   .Returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
 
                 var builder = Given_an_authorization_builder_with_claim_assigned_education_organization_ids(
                     The<IEducationOrganizationCache>(),
@@ -340,7 +342,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
             {
                 Given<IEducationOrganizationCache>()
                    .that_given_education_organization_id(999)
-                   .returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
+                   .Returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
 
                 var builder = Given_an_authorization_builder_with_claim_assigned_education_organization_ids(
                     The<IEducationOrganizationCache>(),
@@ -385,9 +387,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
             protected override void Arrange()
             {
                 Given<IEducationOrganizationCache>()
-                   .that_given_education_organization_id(999)
-                   .returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
-
+                  .that_given_education_organization_id(999)
+                  .Returns(new EducationOrganizationIdentifiers(999, "LocalEducationAgency"));
+               
                 var builder = Given_an_authorization_builder_with_claim_assigned_education_organization_ids(
                     The<IEducationOrganizationCache>(),
                     999);
@@ -415,4 +417,3 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
         }
     }
 }
-#endif

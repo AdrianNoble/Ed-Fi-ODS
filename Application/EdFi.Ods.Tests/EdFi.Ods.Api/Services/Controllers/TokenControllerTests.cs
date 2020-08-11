@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +29,7 @@ using NUnit.Framework;
 using Test.Common;
 using EdFi.TestFixture;
 using FakeItEasy;
+using Shouldly;
 
 // ReSharper disable InconsistentNaming
 
@@ -116,7 +117,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                                            Id = _suppliedAccessToken
                                        });
                    
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
@@ -192,7 +193,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 [Assert]
                 public void Should_use_ClientAppRepo_to_obtain_the_ApiClient_using_both_the_key_and_secret()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.GetClient("clientId"));
+                    A.CallTo(() => _clientAppRepo.GetClient("clientId"));
                 }
 
                 [Assert]
@@ -200,21 +201,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     ApiClientIdentity apiClientIdentity;
 
-                    _apiClientAuthenticator.AssertWasCalled(
-                        x => x.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity),
-                        x => x.Repeat.Once());
+                    A.CallTo(
+                        () => _apiClientAuthenticator.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity)).MustHaveHappened();
+
                 }
 
                 [Assert]
                 public void Should_use_ClientAppRepo_to_create_token_using_the_supplied_ApiClientId()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.AddClientAccessToken(_suppliedClient.ApiClientId, null));
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(_suppliedClient.ApiClientId, null));
                 }
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                   
                 }
             }
 
@@ -240,20 +240,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     _suppliedAccessToken = Guid.NewGuid();
 
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
+                    _clientAppRepo = Stub<IClientAppRepo>();
 
                     // Simulate a successful lookup of the client id/secret
-                    _clientAppRepo.Expect(x => x.GetClient(Arg<string>.Is.Anything))
-                                  .Return(_suppliedClient);
+                    A.CallTo(() => _clientAppRepo.GetClient(A<string>._))
+                                  .Returns(_suppliedClient);
 
-                    _clientAppRepo.Expect(x => x.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything))
-                                  .Return(
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._))
+                                  .Returns(
                                        new ClientAccessToken(new TimeSpan(0, 10, 0))
                                        {
                                            ApiClient = _suppliedClient, Id = _suppliedAccessToken
                                        });
 
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -332,7 +332,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 [Assert]
                 public void Should_use_ClientAppRepo_to_obtain_the_ApiClient_using_the_key()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.GetClient("clientId"));
+                    A.CallTo(() => _clientAppRepo.GetClient("clientId"));
                 }
 
                 [Assert]
@@ -340,21 +340,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     ApiClientIdentity apiClientIdentity;
 
-                    _apiClientAuthenticator.AssertWasCalled(
-                        x => x.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity),
-                        x => x.Repeat.Once());
+                    A.CallTo(
+                        () => _apiClientAuthenticator.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity)).MustHaveHappened();
+                 
                 }
 
                 [Assert]
                 public void Should_use_ClientAppRepo_to_create_token_using_the_supplied_ApiClientId()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.AddClientAccessToken(_suppliedClient.ApiClientId, null));
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(_suppliedClient.ApiClientId, null)).MustHaveHappened();
                 }
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                   
                 }
             }
 
@@ -403,21 +402,21 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     _suppliedAccessToken = Guid.NewGuid();
 
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
+                    _clientAppRepo = Stub<IClientAppRepo>();
 
                     // Simulate a successful lookup of the client id/secret
-                    _clientAppRepo.Expect(x => x.GetClient(Arg<string>.Is.Anything))
-                                  .Return(_suppliedClient);
+                    A.CallTo(() => _clientAppRepo.GetClient(A<string>._))
+                                  .Returns(_suppliedClient);
 
-                    _clientAppRepo.Expect(x => x.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything))
-                                  .Return(
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._))
+                                  .Returns(
                                        new ClientAccessToken(new TimeSpan(0, 10, 0))
                                        {
                                            ApiClient = _suppliedClient,
                                            Id = _suppliedAccessToken
                                        });
 
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -495,7 +494,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 [Assert]
                 public void Should_use_ClientAppRepo_to_obtain_the_ApiClient_using_the_key()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.GetClient("clientId"));
+                    A.CallTo(() => _clientAppRepo.GetClient("clientId")).MustHaveHappened();
                 }
 
                 [Assert]
@@ -503,22 +502,21 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     ApiClientIdentity apiClientIdentity;
 
-                    _apiClientAuthenticator.AssertWasCalled(
-                        x => x.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity),
-                        x => x.Repeat.Once());
+                    A.CallTo(
+                        () => _apiClientAuthenticator.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity)).MustHaveHappenedOnceExactly();
+                   
                 }
 
                 [Assert]
                 public void Should_use_ClientAppRepo_to_create_token_using_the_supplied_ApiClientId_and_scope()
                 {
-                    _clientAppRepo.AssertWasCalled(x =>
-                            x.AddClientAccessToken(_suppliedClient.ApiClientId, _requestedScope));
+                    A.CallTo(() =>
+                            _clientAppRepo.AddClientAccessToken(_suppliedClient.ApiClientId, _requestedScope)).MustHaveHappened();
                 }
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                   
                 }
             }
 
@@ -554,13 +552,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     _suppliedAccessToken = Guid.NewGuid();
 
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
+                    _clientAppRepo = Stub<IClientAppRepo>();
 
                     // Simulate a successful lookup of the client id/secret
-                    _clientAppRepo.Expect(x => x.GetClient(Arg<string>.Is.Anything))
-                                  .Return(_suppliedClient);
+                    A.CallTo(() => _clientAppRepo.GetClient(A<string>._))
+                                  .Returns(_suppliedClient);
 
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -619,7 +617,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 [Assert]
                 public void Should_use_ClientAppRepo_to_obtain_the_ApiClient_using_the_key()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.GetClient("clientId"));
+                    A.CallTo(() => _clientAppRepo.GetClient("clientId")).MustHaveHappened();
                 }
 
                 [Assert]
@@ -627,22 +625,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     ApiClientIdentity apiClientIdentity;
 
-                    _apiClientAuthenticator.AssertWasCalled(
-                        x => x.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity),
-                        x => x.Repeat.Once());
+                   A.CallTo(
+                        () => _apiClientAuthenticator.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity)).MustHaveHappened();
                 }
 
                 [Assert]
                 public void Should_NOT_use_ClientAppRepo_to_create_token()
                 {
-                    _clientAppRepo.AssertWasNotCalled(x =>
-                            x.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
+                    A.CallTo(() =>
+                            _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._)).MustNotHaveHappened();
                 }
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                    
                 }
             }
 
@@ -678,13 +674,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     _suppliedAccessToken = Guid.NewGuid();
 
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
+                    _clientAppRepo = Stub<IClientAppRepo>();
 
                     // Simulate a successful lookup of the client id/secret
-                    _clientAppRepo.Expect(x => x.GetClient(Arg<string>.Is.Anything))
-                                  .Return(_suppliedClient);
+                    A.CallTo(() => _clientAppRepo.GetClient(A<string>._))
+                                  .Returns(_suppliedClient);
 
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -743,7 +739,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 [Assert]
                 public void Should_use_ClientAppRepo_to_obtain_the_ApiClient_using_the_key()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.GetClient("clientId"));
+                    A.CallTo(() => _clientAppRepo.GetClient("clientId")).MustHaveHappened();
                 }
 
                 [Assert]
@@ -751,22 +747,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     ApiClientIdentity apiClientIdentity;
 
-                    _apiClientAuthenticator.AssertWasCalled(
-                        x => x.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity),
-                        x => x.Repeat.Once());
+                    A.CallTo(
+                        () => _apiClientAuthenticator.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity)).MustHaveHappened();
                 }
 
                 [Assert]
                 public void Should_NOT_use_ClientAppRepo_to_create_token()
                 {
-                    _clientAppRepo.AssertWasNotCalled(x =>
-                            x.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
+                    A.CallTo(() =>
+                            _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._)).MustHaveHappened();
                 }
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                   
                 }
             }
 
@@ -793,20 +787,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     _suppliedAccessToken = Guid.NewGuid();
 
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
+                    _clientAppRepo = Stub<IClientAppRepo>();
 
                     // Simulate a successful lookup of the client id/secret
-                    _clientAppRepo.Expect(x => x.GetClient(Arg<string>.Is.Anything))
-                                  .Return(_suppliedClient);
+                    A.CallTo(() => _clientAppRepo.GetClient(A<string>._))
+                                  .Returns(_suppliedClient);
 
-                    _clientAppRepo.Expect(x => x.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything))
-                                  .Return(
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._))
+                                  .Returns(
                                        new ClientAccessToken(new TimeSpan(0, 10, 0))
                                        {
                                            ApiClient = _suppliedClient, Id = _suppliedAccessToken
                                        });
 
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -883,7 +877,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 [Assert]
                 public void Should_use_ClientAppRepo_to_obtain_the_ApiClient_using_the_key()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.GetClient("clientId"));
+                    A.CallTo(() => _clientAppRepo.GetClient("clientId")).MustHaveHappened();
                 }
 
                 [Assert]
@@ -891,21 +885,19 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     ApiClientIdentity apiClientIdentity;
 
-                    _apiClientAuthenticator.AssertWasCalled(
-                        x => x.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity),
-                        x => x.Repeat.Once());
+                    A.CallTo(
+                        () => _apiClientAuthenticator.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity)).MustHaveHappened();
                 }
 
                 [Assert]
                 public void Should_use_ClientAppRepo_to_create_token_using_the_supplied_ApiClientId()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.AddClientAccessToken(_suppliedClient.ApiClientId, null));
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(_suppliedClient.ApiClientId, null)).MustHaveHappened();
                 }
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                    
                 }
             }
 
@@ -932,20 +924,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     _suppliedAccessToken = Guid.NewGuid();
 
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
+                    _clientAppRepo = Stub<IClientAppRepo>();
 
                     // Simulate a successful lookup of the client id/secret
-                    _clientAppRepo.Expect(x => x.GetClient(Arg<string>.Is.Anything))
-                                  .Return(_suppliedClient);
+                    A.CallTo(() => _clientAppRepo.GetClient(A<string>._))
+                                  .Returns(_suppliedClient);
 
-                    _clientAppRepo.Expect(x => x.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything))
-                                  .Return(
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._))
+                                  .Returns(
                                        new ClientAccessToken(new TimeSpan(0, 10, 0))
                                        {
                                            ApiClient = _suppliedClient, Id = _suppliedAccessToken
                                        });
 
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -1022,7 +1014,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 [Assert]
                 public void Should_use_ClientAppRepo_to_obtain_the_ApiClient_using_the_key()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.GetClient("clientId"));
+                    A.CallTo(() => _clientAppRepo.GetClient("clientId")).MustHaveHappened();
                 }
 
                 [Assert]
@@ -1030,21 +1022,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     ApiClientIdentity apiClientIdentity;
 
-                    _apiClientAuthenticator.AssertWasCalled(
-                        x => x.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity),
-                        x => x.Repeat.Once());
+                    A.CallTo(
+                        () => _apiClientAuthenticator.TryAuthenticate("clientId", "clientSecret", out apiClientIdentity))
+                        .MustHaveHappened();
                 }
 
                 [Assert]
                 public void Should_use_ClientAppRepo_to_create_token_using_the_supplied_ApiClientId()
                 {
-                    _clientAppRepo.AssertWasCalled(x => x.AddClientAccessToken(_suppliedClient.ApiClientId, null));
+                    A.CallTo(() => _clientAppRepo.AddClientAccessToken(_suppliedClient.ApiClientId, null)).MustHaveHappened();
                 }
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                
                 }
             }
 
@@ -1060,8 +1051,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -1107,7 +1098,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                    
                 }
             }
 
@@ -1124,9 +1115,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -1172,7 +1163,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                    
                 }
             }
 
@@ -1188,8 +1179,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
@@ -1244,7 +1235,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                   
                 }
             }
 
@@ -1260,8 +1251,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
@@ -1308,7 +1299,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                   
                 }
             }
 
@@ -1324,8 +1315,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
@@ -1372,7 +1363,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                    
                 }
             }
 
@@ -1388,8 +1379,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
@@ -1436,7 +1427,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                    
                 }
             }
 
@@ -1452,8 +1443,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.MockFalse(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.MockFalse();
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
@@ -1505,8 +1496,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
-                    _apiClientAuthenticator.VerifyAllExpectations();
+                   
                 }
             }
 
@@ -1522,8 +1512,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
 
@@ -1574,7 +1564,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                    
                 }
             }
 
@@ -1590,8 +1580,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 protected override void Arrange()
                 {
-                    _clientAppRepo = mocks.StrictMock<IClientAppRepo>();
-                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                    _clientAppRepo = Stub<IClientAppRepo>();
+                    _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
                     _controller = CreateTokenController(_clientAppRepo, _apiClientAuthenticator);
                 }
@@ -1642,10 +1632,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                 public override void RunOnceAfterAll()
                 {
-                    _clientAppRepo.VerifyAllExpectations();
+                    
                 }
             }
         }
     }
 }
-#endif

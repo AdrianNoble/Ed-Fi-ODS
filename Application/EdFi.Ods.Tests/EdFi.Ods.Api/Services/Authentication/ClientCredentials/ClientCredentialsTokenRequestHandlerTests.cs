@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System.Net.Http;
 using System.Web.Http;
 using EdFi.Admin.DataAccess.Models;
@@ -54,7 +54,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
                                     Client_id = ClientId, Client_secret = ClientSecret
                                 };
 
-                _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock(mocks);
+                _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
                 _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestHandler(_clientAppRepo, _apiClientAuthenticator);
             }
@@ -79,9 +79,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             [Assert]
             public void Should_call_get_client_from_the_database_once()
             {
-               _clientAppRepo.AssertWasCalled(
-                    x => x.GetClient(Arg<string>.Is.Equal(ClientId)),
-                    x => x.Repeat.Once());
+
+               A.CallTo(
+                    () => _clientAppRepo.GetClient(A<string>.That.IsEqualTo(ClientId)))
+                    .MustHaveHappenedOnceExactly();
             }
 
             [Assert]
@@ -89,15 +90,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             {
                 ApiClientIdentity apiClientIdentity;
 
-                _apiClientAuthenticator.AssertWasCalled(
-                    x => x.TryAuthenticate(ClientId, ClientSecret, out apiClientIdentity),
-                    x => x.Repeat.Once());
+                A.CallTo(
+                    () => _apiClientAuthenticator.TryAuthenticate(ClientId, ClientSecret, out apiClientIdentity)).MustHaveHappened();
             }
 
             [Assert]
             public void Should_add_the_client_access_token_to_the_database_once()
             {
-                _clientAppRepo.AssertWasCalled(c => c.AddClientAccessToken(Arg<int>.Is.Equal(0), Arg<string>.Is.Equal(null)), x => x.Repeat.Once());
+                A.CallTo(() => _clientAppRepo.AddClientAccessToken(0, null)).MustHaveHappened();
             }
         }
 
@@ -123,17 +123,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
                 _apiClientAuthenticator = A.Fake<IApiClientAuthenticator>();
                 ApiClientIdentity apiClientIdentity;
 
-                _apiClientAuthenticator
-                   .Expect(aca => aca.TryAuthenticate(null, null, out apiClientIdentity))
-                   .IgnoreArguments()
-                   .Do(
-                        new ApiClientAuthenticatorDelegates.TryAuthenticateDelegate(
+                var apiclientauthenticatedelegate = new ApiClientAuthenticatorDelegates.TryAuthenticateDelegate(
                             (string key, string password, out ApiClientIdentity identity) =>
                             {
                                 identity = null;
                                 return false;
-                            }));
+                            });
 
+                A.CallTo(() => _apiClientAuthenticator.TryAuthenticate(null, null, out apiClientIdentity)).Returns(false);
+                
                 _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestHandler(_clientAppRepo, _apiClientAuthenticator);
             }
 
@@ -159,17 +157,16 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             {
                 ApiClientIdentity apiClientIdentity;
 
-                _apiClientAuthenticator.AssertWasCalled(
-                    x => x.TryAuthenticate(ClientId, ClientSecret, out apiClientIdentity),
-                    x => x.Repeat.Once());
+                A.CallTo(
+                    () => _apiClientAuthenticator.TryAuthenticate(ClientId, ClientSecret, out apiClientIdentity)).MustHaveHappened();
             }
 
             [Assert]
             public void Should_not_add_the_client_access_token_to_the_database_once()
             {
-                _clientAppRepo.AssertWasNotCalled(c => c.AddClientAccessToken(Arg<int>.Is.Anything, Arg<string>.Is.Anything));
+                A.CallTo(
+                   () => _clientAppRepo.AddClientAccessToken(A<int>._, A<string>._)).MustNotHaveHappened();
             }
         }
     }
 }
-#endif

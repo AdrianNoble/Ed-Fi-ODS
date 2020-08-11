@@ -178,7 +178,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.AuthorizationStrategies.Relationships
 
             [Assert]
             public void
-                Should_call_segments_converter_to_convert_segments_built_based_on_the_supplied_claims_with_the_supplied_entity_type_and_filter_builder()
+            Should_call_segments_converter_to_convert_segments_built_based_on_the_supplied_claims_with_the_supplied_entity_type_and_filter_builder()
             {
                 int expectedSegmentLength = Supplied<string[]>("propertyNames").Length;
 
