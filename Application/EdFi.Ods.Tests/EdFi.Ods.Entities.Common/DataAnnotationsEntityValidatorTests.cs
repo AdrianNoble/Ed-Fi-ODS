@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,8 +11,8 @@ using EdFi.Ods.Api.Validation;
 using EdFi.Ods.Common.Attributes;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Entities.NHibernate.StudentAggregate.EdFi;
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shouldly;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
@@ -89,10 +89,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         public void When_validating_person_entity_and_uniqueId_property_contains_trailing_or_leading_whitespace_should_raise_validation_error()
         {
             PersonUniqueIdToUsiCache.GetCache =
-                () => MockRepository.GenerateStub<IPersonUniqueIdToUsiCache>();
+                () => A.Fake<IPersonUniqueIdToUsiCache>();
 
             DescriptorsCache.GetCache =
-                () => MockRepository.GenerateStub<IDescriptorsCache>();
+                () => A.Fake<IDescriptorsCache>();
 
             validationResults = validator.ValidateObject(
                 new Student
@@ -106,4 +106,3 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
         }
     }
 }
-#endif

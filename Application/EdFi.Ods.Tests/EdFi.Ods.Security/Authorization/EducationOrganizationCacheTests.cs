@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORk
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +17,7 @@ using EdFi.Ods.Common.Database;
 using EdFi.Ods.Common.Providers;
 using EdFi.Ods.Security.Authorization;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -98,7 +99,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                 var configValueProvider = Stub<IConfigValueProvider>();
 
                 // Create Faked dependencies
-                var connectionStringProvider = new IOdsDatabaseConnectionStringProvider();
+                var connectionStringProvider = Stub<IOdsDatabaseConnectionStringProvider>();
 
                 var educationOrganizationCacheDataProvider =
                     new FakeEducationOrganizationCacheDataProvider(connectionStringProvider);
@@ -158,12 +159,12 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     true);
 
                 // First retrieve values for the first connection string
-                connectionStringProvider.CurrentValue = "String1";
+               
                 actual88ResultForString1 = edOrgCache.GetEducationOrganizationIdentifiers(88);
                 actual99ResultForString1 = edOrgCache.GetEducationOrganizationIdentifiers(99);
 
                 // Then retrieve values for the second connection string
-                connectionStringProvider.CurrentValue = "String2";
+               
                 actual88ResultForString2 = edOrgCache.GetEducationOrganizationIdentifiers(88);
                 actual99ResultForString2 = edOrgCache.GetEducationOrganizationIdentifiers(99);
             }
@@ -229,9 +230,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     educationServiceCenterId: 330950,
                     localEducationAgencyId: 123456);
 
-                edOrgValueMapper.Stub(x => x.GetEducationOrganizationIdentifiers(default(int)))
-                                .IgnoreArguments()
-                                .Return(suppliedEdOrgValueMap);
+                A.CallTo(() => edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                                .WithAnyArguments()
+                                .Returns(suppliedEdOrgValueMap);
 
                 // edorg identifiers provider
                 suppliedEducationOrganizationIdentifiers = new EducationOrganizationIdentifiers(
@@ -241,9 +242,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     educationServiceCenterId: 330950,
                     localEducationAgencyId: 8675309);
 
-                educationOrganizationIdentifiersProvider.Stub(x => x.GetAllEducationOrganizationIdentifiers())
-                                                        .IgnoreArguments()
-                                                        .Return(
+                A.CallTo(() => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
+                                                        .WithAnyArguments()
+                                                        .Returns(
                                                              Task.Run(
                                                                  () =>
                                                                  {
@@ -300,16 +301,16 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             [Assert]
             public void Should_call_edorg_data_provider_once_to_warm_the_cache()
             {
-                educationOrganizationIdentifiersProvider.AssertWasCalled(
-                    x => x.GetAllEducationOrganizationIdentifiers(),
-                    o => o.Repeat.Once());
+                A.CallTo(
+                    () => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
+                    .MustHaveHappenedOnceExactly();
             }
 
             [Assert]
             public void Should_NOT_call_edorg_value_mapper_for_the_values()
             {
-                edOrgValueMapper.AssertWasNotCalled(
-                    x => x.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId));
+                A.CallTo(
+                    () => edOrgValueMapper.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId)).MustNotHaveHappened();
             }
 
             [Assert]
@@ -360,9 +361,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     educationServiceCenterId: 330950,
                     localEducationAgencyId: 123456);
 
-                edOrgValueMapper.Stub(x => x.GetEducationOrganizationIdentifiers(default(int)))
-                                .IgnoreArguments()
-                                .Return(suppliedEdOrgValueMap);
+                A.CallTo(() => edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                                .WithAnyArguments()
+                                .Returns(suppliedEdOrgValueMap);
 
                 // edorg identifiers provider
                 suppliedEducationOrganizationIdentifiers = new EducationOrganizationIdentifiers(
@@ -403,9 +404,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                             }));
                 }
 
-                educationOrganizationIdentifiersProvider.Stub(x => x.GetAllEducationOrganizationIdentifiers())
-                                                        .IgnoreArguments()
-                                                        .Return(
+                A.CallTo(() => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
+                                                        .WithAnyArguments()
+                                                        .Returns(
                                                              Task.Run(
                                                                  () =>
                                                                  {
@@ -429,16 +430,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             [Assert]
             public void Should_call_edorg_data_provider_once_to_warm_the_cache()
             {
-                educationOrganizationIdentifiersProvider.AssertWasCalled(
-                    x => x.GetAllEducationOrganizationIdentifiers(),
-                    o => o.Repeat.Once());
+               A.CallTo(
+                    () => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers()).MustHaveHappenedOnceExactly();
             }
 
             [Assert]
             public void Should_call_ed_org_value_mapper_for_the_ed_org()
             {
-                edOrgValueMapper.AssertWasCalled(
-                    x => x.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId));
+                A.CallTo(
+                    () => edOrgValueMapper.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId)).MustHaveHappened();
             }
 
             [Assert]
@@ -472,19 +472,18 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                 edOrgValueMapper = Stub<IEducationOrganizationIdentifiersValueMapper>();
                 educationOrganizationIdentifiersProvider = Stub<IEducationOrganizationCacheDataProvider>();
 
-                educationOrganizationIdentifiersProvider.Stub(x => x.GetAllEducationOrganizationIdentifiers())
-                                                        .IgnoreArguments()
-                                                        .Return(
+                A.CallTo(() => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
+                                                        .WithAnyArguments()
+                                                        .Returns(
                                                              Task.Run(
                                                                  () =>
                                                                      (IEnumerable<EducationOrganizationIdentifiers>)
                                                                      new EducationOrganizationIdentifiers[0]));
 
-                edOrgValueMapper = mocks.StrictMock<IEducationOrganizationIdentifiersValueMapper>();
-
-                SetupResult.For(edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
-                           .IgnoreArguments()
-                           .Return(EducationOrganizationIdentifiers.CreateLookupInstance(default(int)));
+                edOrgValueMapper = Stub<IEducationOrganizationIdentifiersValueMapper>();
+                A.CallTo(()=> edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                              .WithAnyArguments()
+                              .Returns(EducationOrganizationIdentifiers.CreateLookupInstance(default(int)));
             }
 
             protected override void Act()
@@ -532,9 +531,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                 edOrgValueMapper = Stub<IEducationOrganizationIdentifiersValueMapper>();
                 educationOrganizationIdentifiersProvider = Stub<IEducationOrganizationCacheDataProvider>();
 
-                educationOrganizationIdentifiersProvider.Stub(x => x.GetAllEducationOrganizationIdentifiers())
-                                                        .IgnoreArguments()
-                                                        .Return(
+                A.CallTo(() => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
+                                                        .WithAnyArguments()
+                                                        .Returns(
                                                              Task.Run(
                                                                  () =>
                                                                      (IEnumerable<EducationOrganizationIdentifiers>)
@@ -548,9 +547,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     educationServiceCenterId: 330950,
                     localEducationAgencyId: 123456);
 
-                edOrgValueMapper.Stub(x => x.GetEducationOrganizationIdentifiers(default(int)))
-                                .IgnoreArguments()
-                                .Return(suppliedEdOrgValueMap);
+                A.CallTo(() => edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                                .WithAnyArguments()
+                                .Returns(suppliedEdOrgValueMap);
             }
 
             protected override void Act()
@@ -575,9 +574,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             [Assert]
             public void Should_call_ed_org_value_mapper_for_the_ed_org_ids_once()
             {
-                edOrgValueMapper.AssertWasCalled(
-                    x => x.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId),
-                    o => o.Repeat.Once());
+                A.CallTo(
+                    () => edOrgValueMapper.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId)).MustHaveHappened();
             }
 
             [Assert]
@@ -588,4 +586,3 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
         }
     }
 }
-#endif

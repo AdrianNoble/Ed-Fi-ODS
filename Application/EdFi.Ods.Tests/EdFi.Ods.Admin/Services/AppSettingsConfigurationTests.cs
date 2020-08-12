@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using System.Configuration;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -17,14 +16,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Admin.Services
         [Test]
         public void When_Accessing_App_Settings()
         {
-            //var config = new ConfigurationBuilder()
-            //   .SetBasePath(TestContext.CurrentContext.TestDirectory)
-            //   .AddJsonFile("appsettings.json", optional: true)
-            //   .AddEnvironmentVariables()
-            //   .Build();
-
             var config = new ConfigurationBuilder()
-               .SetBasePath(@"D:\Ed_Fi\Project\Ed-Fi-ODS\Application\EdFi.Ods.Tests\")
+               .SetBasePath(TestContext.CurrentContext.TestDirectory)
                .AddJsonFile("appsettings.json", optional: true)
                .AddEnvironmentVariables()
                .Build();
