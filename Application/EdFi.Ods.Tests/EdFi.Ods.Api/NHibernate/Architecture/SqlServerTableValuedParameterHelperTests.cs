@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using EdFi.Ods.Common.Infrastructure.SqlServer;
-using EdFi.Ods.Api.Common.Infrastructure.Architecture.SqlServer;
 using EdFi.TestFixture;
 using FakeItEasy;
 using NHibernate;
@@ -61,7 +60,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_set_the_parameter_value_on_the_query_using_the_supplied_name()
             {
-                 A.CallTo(() => _query.SetParameter(_suppliedParameterName, A<object>._, A<IType>._)).MustHaveHappened();
+                A.CallTo(() => _query.SetParameter(_suppliedParameterName, A<object>._, A<IType>._)).MustHaveHappened();
             }
 
             [Assert]

@@ -15,7 +15,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using EdFi.Ods.Api.Authentication;
-using EdFi.Ods.Api.Services.Authorization;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Conventions;
 using EdFi.Ods.Common.Infrastructure.Filtering;

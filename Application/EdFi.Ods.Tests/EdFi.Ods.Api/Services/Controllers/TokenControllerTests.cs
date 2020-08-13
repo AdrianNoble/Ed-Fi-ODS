@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-
+#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Routing;
 using EdFi.Admin.DataAccess.Models;
-using EdFi.Ods.Api.Models.Tokens;
 using EdFi.Ods.Sandbox.Repositories;
+using EdFi.Ods.Api.Common.Models.Tokens;
 using EdFi.Ods.Api.Services;
 using EdFi.Ods.Api.Services.Authentication;
 using EdFi.Ods.Api.Services.Authentication.ClientCredentials;
@@ -30,6 +30,9 @@ using Test.Common;
 using EdFi.TestFixture;
 using FakeItEasy;
 using Shouldly;
+using EdFi.Ods.Api.Controllers;
+using EdFi.Ods.Api.Providers;
+using EdFi.Ods.Api.Models.Tokens;
 
 // ReSharper disable InconsistentNaming
 
@@ -44,9 +47,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
             IApiClientAuthenticator apiClientAuthenticator,
             HttpMethod method = null)
         {
-            var handlers = new ITokenRequestHandler[]
+            var handlers = A.Fake<ITokenRequestProvider>();
+           
+            var handlers = new ITokenRequestProvider
                            {
-                               new ClientCredentialsTokenRequestHandler(clientAppRepo, apiClientAuthenticator)
+                               new ClientCredentialsTokenRequestProvider(clientAppRepo, apiClientAuthenticator)
                            };
 
             var controller = new TokenController(handlers.First());
@@ -377,7 +382,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 private ApiClient _suppliedClient;
                 private Guid _suppliedAccessToken;
                 private string _requestedScope;
-
+                
                 private HttpResponseMessage _actualResponseMessage;
                 private JObject _actualJsonContent;
 
@@ -399,7 +404,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                         .Select(x => x.EducationOrganizationId)
                         .First()
                         .ToString();
-
+                    
                     _suppliedAccessToken = Guid.NewGuid();
 
                     _clientAppRepo = Stub<IClientAppRepo>();
@@ -412,7 +417,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                                   .Returns(
                                        new ClientAccessToken(new TimeSpan(0, 10, 0))
                                        {
-                                           ApiClient = _suppliedClient,
+                                           ApiClient = _suppliedClient, 
                                            Id = _suppliedAccessToken
                                        });
 
@@ -519,7 +524,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                    
                 }
             }
-
+            
             [TestFixture]
             public class With_a_scope_not_matching_an_associated_EdOrgId : TestFixtureBase
             {
@@ -530,7 +535,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 private ApiClient _suppliedClient;
                 private Guid _suppliedAccessToken;
                 private string _requestedScope;
-
+                
                 private HttpResponseMessage _actualResponseMessage;
                 private JObject _actualJsonContent;
 
@@ -549,7 +554,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     // Scope the request to something not in list above
                     _requestedScope = "1000";
-
+                    
                     _suppliedAccessToken = Guid.NewGuid();
 
                     _clientAppRepo = Stub<IClientAppRepo>();
@@ -587,17 +592,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     Assert.That(_actualResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
                 }
-
+                
                 [Assert]
                 public void Should_return_an_error_body_indicating_an_invalid_scope_was_supplied()
                 {
                     Assert.That(
                         _actualJsonContent.Properties().Count(),
-                        Is.EqualTo(2),
+                        Is.EqualTo(2), 
                         _actualJsonContent.ToString());
 
-                    Assert.That(
-                        _actualJsonContent["error"].Value<string>(),
+                    Assert.That( 
+                        _actualJsonContent["error"].Value<string>(), 
                         Is.EqualTo("invalid_scope"));
                 }
 
@@ -606,11 +611,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     Assert.That(
                         _actualJsonContent.Properties().Count(),
-                        Is.EqualTo(2),
+                        Is.EqualTo(2), 
                         _actualJsonContent.ToString());
 
-                    Assert.That(
-                        _actualJsonContent["error_description"].Value<string>(),
+                    Assert.That( 
+                        _actualJsonContent["error_description"].Value<string>(), 
                         Is.EqualTo("The client is not explicitly associated with the EducationOrganizationId specified in the requested 'scope'."));
                 }
 
@@ -652,7 +657,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 private ApiClient _suppliedClient;
                 private Guid _suppliedAccessToken;
                 private string _requestedScope;
-
+                
                 private HttpResponseMessage _actualResponseMessage;
                 private JObject _actualJsonContent;
 
@@ -671,7 +676,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
 
                     // Scope the request to something not in list above
                     _requestedScope = "9a9";
-
+                    
                     _suppliedAccessToken = Guid.NewGuid();
 
                     _clientAppRepo = Stub<IClientAppRepo>();
@@ -709,17 +714,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     Assert.That(_actualResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
                 }
-
+                
                 [Assert]
                 public void Should_return_an_error_body_indicating_an_invalid_scope_was_supplied()
                 {
                     Assert.That(
                         _actualJsonContent.Properties().Count(),
-                        Is.EqualTo(2),
+                        Is.EqualTo(2), 
                         _actualJsonContent.ToString());
 
-                    Assert.That(
-                        _actualJsonContent["error"].Value<string>(),
+                    Assert.That( 
+                        _actualJsonContent["error"].Value<string>(), 
                         Is.EqualTo("invalid_scope"));
                 }
 
@@ -728,11 +733,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
                 {
                     Assert.That(
                         _actualJsonContent.Properties().Count(),
-                        Is.EqualTo(2),
+                        Is.EqualTo(2), 
                         _actualJsonContent.ToString());
 
-                    Assert.That(
-                        _actualJsonContent["error_description"].Value<string>(),
+                    Assert.That( 
+                        _actualJsonContent["error_description"].Value<string>(), 
                         Is.EqualTo("The supplied 'scope' was not a number (it should be an EducationOrganizationId that is explicitly associated with the client)."));
                 }
 
@@ -1638,3 +1643,4 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Controllers
         }
     }
 }
+#endif

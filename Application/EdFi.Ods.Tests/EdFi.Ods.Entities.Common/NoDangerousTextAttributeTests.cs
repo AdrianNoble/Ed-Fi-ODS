@@ -8,8 +8,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using EdFi.Ods.Api.Attributes;
 using EdFi.Ods.Api.Validation;
-using EdFi.Ods.Api.Common.Attributes;
-using EdFi.Ods.Api.Common.Validation;
 using EdFi.TestFixture;
 using NUnit.Framework;
 using Test.Common;

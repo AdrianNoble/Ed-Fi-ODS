@@ -6,8 +6,9 @@
 using System.Net.Http;
 using System.Web.Http;
 using EdFi.Admin.DataAccess.Models;
+using EdFi.Ods.Api.Models.ClientCredentials;
 using EdFi.Ods.Api.Models.Tokens;
-using EdFi.Ods.Api.Services.Authentication.ClientCredentials;
+using EdFi.Ods.Api.Providers;
 using EdFi.Ods.Common.Security;
 using EdFi.Ods.Sandbox.Repositories;
 using EdFi.TestFixture;
@@ -29,12 +30,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
         public class When_handling_a_valid_token_request
             : TestFixtureBase
         {
-            private readonly HttpRequestMessage _httpRequest = null;
             private TokenRequest _tokenRequest;
             private IClientAppRepo _clientAppRepo;
             private IApiClientAuthenticator _apiClientAuthenticator;
-            private ClientCredentialsTokenRequestHandler _clientCredentialsTokenRequestHandler;
-            private IHttpActionResult _actionResult;
+            private ClientCredentialsTokenRequestProvider _clientCredentialsTokenRequestHandler;
+            private AuthenticationResponse _actionResult;
 
             protected override void Arrange()
             {
@@ -51,17 +51,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
                
                 _tokenRequest = new TokenRequest
                                 {
-                                    Client_id = ClientId, Client_secret = ClientSecret
-                                };
+                                    Client_id = ClientId, Client_secret = ClientSecret,Grant_type= "client_credentials"
+                };
 
                 _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
-                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestHandler(_clientAppRepo, _apiClientAuthenticator);
+                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestProvider(_clientAppRepo, _apiClientAuthenticator);
             }
 
             protected override void Act()
             {
-                _clientCredentialsTokenRequestHandler.Handle(_httpRequest, _tokenRequest, out _actionResult);
+                _actionResult = _clientCredentialsTokenRequestHandler.HandleAsync(_tokenRequest).Result;
             }
 
             [Assert]
@@ -81,7 +81,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             {
 
                A.CallTo(
-                    () => _clientAppRepo.GetClient(A<string>.That.IsEqualTo(ClientId)))
+                    () => _clientAppRepo.GetClient(ClientId))
                     .MustHaveHappenedOnceExactly();
             }
 
@@ -104,13 +104,12 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
         public class When_handling_an_invalid_token_request
             : TestFixtureBase
         {
-            private readonly HttpRequestMessage _httpRequest = null;
+            
             private IClientAppRepo _clientAppRepo;
             private IApiClientAuthenticator _apiClientAuthenticator;
             private TokenRequest _tokenRequest;
-            private ClientCredentialsTokenRequestHandler _clientCredentialsTokenRequestHandler;
-            private IHttpActionResult _actionResult;
-
+            private ClientCredentialsTokenRequestProvider _clientCredentialsTokenRequestHandler;
+            private AuthenticationResponse _actionResult;
             protected override void Arrange()
             {
                 _clientAppRepo = A.Fake<IClientAppRepo>();
@@ -132,12 +131,12 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
 
                 A.CallTo(() => _apiClientAuthenticator.TryAuthenticate(null, null, out apiClientIdentity)).Returns(false);
                 
-                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestHandler(_clientAppRepo, _apiClientAuthenticator);
+                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestProvider(_clientAppRepo, _apiClientAuthenticator);
             }
 
             protected override void Act()
             {
-                _clientCredentialsTokenRequestHandler.Handle(_httpRequest, _tokenRequest, out _actionResult);
+                _actionResult =  _clientCredentialsTokenRequestHandler.HandleAsync(_tokenRequest).Result;
             }
 
             [Assert]

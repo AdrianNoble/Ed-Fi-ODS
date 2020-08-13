@@ -5,12 +5,9 @@
 
 using System.ComponentModel.DataAnnotations;
 using EdFi.Ods.Common.Attributes;
-using EdFi.Ods.Api.Common.Attributes;
-using EdFi.Ods.Api.Common.Validation;
 using EdFi.TestFixture;
 using NUnit.Framework;
 using Shouldly;
-using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Validation
 {

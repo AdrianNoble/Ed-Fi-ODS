@@ -6,14 +6,13 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Http.Controllers;
-using System.Web.Http.Metadata;
-using System.Web.Http.Metadata.Providers;
-using System.Web.Http.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Web.Http.Routing;
-using EdFi.Ods.Api.Common.Models.Requests.Students.EdFi;
-using EdFi.Ods.Api.Services.Binders;
+using EdFi.Ods.Api.ModelBinders;
 using NUnit.Framework;
 using Shouldly;
+using System.Threading.Tasks;
+using FakeItEasy;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.WebApi
 {
@@ -36,24 +35,22 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi
 
             controllerContext.RouteData = new HttpRouteData(new HttpRoute(), routeDictionary);
 
-            var actionContext = new HttpActionContext
-                                {
-                                    ControllerContext = controllerContext
-                                };
-
-            var bindingContext = new ModelBindingContext
-                                 {
-                                     ModelMetadata = new ModelMetadata(
-                                         new EmptyModelMetadataProvider(),
-                                         typeof(object),
-                                         () => new object(),
-                                         typeof(StudentGetByIds),
-                                         "foo")
-                                 };
-
+         
+            var bindingContext = A.Fake<ModelBindingContext>();
+            //{
+            //    ModelMetadata = new ModelMetadata(
+            //                             new EmptyModelMetadataProvider(),
+            //                             typeof(object),
+            //                             () => new object(),
+            //                             typeof(StudentGetByIds),
+            //                             "foo")
+            //};
+            //ModelMetadata model =
+            //bindingContext.ModelMetadata=
             var sut = new IdsModelBinder();
-            var result = sut.BindModel(actionContext, bindingContext);
-            result.ShouldBeTrue();
+            Task result = sut.BindModelAsync(bindingContext);
+            result.IsCompleted.ShouldBeTrue();
+           
         }
 
         [Test]
@@ -63,24 +60,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi
             var routeDictionary = new HttpRouteValueDictionary(new Dictionary<string, object>());
             controllerContext.RouteData = new HttpRouteData(new HttpRoute(), routeDictionary);
 
-            var actionContext = new HttpActionContext
-                                {
-                                    ControllerContext = controllerContext
-                                };
-
-            var bindingContext = new ModelBindingContext
-                                 {
-                                     ModelMetadata = new ModelMetadata(
-                                         new EmptyModelMetadataProvider(),
-                                         typeof(object),
-                                         () => new object(),
-                                         typeof(StudentGetByIds),
-                                         "foo")
-                                 };
-
+            //var bindingContext = new ModelBindingContext
+            //                     {
+            //                         ModelMetadata = new ModelMetadata(
+            //                             new EmptyModelMetadataProvider(),
+            //                             typeof(object),
+            //                             () => new object(),
+            //                             typeof(StudentGetByIds),
+            //                             "foo")
+            //                     };
+            var bindingContext = A.Fake<ModelBindingContext>();
+ 
             var sut = new IdsModelBinder();
-            var result = sut.BindModel(actionContext, bindingContext);
-            result.ShouldBeFalse();
+            Task result = sut.BindModelAsync(bindingContext);
+            result.IsCompleted.ShouldBeFalse();
         }
     }
 }

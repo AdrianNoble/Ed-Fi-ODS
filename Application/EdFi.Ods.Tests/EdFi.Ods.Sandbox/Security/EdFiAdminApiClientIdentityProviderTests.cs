@@ -18,7 +18,6 @@ using FakeItEasy;
 using NUnit.Framework;
 using EdFi.Ods.Sandbox.Provisioners;
 using Microsoft.Extensions.Configuration;
-using EdFi.Ods.Api.NetCore.Providers;
 
 // ReSharper disable InconsistentNaming
 

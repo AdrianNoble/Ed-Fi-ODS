@@ -2,13 +2,12 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http.Controllers;
-using EdFi.Ods.Api.Services.Filters;
+using EdFi.Ods.Api.Filters;
 using EdFi.TestFixture;
+using FakeItEasy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -24,64 +23,48 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
             [Assert]
             public void Existing_arguments_should_not_trigger_filter()
             {
-                var actionContext = new HttpActionContext();
+                var actionExecutingContext = A.Fake<ActionExecutingContext>();
+                
                 var actionFilter = new CheckModelForNullAttribute();
-                actionContext.ActionArguments.Add("request", "ParameterValue");
-                actionContext.ActionArguments.Add("classParameter", new CheckModelForNullAttribute());
-
-                actionFilter.OnActionExecuting(actionContext);
-                actionContext.Response.ShouldBeNull();
+                actionExecutingContext.ActionDescriptor.Properties.Add("request", "ParameterValue");
+                actionExecutingContext.ActionDescriptor.Properties.Add("classParameter", new CheckModelForNullAttribute());
+               
+                actionFilter.OnActionExecuting(actionExecutingContext);
+                actionExecutingContext.Result.ShouldBeNull();
             }
 
             [Assert]
             public void Single_null_argument_should_trigger_filter()
             {
-                var httpActionDescriptor = Stub<HttpActionDescriptor>();
+                var actionExecutingContext = A.Fake<ActionExecutingContext>();
+                actionExecutingContext.ActionDescriptor.Properties.Add("request", "ParameterValue");
+                actionExecutingContext.ActionDescriptor.Properties.Add("classParameter", null);
 
-                var controllerContext = new HttpControllerContext
-                                        {
-                                            Request = new HttpRequestMessage()
-                                        };
-
-                var actionContext = new HttpActionContext(controllerContext, httpActionDescriptor);
                 var actionFilter = new CheckModelForNullAttribute();
-                actionContext.ActionArguments.Add("requestParameter", "ParameterValue");
-                actionContext.ActionArguments.Add("classParameter", null);
-
-                actionFilter.OnActionExecuting(actionContext);
-                var response = actionContext.Response;
+               
+                actionFilter.OnActionExecuting(actionExecutingContext);
+                BadRequestObjectResult response =(BadRequestObjectResult)actionExecutingContext.Result;
                 response.ShouldNotBeNull();
-                response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-                var responseMessage = response.Content.ReadAsStringAsync()
-                                              .Result;
+                var responseMessage = response.ExecuteResultAsync(actionExecutingContext).Exception.Message;
+                responseMessage.ShouldBe("{\"Message\":\"The request is invalid because it is missing requestParameter', 'classParameter \"}");
 
-                responseMessage.ShouldBe("{\"Message\":\"The request is invalid because it is missing a classParameter.\"}");
             }
 
             [Assert]
             public void Multiple_null_arguments_should_trigger_filter()
             {
-                var httpActionDescriptor = Stub<HttpActionDescriptor>();
-
-                var controllerContext = new HttpControllerContext
-                                        {
-                                            Request = new HttpRequestMessage()
-                                        };
-
-                var actionContext = new HttpActionContext(controllerContext, httpActionDescriptor);
+           
                 var actionFilter = new CheckModelForNullAttribute();
-                actionContext.ActionArguments.Add("requestParameter", null);
-                actionContext.ActionArguments.Add("classParameter", null);
+                var actionExecutingContext = A.Fake<ActionExecutingContext>();
+                actionExecutingContext.ActionDescriptor.Properties.Add("request", null);
+                actionExecutingContext.ActionDescriptor.Properties.Add("classParameter", null);
 
-                actionFilter.OnActionExecuting(actionContext);
-                var response = actionContext.Response;
+                actionFilter.OnActionExecuting(actionExecutingContext);
+                var response = actionExecutingContext.Result;
                 response.ShouldNotBeNull();
-                response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-
-                var responseMessage = response.Content.ReadAsStringAsync()
-                                              .Result;
-
+               
+                var responseMessage = response.ExecuteResultAsync(actionExecutingContext).Exception.Message;
                 responseMessage.ShouldBe("{\"Message\":\"The request is invalid because it is missing requestParameter', 'classParameter \"}");
 
             }

@@ -5,8 +5,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using EdFi.Ods.Api.Common.ExceptionHandling.Translators;
-using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Api.ExceptionHandling.Translators;
 using EdFi.Ods.Api.Models;
 using EdFi.TestFixture;
@@ -14,7 +12,6 @@ using NHibernate;
 using NHibernate.Exceptions;
 using NUnit.Framework;
 using Shouldly;
-using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.ExceptionHandling
 {

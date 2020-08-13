@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Web;
 using EdFi.Ods.Api.Services.Authorization;
 using Http.TestLibrary;
+using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using Shouldly;
 
@@ -19,6 +20,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Common
         [Test]
         public void Should_Cache_item_in_HttpContext_Items()
         {
+            
             using (var simulatedContext = new HttpSimulator())
             {
                 var key = "abc";
