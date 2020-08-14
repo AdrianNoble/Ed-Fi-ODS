@@ -189,6 +189,7 @@ namespace EdFi.TestFixture
         /// <returns></returns>
         protected TSupplied Supplied<TSupplied>(TSupplied value)
         {
+            if(!_suppliedByName.ContainsKey(typeof(TSupplied).FullName))
             _suppliedByName.Add(typeof(TSupplied).FullName, value);
             return value;
         }

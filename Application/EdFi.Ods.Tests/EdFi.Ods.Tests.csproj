@@ -77,6 +77,7 @@
     <ProjectReference Include="..\..\tests\EdFi.TestFixture\EdFi.TestFixture.csproj" />
     <ProjectReference Include="..\EdFi.Admin.DataAccess\EdFi.Admin.DataAccess.csproj" />
     <ProjectReference Include="..\EdFi.Common\EdFi.Common.csproj" />
+    <ProjectReference Include="..\EdFi.Ods.Api\EdFi.Ods.Api.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Features\EdFi.Ods.Features.csproj" />
     <ProjectReference Include="..\EdFi.Security.DataAccess\EdFi.Security.DataAccess.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Sandbox\EdFi.Ods.Sandbox.csproj" />
@@ -85,7 +86,6 @@
     <ProjectReference Include="..\EdFi.Ods.Composites.Test\EdFi.Ods.Composites.Test.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Profiles.Test\EdFi.Ods.Profiles.Test.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Admin\EdFi.Ods.Admin.csproj" />
-    <ProjectReference Include="..\EdFi.Ods.Api\EdFi.Ods.Api.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Common\EdFi.Ods.Common.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Security\EdFi.Ods.Security.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Tests.TestExtension\EdFi.Ods.Tests.TestExtension.csproj" />

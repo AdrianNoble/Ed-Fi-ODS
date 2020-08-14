@@ -204,7 +204,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Architecture
             [Assert]
             public void Should_pass_the_call_through_to_the_SetParameterList_method()
             {
-                A.CallTo(() => _query.SetParameter(_suppliedParameterName, _suppliedIds)).MustHaveHappened();
+                A.CallTo(() => _query.SetParameterList(_suppliedParameterName, _suppliedIds)).MustHaveHappened();
             }
         }
     }

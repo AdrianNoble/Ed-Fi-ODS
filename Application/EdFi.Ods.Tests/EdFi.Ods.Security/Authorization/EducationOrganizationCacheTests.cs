@@ -2,13 +2,13 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Providers;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Database;
@@ -89,19 +89,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             protected override void ExecuteBehavior()
             {
                 // Provide external dependencies not needing specific behavior in this test
-                var cacheProvider = new MemoryCacheProvider
-                                    {
-                                        MemoryCache = new MemoryCache("IsolatedForUnitTest")
-                                    };
-
-                var configValueProvider = Stub<IConfigValueProvider>();
-
+                var cacheProvider = Stub<ICacheProvider>();
+                var edFiOdsInstanceIdentificationProvider = Stub<IEdFiOdsInstanceIdentificationProvider>();
+                var educationOrganizationIdentifiersValueMapper= Stub<IEducationOrganizationIdentifiersValueMapper>();
+                
                 // Create Faked dependencies
                 var connectionStringProvider = Stub<IOdsDatabaseConnectionStringProvider>();
 
-                var educationOrganizationCacheDataProvider =
-                    new FakeEducationOrganizationCacheDataProvider(connectionStringProvider);
-
+                var educationOrganizationCacheDataProvider = Stub<IEducationOrganizationCacheDataProvider>();
+                    
                 var suppliedIdentifierSet1 = new List<EducationOrganizationIdentifiers>
                                              {
                                                  new EducationOrganizationIdentifiers(
@@ -144,15 +140,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                                                      schoolId: 888)
                                              };
 
-                // Set up the cache data provider to return different data based on different connection strings
-                educationOrganizationCacheDataProvider.AddResult("String1", suppliedIdentifierSet1);
-                educationOrganizationCacheDataProvider.AddResult("String2", suppliedIdentifierSet2);
+                A.CallTo(() => educationOrganizationCacheDataProvider.GetAllEducationOrganizationIdentifiers())
+                    .Returns(suppliedIdentifierSet1);
+                A.CallTo(() => educationOrganizationCacheDataProvider.GetAllEducationOrganizationIdentifiers())
+                   .Returns(suppliedIdentifierSet2);
+
 
                 // Create the cache
                 var edOrgCache = new EducationOrganizationCache(
                     cacheProvider,
-                    new EdFiOdsInstanceIdentificationProvider(connectionStringProvider),
-                    educationOrganizationCacheDataProvider,
+                    edFiOdsInstanceIdentificationProvider,
+                    educationOrganizationIdentifiersValueMapper,
                     educationOrganizationCacheDataProvider,
                     true);
 
@@ -258,11 +256,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
 
             protected override void Act()
             {
-                var memoryCacheProvider = new MemoryCacheProvider
-                                          {
-                                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
-                                          };
-
+                var memoryCacheProvider = Stub<ICacheProvider>();
+                
                 var educationOrganizationCache = new EducationOrganizationCache(
                     memoryCacheProvider,
                     edfiOdsInstanceIdentificationProvider,
@@ -371,11 +366,12 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     educationServiceCenterId: 330950,
                     localEducationAgencyId: 8675309);
 
-                var memoryCacheProvider = new MemoryCacheProvider
-                                          {
-                                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
-                                          };
-
+                //var memoryCacheProvider = new MemoryCacheProvider
+                //                          {
+                //                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
+                //                          };
+                var memoryCacheProvider = Stub<MemoryCacheProvider>();
+                
                 var educationOrganizationCache = new EducationOrganizationCache(
                     memoryCacheProvider,
                     edfiOdsInstanceIdentificationProvider,
@@ -486,11 +482,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
 
             protected override void Act()
             {
-                var memoryCacheProvider = new MemoryCacheProvider
-                                          {
-                                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
-                                          };
-
+                //var memoryCacheProvider = new MemoryCacheProvider
+                //                          {
+                //                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
+                //                          };
+                var memoryCacheProvider = Stub<MemoryCacheProvider>();
                 var educationOrganizationCache = new EducationOrganizationCache(
                     memoryCacheProvider,
                     edfiOdsInstanceIdentificationProvider,
@@ -552,10 +548,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
 
             protected override void Act()
             {
-                var memoryCacheProvider = new MemoryCacheProvider
-                                          {
-                                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
-                                          };
+                var memoryCacheProvider = Stub<MemoryCacheProvider>();
 
                 var educationOrganizationCache = new EducationOrganizationCache(
                     memoryCacheProvider,
@@ -584,4 +577,3 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
         }
     }
 }
-#endif
