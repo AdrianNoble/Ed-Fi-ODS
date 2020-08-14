@@ -19,6 +19,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Filtering
     {
         public class When_setting_and_getting_authorization_filter_context : ScenarioFor<AuthorizationFilterContextProvider>
         {
+            private static AuthorizationFilterContextProvider authProvider;
             protected override void Arrange()
             {
                 Given<IContextStorage>(new HashtableContextStorage());
@@ -26,17 +27,19 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Filtering
                 Given<ISession>();
 
                 Supplied<IReadOnlyList<AuthorizationFilterDetails>>(CreateTestParameters());
+                authProvider = new AuthorizationFilterContextProvider(Given<IContextStorage>(new HashtableContextStorage()));
+
             }
 
             protected override void Act()
             {
-                TestSubject.SetFilterContext(Supplied<IReadOnlyList<AuthorizationFilterDetails>>());
+                authProvider.SetFilterContext(Supplied<IReadOnlyList<AuthorizationFilterDetails>>());
             }
 
             [Assert]
             public void Should_save_the_parameters_into_context_storage()
             {
-                Assert.That(
+               Assert.That(
                     Given<IContextStorage>().GetValue<IReadOnlyList<AuthorizationFilterDetails>>("FilterContextProvider.FilterContext"), 
                     Is.EquivalentTo(Supplied<IReadOnlyList<AuthorizationFilterDetails>>()));
             }

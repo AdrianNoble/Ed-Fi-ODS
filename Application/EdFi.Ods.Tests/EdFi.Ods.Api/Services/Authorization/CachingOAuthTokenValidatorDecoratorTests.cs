@@ -70,8 +70,9 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
             public void Should_check_the_cache_for_the_details()
             {
                 object objects = null;
-                A.CallTo(() => _cacheProvider.TryGetCachedObject(A<string>._, out objects)).ShouldBe(null);
-                
+                A.CallTo(() => _cacheProvider.TryGetCachedObject(A<string>._, out objects)).MustHaveHappened();
+                var result= _cacheProvider.TryGetCachedObject(_suppliedApiToken, out objects);
+                Assert.AreEqual(false, result);
             }
 
             [Assert]
@@ -159,7 +160,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authorization
             {
                 A.CallTo(() => _cacheProvider.Insert(A<string>._,
                                A<object>.That.IsSameAs(_suppliedInvalidClientDetails),
-                               A<DateTime>._,A<TimeSpan>._)).MustHaveHappened();
+                               A<DateTime>._,A<TimeSpan>._)).MustNotHaveHappened();
             }
 
             [Assert]

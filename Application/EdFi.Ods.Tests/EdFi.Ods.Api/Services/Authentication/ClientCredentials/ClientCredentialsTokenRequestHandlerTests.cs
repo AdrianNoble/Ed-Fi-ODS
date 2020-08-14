@@ -56,11 +56,11 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
 
                 _apiClientAuthenticator = _apiClientAuthenticatorHelper.Mock();
 
-                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestProvider(_clientAppRepo, _apiClientAuthenticator);
             }
 
             protected override void Act()
             {
+                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestProvider(_clientAppRepo, _apiClientAuthenticator);
                 _actionResult = _clientCredentialsTokenRequestHandler.HandleAsync(_tokenRequest).Result;
             }
 
@@ -73,7 +73,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             [Assert]
             public void Should_have_action_result_type_of_authentication_success()
             {
-                Assert.That(_actionResult, Is.InstanceOf<AuthenticationSuccess>());
+                Assert.That(_actionResult, Is.InstanceOf<AuthenticationResponse>());
             }
 
             [Assert]
@@ -81,7 +81,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             {
 
                A.CallTo(
-                    () => _clientAppRepo.GetClient(ClientId))
+                    () => _clientAppRepo.GetClientAsync(ClientId))
                     .MustHaveHappenedOnceExactly();
             }
 
@@ -115,13 +115,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
                 _clientAppRepo = A.Fake<IClientAppRepo>();
 
                 _tokenRequest = new TokenRequest
-                                {
-                                    Client_id = ClientId, Client_secret = ClientSecret
-                                };
+                {
+                    Client_id = ClientId,
+                    Client_secret = ClientSecret,
+                    Grant_type = "client_credentials"
+                };
 
                 _apiClientAuthenticator = A.Fake<IApiClientAuthenticator>();
-                ApiClientIdentity apiClientIdentity;
-
+                
                 var apiclientauthenticatedelegate = new ApiClientAuthenticatorDelegates.TryAuthenticateDelegate(
                             (string key, string password, out ApiClientIdentity identity) =>
                             {
@@ -129,13 +130,12 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
                                 return false;
                             });
 
-                A.CallTo(() => _apiClientAuthenticator.TryAuthenticate(null, null, out apiClientIdentity)).Returns(false);
                 
-                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestProvider(_clientAppRepo, _apiClientAuthenticator);
             }
 
             protected override void Act()
             {
+                _clientCredentialsTokenRequestHandler = new ClientCredentialsTokenRequestProvider(_clientAppRepo, _apiClientAuthenticator);
                 _actionResult =  _clientCredentialsTokenRequestHandler.HandleAsync(_tokenRequest).Result;
             }
 
@@ -148,16 +148,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Authentication.ClientCredentials
             [Assert]
             public void Should_have_action_result_type_of_authentication_error()
             {
-                Assert.That(_actionResult, Is.InstanceOf<AuthenticationError>());
+                Assert.That(_actionResult, Is.InstanceOf<AuthenticationResponse>());
             }
 
             [Assert]
             public void Should_call_try_authenticate_from_database_once()
             {
-                ApiClientIdentity apiClientIdentity;
-
                 A.CallTo(
-                    () => _apiClientAuthenticator.TryAuthenticate(ClientId, ClientSecret, out apiClientIdentity)).MustHaveHappened();
+                    () => _apiClientAuthenticator.TryAuthenticateAsync(ClientId, ClientSecret)).MustHaveHappened();
             }
 
             [Assert]

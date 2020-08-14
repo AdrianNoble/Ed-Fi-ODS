@@ -11,6 +11,7 @@ using EdFi.Ods.Tests._Extensions;
 using NUnit.Framework;
 using Test.Common;
 using EdFi.TestFixture;
+using FakeItEasy;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models
 {
@@ -44,6 +45,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models
             : ScenarioFor<
                 DomainModelDefinitionsJsonEmbeddedResourceProvider>
         {
+            private DomainModelDefinitions _domainModelDefinitions;
             protected override void Arrange()
             {
                 Given(typeof(When_getting_domain_model_definitions_from_non_extension_assembly).Assembly);
@@ -51,7 +53,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models
 
             protected override void Act()
             {
-                TestSubject.GetDomainModelDefinitions();
+                _domainModelDefinitions = TestSubject.GetDomainModelDefinitions();
             }
 
             [Assert]

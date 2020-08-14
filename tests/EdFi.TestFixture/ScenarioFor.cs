@@ -253,8 +253,6 @@ namespace EdFi.TestFixture
             // Scenario initialization
             BeforeScenario();
 
-            // Allow fixture to arrange the state for the test
-            Arrange();
 
             // Get a list of uninitialized stubs
             var uninitializedArgDisplayNames = _constructorArgs
@@ -300,26 +298,6 @@ namespace EdFi.TestFixture
                 setter.Invoke(
                     TestSubject,
                     new[] { dependencyValue });
-            }
-
-            // Execute the behavior
-            try
-            {
-                // Execute the behavior
-                Act();
-            }
-            catch (Exception ex)
-            {
-                ActualException = ex;
-            }
-            finally
-            {
-                if (uninitializedDependencyNames.Any())
-                {
-                    Console.WriteLine(
-                        "The following dependencies were only stubbed for the test:\r\n    {0}\r\n",
-                        string.Join("\r\n    ", uninitializedDependencyNames));
-                }
             }
         }
 

@@ -10,6 +10,7 @@ using System.Security.Claims;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.TestFixture;
 using FakeItEasy;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -66,16 +67,16 @@ namespace EdFi.Ods.Tests.EdFi.Security.Claims
                     {
                         1, 2
                     });
-                var thrown = A.CallTo(() => JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue));
-                thrown.ShouldBeNull();
+                var result = JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue);
+                result.ShouldNotBeNull();
             }
 
             [Test]
             public void Should_have_no_errors_when_suppling_only_the_action()
             {
                 var suppliedEdFiClaimValue = new EdFiResourceClaimValue("action");
-                var thrown = A.CallTo(() => JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue));
-                thrown.ShouldBeNull();
+                var result = JsonClaimHelper.CreateClaim(SuppliedClaimType, suppliedEdFiClaimValue);
+                result.ShouldNotBeNull();
             }
         }
 
@@ -88,7 +89,6 @@ namespace EdFi.Ods.Tests.EdFi.Security.Claims
                                                                          {
                                                                              1, 2
                                                                          };
-
             [Test]
             public void Should_create_a_EdFiClaimValue()
             {
@@ -122,9 +122,9 @@ namespace EdFi.Ods.Tests.EdFi.Security.Claims
             {
                 var suppliedEdFiClaimValue = new EdFiResourceClaimValue(ExpectedAction);
                 var claim = JsonClaimHelper.CreateClaim(ExpectedClaimType, suppliedEdFiClaimValue);
-                var thrown = A.CallTo(() => claim.ToEdFiResourceClaimValue());
-                thrown.ShouldBeNull();
-            }
+                var actual = claim.ToEdFiResourceClaimValue();
+                Assert.IsTrue(actual.EducationOrganizationIds.Count == 0);
+           }
         }
     }
 }
