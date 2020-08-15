@@ -85,18 +85,18 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             private EducationOrganizationIdentifiers actual99ResultForString1;
             private EducationOrganizationIdentifiers actual88ResultForString2;
             private EducationOrganizationIdentifiers actual99ResultForString2;
+            private ICacheProvider cacheProvider;
+            private IEdFiOdsInstanceIdentificationProvider edFiOdsInstanceIdentificationProvider;
+            private IEducationOrganizationIdentifiersValueMapper educationOrganizationIdentifiersValueMapper;
+            private IEducationOrganizationCacheDataProvider educationOrganizationCacheDataProvider;
 
             protected override void ExecuteBehavior()
             {
                 // Provide external dependencies not needing specific behavior in this test
-                var cacheProvider = Stub<ICacheProvider>();
-                var edFiOdsInstanceIdentificationProvider = Stub<IEdFiOdsInstanceIdentificationProvider>();
-                var educationOrganizationIdentifiersValueMapper= Stub<IEducationOrganizationIdentifiersValueMapper>();
-                
-                // Create Faked dependencies
-                var connectionStringProvider = Stub<IOdsDatabaseConnectionStringProvider>();
-
-                var educationOrganizationCacheDataProvider = Stub<IEducationOrganizationCacheDataProvider>();
+                cacheProvider = Stub<ICacheProvider>();
+                edFiOdsInstanceIdentificationProvider = Stub<IEdFiOdsInstanceIdentificationProvider>();
+                educationOrganizationIdentifiersValueMapper= Stub<IEducationOrganizationIdentifiersValueMapper>();
+                educationOrganizationCacheDataProvider = Stub<IEducationOrganizationCacheDataProvider>();
                     
                 var suppliedIdentifierSet1 = new List<EducationOrganizationIdentifiers>
                                              {
@@ -140,12 +140,16 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                                                      schoolId: 888)
                                              };
 
+                
+
                 A.CallTo(() => educationOrganizationCacheDataProvider.GetAllEducationOrganizationIdentifiers())
                     .Returns(suppliedIdentifierSet1);
                 A.CallTo(() => educationOrganizationCacheDataProvider.GetAllEducationOrganizationIdentifiers())
                    .Returns(suppliedIdentifierSet2);
+            }
 
-
+            protected override void Act()
+            {
                 // Create the cache
                 var edOrgCache = new EducationOrganizationCache(
                     cacheProvider,
@@ -155,14 +159,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     true);
 
                 // First retrieve values for the first connection string
-               
+
                 actual88ResultForString1 = edOrgCache.GetEducationOrganizationIdentifiers(88);
                 actual99ResultForString1 = edOrgCache.GetEducationOrganizationIdentifiers(99);
 
                 // Then retrieve values for the second connection string
-               
+
                 actual88ResultForString2 = edOrgCache.GetEducationOrganizationIdentifiers(88);
                 actual99ResultForString2 = edOrgCache.GetEducationOrganizationIdentifiers(99);
+
             }
 
             [Test]

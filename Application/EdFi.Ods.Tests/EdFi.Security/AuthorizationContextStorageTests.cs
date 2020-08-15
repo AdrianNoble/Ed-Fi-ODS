@@ -7,7 +7,6 @@ using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.Ods.Tests._Extensions;
 using EdFi.TestFixture;
-using FakeItEasy;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;
@@ -24,8 +23,8 @@ namespace EdFi.Ods.Tests.EdFi.Security
             {
                 // Set the "resource" context only
                 var contextStorage = new HashtableContextStorage();
-                contextStorage.SetValue(AuthorizationContextKeys.Resource, new[] { "Some Resource" });
-
+                contextStorage.SetValue(AuthorizationContextKeys.Resource, new[] {"Some Resource"});
+                
                 Given<IContextStorage>(contextStorage);
             }
 
@@ -58,7 +57,7 @@ namespace EdFi.Ods.Tests.EdFi.Security
             {
                 SystemUnderTest.VerifyAuthorizationContextExists();
             }
-
+            
             [Assert]
             public void Should_throw_an_AuthorizationContextException_with_action_in_the_message()
             {
@@ -66,27 +65,22 @@ namespace EdFi.Ods.Tests.EdFi.Security
                 ActualException.Message.ShouldContain("resource");
             }
         }
-
+        
         public class When_calling_the_VerifyContextSet_method_with_resource_stored_as_empty_array_in_the_current_context
             : ScenarioFor<AuthorizationContextProvider>
         {
-            private static AuthorizationContextProvider authorizationcontextprovider;
-        
             protected override void Arrange()
             {
-                
+                var contextStorage = new HashtableContextStorage();
+                contextStorage.SetValue(AuthorizationContextKeys.Resource, new string[0]);
+                contextStorage.SetValue(AuthorizationContextKeys.Action, "Some Action");
+
+                Given<IContextStorage>(contextStorage);
             }
 
             protected override void Act()
             {
-                //HashtableContextStorage contextstorage = new HashtableContextStorage();
-                //contextstorage.SetValue(AuthorizationContextKeys.Resource, new string[0]);
-                //contextstorage.SetValue(AuthorizationContextKeys.Action, "Some Action");
-                var _contextStorage = A.Fake<IContextStorage>();
-                _contextStorage.SetValue(AuthorizationContextKeys.Resource, new string[0]);
-                _contextStorage.SetValue(AuthorizationContextKeys.Action, "Some Action");
-                authorizationcontextprovider = new AuthorizationContextProvider(_contextStorage);
-                TestSubject.VerifyAuthorizationContextExists();
+                SystemUnderTest.VerifyAuthorizationContextExists();
             }
 
             [Assert]
@@ -103,9 +97,9 @@ namespace EdFi.Ods.Tests.EdFi.Security
             protected override void Arrange()
             {
                 var contextStorage = new HashtableContextStorage();
-                contextStorage.SetValue(AuthorizationContextKeys.Resource, new[] { "Some Resource" });
+                contextStorage.SetValue(AuthorizationContextKeys.Resource, new[] {"Some Resource"});
                 contextStorage.SetValue(AuthorizationContextKeys.Action, "Some Action");
-
+                
                 Given<IContextStorage>(contextStorage);
             }
 
@@ -113,7 +107,7 @@ namespace EdFi.Ods.Tests.EdFi.Security
             {
                 SystemUnderTest.VerifyAuthorizationContextExists();
             }
-
+            
             [Test]
             public void Should_not_throw_an_AuthorizationContextException()
             {
