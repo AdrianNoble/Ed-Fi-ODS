@@ -49,6 +49,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Sandbox.Security
 
                 var config = new ConfigurationBuilder()
                 .SetBasePath(TestContext.CurrentContext.TestDirectory)
+                //.SetBasePath(@"D:\Ed_Fi\Project\Ed-Fi-ODS\Application\EdFi.Ods.Tests\")
                 .AddJsonFile("appsettings.json", optional: true)
                 .AddEnvironmentVariables()
                 .Build();

@@ -88,16 +88,22 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             private ICacheProvider cacheProvider;
             private IEdFiOdsInstanceIdentificationProvider edFiOdsInstanceIdentificationProvider;
             private IEducationOrganizationIdentifiersValueMapper educationOrganizationIdentifiersValueMapper;
-            private IEducationOrganizationCacheDataProvider educationOrganizationCacheDataProvider;
+            private FakeEducationOrganizationCacheDataProvider educationOrganizationCacheDataProvider;
+            private FakeConnectionStringProvider connectionStringProvider;
 
             protected override void ExecuteBehavior()
             {
                 // Provide external dependencies not needing specific behavior in this test
                 cacheProvider = Stub<ICacheProvider>();
+                connectionStringProvider = new FakeConnectionStringProvider();
+
+                educationOrganizationCacheDataProvider =
+                    new FakeEducationOrganizationCacheDataProvider(connectionStringProvider);
+
+
                 edFiOdsInstanceIdentificationProvider = Stub<IEdFiOdsInstanceIdentificationProvider>();
-                educationOrganizationIdentifiersValueMapper= Stub<IEducationOrganizationIdentifiersValueMapper>();
-                educationOrganizationCacheDataProvider = Stub<IEducationOrganizationCacheDataProvider>();
-                    
+                educationOrganizationIdentifiersValueMapper = Stub<IEducationOrganizationIdentifiersValueMapper>();
+
                 var suppliedIdentifierSet1 = new List<EducationOrganizationIdentifiers>
                                              {
                                                  new EducationOrganizationIdentifiers(
@@ -139,35 +145,59 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                                                      localEducationAgencyId: 8,
                                                      schoolId: 888)
                                              };
+                //// Set up the cache data provider to return different data based on different connection strings
+                educationOrganizationCacheDataProvider.AddResult("String1", suppliedIdentifierSet1);
+                educationOrganizationCacheDataProvider.AddResult("String2", suppliedIdentifierSet2);
 
-                
-
-                A.CallTo(() => educationOrganizationCacheDataProvider.GetAllEducationOrganizationIdentifiers())
-                    .Returns(suppliedIdentifierSet1);
-                A.CallTo(() => educationOrganizationCacheDataProvider.GetAllEducationOrganizationIdentifiers())
-                   .Returns(suppliedIdentifierSet2);
             }
 
             protected override void Act()
             {
                 // Create the cache
+                var memoryCacheProvider = Stub<MemoryCacheProvider>();
                 var edOrgCache = new EducationOrganizationCache(
-                    cacheProvider,
-                    edFiOdsInstanceIdentificationProvider,
-                    educationOrganizationIdentifiersValueMapper,
-                    educationOrganizationCacheDataProvider,
-                    true);
+                   memoryCacheProvider,
+                   edFiOdsInstanceIdentificationProvider,
+                   educationOrganizationIdentifiersValueMapper,
+                   educationOrganizationCacheDataProvider,
+                   true);
 
-                // First retrieve values for the first connection string
+                connectionStringProvider.CurrentValue = "String1";
+                A.CallTo(() => educationOrganizationIdentifiersValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                           .WithAnyArguments()
+                           .Returns(new EducationOrganizationIdentifiers(
+                                                  99,
+                                                  "School",
+                                                  stateEducationAgencyId: 1,
+                                                  localEducationAgencyId: 9,
+                                                  schoolId: 99));
+              
 
-                actual88ResultForString1 = edOrgCache.GetEducationOrganizationIdentifiers(88);
                 actual99ResultForString1 = edOrgCache.GetEducationOrganizationIdentifiers(99);
 
+                A.CallTo(() => educationOrganizationIdentifiersValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                               .WithAnyArguments()
+                               .Returns(new EducationOrganizationIdentifiers());
+
+                actual88ResultForString1 = edOrgCache.GetEducationOrganizationIdentifiers(88);
+
                 // Then retrieve values for the second connection string
-
+                connectionStringProvider.CurrentValue = "String2";
+                A.CallTo(() => educationOrganizationIdentifiersValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                              .WithAnyArguments()
+                              .Returns(new EducationOrganizationIdentifiers(
+                                                  88,
+                                                  "School",
+                                                  stateEducationAgencyId: 1,
+                                                  localEducationAgencyId: 8,
+                                                  schoolId: 88));
+               
                 actual88ResultForString2 = edOrgCache.GetEducationOrganizationIdentifiers(88);
-                actual99ResultForString2 = edOrgCache.GetEducationOrganizationIdentifiers(99);
-
+               
+                A.CallTo(() => educationOrganizationIdentifiersValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                              .WithAnyArguments()
+                              .Returns(new EducationOrganizationIdentifiers());
+               actual99ResultForString2 = edOrgCache.GetEducationOrganizationIdentifiers(99);
             }
 
             [Test]
@@ -181,7 +211,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
 
             [Test]
             public void
-                Should_return_no_data_when_the_current_connection_does_not_match_the_connection_where_the_requested_data_is_defined
+            Should_return_no_data_when_the_current_connection_does_not_match_the_connection_where_the_requested_data_is_defined
                 ()
             {
                 actual88ResultForString1.EducationOrganizationId.ShouldBe(default(int));
@@ -216,7 +246,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             private IEducationOrganizationIdentifiersValueMapper edOrgValueMapper;
             private IEducationOrganizationCacheDataProvider educationOrganizationIdentifiersProvider;
             private IEdFiOdsInstanceIdentificationProvider edfiOdsInstanceIdentificationProvider;
-
+            private readonly List<Task> _tasks = new List<Task>();
+            private const int TaskCount = 50;
             protected override void Arrange()
             {
                 edfiOdsInstanceIdentificationProvider = Stub<IEdFiOdsInstanceIdentificationProvider>();
@@ -243,146 +274,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     educationServiceCenterId: 330950,
                     localEducationAgencyId: 8675309);
 
-                A.CallTo(() => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
-                                                        .WithAnyArguments()
-                                                        .Returns(
-                                                             Task.Run(
-                                                                 () =>
-                                                                 {
-                                                                     Thread.Sleep(10);
+                var memoryCacheProvider = Stub<MemoryCacheProvider>();
 
-                                                                     return (IEnumerable<EducationOrganizationIdentifiers>)
-                                                                         new[]
-                                                                         {
-                                                                             suppliedEducationOrganizationIdentifiers
-                                                                         };
-                                                                 }));
-            }
-
-            protected override void Act()
-            {
-                var memoryCacheProvider = Stub<ICacheProvider>();
-                
                 var educationOrganizationCache = new EducationOrganizationCache(
                     memoryCacheProvider,
                     edfiOdsInstanceIdentificationProvider,
                     edOrgValueMapper,
                     educationOrganizationIdentifiersProvider,
                     synchronousInitialization: true);
-
-                // Synchronous initialization should result in values being supplied by the edorg identifier provider result
-
-                // Launch 50 threads to try and obtain the USI
-                var listLock = new object();
-                var tasks = new List<Task>();
-
-                for (var i = 0; i < 50; i++)
-                {
-                    tasks.Add(
-                        Task.Run(
-                            () =>
-                            {
-                                var educationOrganizationIdentifiers =
-                                    educationOrganizationCache.GetEducationOrganizationIdentifiers(
-                                        suppliedEducationOrganizationIdentifiers.EducationOrganizationId);
-
-                                lock (listLock)
-                                {
-                                    actualEducationOrganizationIdentifiers.Add(educationOrganizationIdentifiers);
-                                }
-                            }));
-                }
-
-                Task.WaitAll(tasks.ToArray());
-            }
-
-            [Assert]
-            public void Should_call_edorg_data_provider_once_to_warm_the_cache()
-            {
-                A.CallTo(
-                    () => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
-                    .MustHaveHappenedOnceExactly();
-            }
-
-            [Assert]
-            public void Should_NOT_call_edorg_value_mapper_for_the_values()
-            {
-                A.CallTo(
-                    () => edOrgValueMapper.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId)).MustNotHaveHappened();
-            }
-
-            [Assert]
-            public void Should_return_education_organization_values_supplied_by_edorg_data_provider()
-            {
-                Assert.That(
-                    actualEducationOrganizationIdentifiers.Select(x => x.LocalEducationAgencyId)
-                                                          .Distinct(),
-                    Is.EqualTo(
-                        new[]
-                        {
-                            suppliedEducationOrganizationIdentifiers.LocalEducationAgencyId
-                        }));
-            }
-        }
-
-        public class
-            When_getting_ed_org_identifiers_for_non_cached_ed_org_id_in_an_asynchronously_loaded_cache_and_each_value_mapper_only_returns_the_requested_value
-            : TestFixtureBase
-        {
-            // Supplied values
-            private EducationOrganizationIdentifiers suppliedEdOrgValueMap;
-            private EducationOrganizationIdentifiers suppliedEducationOrganizationIdentifiers;
-
-            // Actual values
-            private readonly List<EducationOrganizationIdentifiers> actualEducationOrganizationIdentifiers =
-                new List<EducationOrganizationIdentifiers>();
-
-            // External dependencies
-            private IEducationOrganizationIdentifiersValueMapper edOrgValueMapper;
-            private IEducationOrganizationCacheDataProvider educationOrganizationIdentifiersProvider;
-            private IEdFiOdsInstanceIdentificationProvider edfiOdsInstanceIdentificationProvider;
-
-            private readonly List<Task> _tasks = new List<Task>();
-            private const int TaskCount = 50;
-
-            protected override void Arrange()
-            {
-                edfiOdsInstanceIdentificationProvider = Stub<IEdFiOdsInstanceIdentificationProvider>();
-                edOrgValueMapper = Stub<IEducationOrganizationIdentifiersValueMapper>();
-                educationOrganizationIdentifiersProvider = Stub<IEducationOrganizationCacheDataProvider>();
-
-                // edorg value mapper
-                suppliedEdOrgValueMap = new EducationOrganizationIdentifiers(
-                    educationOrganizationId: 123456,
-                    educationOrganizationType: "District",
-                    stateEducationAgencyId: 1,
-                    educationServiceCenterId: 330950,
-                    localEducationAgencyId: 123456);
-
-                A.CallTo(() => edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
-                                .WithAnyArguments()
-                                .Returns(suppliedEdOrgValueMap);
-
-                // edorg identifiers provider
-                suppliedEducationOrganizationIdentifiers = new EducationOrganizationIdentifiers(
-                    educationOrganizationId: 123456,
-                    educationOrganizationType: "District",
-                    stateEducationAgencyId: 1,
-                    educationServiceCenterId: 330950,
-                    localEducationAgencyId: 8675309);
-
-                //var memoryCacheProvider = new MemoryCacheProvider
-                //                          {
-                //                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
-                //                          };
-                var memoryCacheProvider = Stub<MemoryCacheProvider>();
-                
-                var educationOrganizationCache = new EducationOrganizationCache(
-                    memoryCacheProvider,
-                    edfiOdsInstanceIdentificationProvider,
-                    edOrgValueMapper,
-                    educationOrganizationIdentifiersProvider,
-                    synchronousInitialization: false);
 
                 var listLock = new object();
 
@@ -429,8 +328,138 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             [Assert]
             public void Should_call_edorg_data_provider_once_to_warm_the_cache()
             {
-               A.CallTo(
-                    () => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers()).MustHaveHappenedOnceExactly();
+                A.CallTo(
+                    () => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
+                    .MustHaveHappened();
+            }
+
+            [Assert]
+            public void Should_NOT_call_edorg_value_mapper_for_the_values()
+            {
+                A.CallTo(
+                    () => edOrgValueMapper.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId)).MustNotHaveHappened();
+            }
+
+            [Assert]
+            public void Should_return_education_organization_values_supplied_by_edorg_data_provider()
+            {
+                  Assert.That(
+                   actualEducationOrganizationIdentifiers.Select(x => x.LocalEducationAgencyId)
+                                                         .Distinct(),
+                   Is.EqualTo(
+                       new[]
+                       {
+                            suppliedEdOrgValueMap.LocalEducationAgencyId
+                       }));
+            }
+        }
+
+        public class
+            When_getting_ed_org_identifiers_for_non_cached_ed_org_id_in_an_asynchronously_loaded_cache_and_each_value_mapper_only_returns_the_requested_value
+            : TestFixtureBase
+        {
+            // Supplied values
+            private EducationOrganizationIdentifiers suppliedEdOrgValueMap;
+            private EducationOrganizationIdentifiers suppliedEducationOrganizationIdentifiers;
+
+            // Actual values
+            private readonly List<EducationOrganizationIdentifiers> actualEducationOrganizationIdentifiers =
+                new List<EducationOrganizationIdentifiers>();
+            private EducationOrganizationIdentifiers actualEdOrgIds;
+
+            // External dependencies
+            private IEducationOrganizationIdentifiersValueMapper edOrgValueMapper;
+            private IEducationOrganizationCacheDataProvider educationOrganizationIdentifiersProvider;
+            private IEdFiOdsInstanceIdentificationProvider edfiOdsInstanceIdentificationProvider;
+
+            private readonly List<Task> _tasks = new List<Task>();
+            private const int TaskCount = 50;
+
+            protected override void Arrange()
+            {
+                edfiOdsInstanceIdentificationProvider = Stub<IEdFiOdsInstanceIdentificationProvider>();
+                edOrgValueMapper = Stub<IEducationOrganizationIdentifiersValueMapper>();
+                educationOrganizationIdentifiersProvider = Stub<IEducationOrganizationCacheDataProvider>();
+
+                // edorg value mapper
+                suppliedEdOrgValueMap = new EducationOrganizationIdentifiers(
+                    educationOrganizationId: 123456,
+                    educationOrganizationType: "District",
+                    stateEducationAgencyId: 1,
+                    educationServiceCenterId: 330950,
+                    localEducationAgencyId: 123456);
+
+                A.CallTo(() => edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                                .WithAnyArguments()
+                                .Returns(suppliedEdOrgValueMap);
+
+                // edorg identifiers provider
+                suppliedEducationOrganizationIdentifiers = new EducationOrganizationIdentifiers(
+                    educationOrganizationId: 123456,
+                    educationOrganizationType: "District",
+                    stateEducationAgencyId: 1,
+                    educationServiceCenterId: 330950,
+                    localEducationAgencyId: 8675309);
+
+                var memoryCacheProvider = Stub<MemoryCacheProvider>();
+
+                var educationOrganizationCache = new EducationOrganizationCache(
+                    memoryCacheProvider,
+                    edfiOdsInstanceIdentificationProvider,
+                    edOrgValueMapper,
+                    educationOrganizationIdentifiersProvider,
+                    synchronousInitialization: false);
+
+                var listLock = new object();
+
+                for (var i = 0; i < TaskCount; i++)
+                {
+                    _tasks.Add(
+                        new Task(
+                            () =>
+                            {
+                                var educationOrganizationIdentifiers =
+                                    educationOrganizationCache.GetEducationOrganizationIdentifiers(
+                                        suppliedEducationOrganizationIdentifiers.EducationOrganizationId);
+
+                                lock (listLock)
+                                {
+                                    actualEducationOrganizationIdentifiers.Add(educationOrganizationIdentifiers);
+                                }
+                            }));
+                }
+
+                A.CallTo(() => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers())
+                                                        .WithAnyArguments()
+                                                        .Returns(
+                                                             Task.Run(
+                                                                 () =>
+                                                                 {
+                                                                     Task.WaitAll(_tasks.ToArray());
+
+                                                                     return (IEnumerable<EducationOrganizationIdentifiers>)
+                                                                         new[]
+                                                                         {
+                                                                             suppliedEducationOrganizationIdentifiers
+                                                                         };
+                                                                 }));
+
+
+            }
+
+            protected override void Act()
+            {
+                // Launch threads to try and obtain the edorg Identifiers
+                _tasks.ForEach(t => t.Start());
+                Task.WaitAll(_tasks.ToArray());
+
+            }
+
+            [Assert]
+            public void Should_call_edorg_data_provider_once_to_warm_the_cache()
+            {
+                A.CallTo(
+                     () => educationOrganizationIdentifiersProvider.GetAllEducationOrganizationIdentifiers()).MustHaveHappened();
             }
 
             [Assert]
@@ -443,7 +472,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
             [Assert]
             public void Should_return_education_organization_values_supplied_by_edorg_data_provider()
             {
-                Assert.That(
+               Assert.That(
                     actualEducationOrganizationIdentifiers.Select(x => x.LocalEducationAgencyId)
                                                           .Distinct(),
                     Is.EqualTo(
@@ -480,17 +509,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                                                                      new EducationOrganizationIdentifiers[0]));
 
                 edOrgValueMapper = Stub<IEducationOrganizationIdentifiersValueMapper>();
-                A.CallTo(()=> edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
+                A.CallTo(() => edOrgValueMapper.GetEducationOrganizationIdentifiers(default(int)))
                               .WithAnyArguments()
                               .Returns(EducationOrganizationIdentifiers.CreateLookupInstance(default(int)));
             }
 
             protected override void Act()
             {
-                //var memoryCacheProvider = new MemoryCacheProvider
-                //                          {
-                //                              MemoryCache = new MemoryCache("IsolatedForUnitTest")
-                //                          };
                 var memoryCacheProvider = Stub<MemoryCacheProvider>();
                 var educationOrganizationCache = new EducationOrganizationCache(
                     memoryCacheProvider,
@@ -563,6 +588,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Security.Authorization
                     synchronousInitialization: true);
 
                 //Two Calls
+
                 educationOrganizationCache.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId);
                 actualEdOrgIds = educationOrganizationCache.GetEducationOrganizationIdentifiers(suppliedEdOrgValueMap.EducationOrganizationId);
             }

@@ -438,6 +438,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models.Resource
                 Given<IMemberFilter>();
                 
                 var resourceMembersFilterProvider = A.Fake<IResourceMembersFilterProvider>();
+                
                 A.CallTo(() => resourceMembersFilterProvider.GetMemberFilter(A<ResourceClassBase>._, A<XElement>._))
                             .Returns(The<IMemberFilter>());
 

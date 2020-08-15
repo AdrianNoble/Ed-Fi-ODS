@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Security.Authorization.Filtering;
+using EdFi.Ods.Tests.EdFi.Ods.Common._Stubs.Repositories;
 using EdFi.TestFixture;
+using FakeItEasy;
 using NHibernate;
 using NUnit.Framework;
 using Test.Common;
@@ -20,14 +22,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Filtering
         public class When_setting_and_getting_authorization_filter_context : ScenarioFor<AuthorizationFilterContextProvider>
         {
             private static AuthorizationFilterContextProvider authProvider;
+            private static IContextStorage contextstorage;
             protected override void Arrange()
             {
                 Given<IContextStorage>(new HashtableContextStorage());
 
                 Given<ISession>();
-
+                contextstorage = new HashtableContextStorage();
                 Supplied<IReadOnlyList<AuthorizationFilterDetails>>(CreateTestParameters());
-                authProvider = new AuthorizationFilterContextProvider(Given<IContextStorage>(new HashtableContextStorage()));
+                authProvider = new AuthorizationFilterContextProvider(contextstorage);
 
             }
 
@@ -39,15 +42,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.NHibernate.Filtering
             [Assert]
             public void Should_save_the_parameters_into_context_storage()
             {
-               Assert.That(
-                    Given<IContextStorage>().GetValue<IReadOnlyList<AuthorizationFilterDetails>>("FilterContextProvider.FilterContext"), 
+                Assert.That(
+                    authProvider.GetFilterContext(), 
                     Is.EquivalentTo(Supplied<IReadOnlyList<AuthorizationFilterDetails>>()));
             }
 
             [Assert]
             public void Should_return_the_saved_authorization_filter_context()
             {
-                Assert.That(TestSubject.GetFilterContext(), Is.EquivalentTo(Supplied<IReadOnlyList<AuthorizationFilterDetails>>()));
+                Assert.That(authProvider.GetFilterContext(), Is.EquivalentTo(Supplied<IReadOnlyList<AuthorizationFilterDetails>>()));
             }
 
             private static IReadOnlyList<AuthorizationFilterDetails> CreateTestParameters()

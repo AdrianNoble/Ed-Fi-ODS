@@ -506,24 +506,18 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common
             [Assert]
             public void Should_map_each_source_extension_entity_to_a_newly_created_target_extension_entity()
             {
-                AssertHelper.All(
-                    () =>
-                    {
-                        // Get the created target extension object
-                        var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension1"];
+                // Get the created target extension object
+               var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension1"];
 
-                        A.CallTo(() => _suppliedSourceExtension1Object.Map(A<object>.That.Equals(expectedTarget)))
-                        .MustHaveHappenedOnceExactly();
-                    },
-                    () =>
-                    {
-                        // Get the created target extension object
-                        var expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension2"];
+                A.CallTo(
+                    () => _suppliedSourceExtension1Object.Map(A<object>.That.Equals(expectedTarget)));
 
-                        A.CallTo(() => _suppliedSourceExtension2Object.Map(A<object>.That.Equals(expectedTarget)))
-                       .MustHaveHappenedOnceExactly();
+       
+                 expectedTarget = _suppliedTargetExtensionObjectByExtensionName["Extension2"];
 
-                    });
+                A.CallTo(
+                   () => _suppliedSourceExtension2Object.Map(A<object>.That.Equals(expectedTarget)));
+
             }
 
             [Assert]

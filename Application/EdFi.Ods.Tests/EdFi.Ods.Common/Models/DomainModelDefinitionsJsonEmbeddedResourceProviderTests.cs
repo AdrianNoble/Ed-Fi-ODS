@@ -23,14 +23,16 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models
         {
             private DomainModelDefinitions _domainModelDefinitions;
 
+            private DomainModelDefinitionsJsonEmbeddedResourceProvider domainmodelprovider;
+
             protected override void Arrange()
             {
-                Given(typeof(Marker_EdFi_Ods_Test_TestExtension).Assembly);
+                domainmodelprovider = new DomainModelDefinitionsJsonEmbeddedResourceProvider(Given(typeof(Marker_EdFi_Ods_Test_TestExtension).Assembly));
             }
 
             protected override void Act()
             {
-                _domainModelDefinitions = TestSubject.GetDomainModelDefinitions();
+                _domainModelDefinitions = domainmodelprovider.GetDomainModelDefinitions();
             }
 
             [Assert]
@@ -46,14 +48,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Common.Models
                 DomainModelDefinitionsJsonEmbeddedResourceProvider>
         {
             private DomainModelDefinitions _domainModelDefinitions;
+            private DomainModelDefinitionsJsonEmbeddedResourceProvider domainmodelprovider;
             protected override void Arrange()
             {
-                Given(typeof(When_getting_domain_model_definitions_from_non_extension_assembly).Assembly);
+                domainmodelprovider = new DomainModelDefinitionsJsonEmbeddedResourceProvider(Given(typeof(When_getting_domain_model_definitions_from_non_extension_assembly).Assembly));
             }
 
             protected override void Act()
             {
-                _domainModelDefinitions = TestSubject.GetDomainModelDefinitions();
+                _domainModelDefinitions = domainmodelprovider.GetDomainModelDefinitions();
             }
 
             [Assert]
