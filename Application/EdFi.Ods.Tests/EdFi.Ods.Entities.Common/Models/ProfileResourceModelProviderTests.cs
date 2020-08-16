@@ -104,14 +104,15 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
         {
             private ProfileResourceModel _actualProfile1ResourceModel;
             private ProfileResourceModel _actualProfile2ResourceModel;
-
+            private ProfileResourceModelProvider profileresourceModelProvider;
+            private IResourceModelProvider resourceModelProvider;
+            private IProfileMetadataProvider profileMetadaProvider;
             protected override void Arrange()
             {
-                // Initialize dependencies
-                var profileprovider = A.Fake<IProfileMetadataProvider>();
-               
-                A.CallTo(()=> profileprovider.GetProfileDefinition("Profile1"))
-                   .Returns(
+                resourceModelProvider = A.Fake<IResourceModelProvider>();
+                profileMetadaProvider = A.Fake<IProfileMetadataProvider>();
+                A.CallTo(() => profileMetadaProvider.GetProfileDefinition("Profile1"))
+                       .Returns(
                         XElement.Parse(
                             @"
                             <Profile name='Profile1'>
@@ -125,9 +126,8 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
                                 </Resource>
                             </Profile>"));
 
-                var profilemetadataprovider = A.Fake<IProfileMetadataProvider>();
 
-                A.CallTo(() => profilemetadataprovider.GetProfileDefinition("Profile2"))
+                A.CallTo(() => profileMetadaProvider.GetProfileDefinition("Profile2"))
                         .Returns(
                         XElement.Parse(
                             @"
@@ -144,21 +144,21 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.Common.Models
                                 </Resource>
                             </Profile>"));
 
-
-                A.CallTo(() => profilemetadataprovider.GetProfileDefinition("ProfileX"))
+                A.CallTo(() => profileMetadaProvider.GetProfileDefinition("ProfileX"))
                     .Throws(new KeyNotFoundException());
 
-                var resourcemodelaprovider = A.Fake<IResourceModelProvider>();
-
-                A.CallTo(() => resourcemodelaprovider.GetResourceModel())
+                A.CallTo(() => resourceModelProvider.GetResourceModel())
                    .Returns(GetTestResourceModel());
+
+                profileresourceModelProvider = new ProfileResourceModelProvider(resourceModelProvider, profileMetadaProvider);
+     
             }
 
             protected override void Act()
             {
-                _actualProfile1ResourceModel = TestSubject.GetProfileResourceModel("Profile1");
-                _actualProfile2ResourceModel = TestSubject.GetProfileResourceModel("Profile2");
-                var ignored = TestSubject.GetProfileResourceModel("ProfileX");
+               _actualProfile1ResourceModel = profileresourceModelProvider.GetProfileResourceModel("Profile1");
+               _actualProfile2ResourceModel = profileresourceModelProvider.GetProfileResourceModel("Profile2");
+               var ignored = profileresourceModelProvider.GetProfileResourceModel("ProfileX");
             }
 
             [Assert]

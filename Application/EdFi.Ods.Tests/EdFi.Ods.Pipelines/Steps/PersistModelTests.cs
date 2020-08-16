@@ -239,8 +239,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
 
                 var eTagProvider = Stub<IETagProvider>();
 
+             
                 A.CallTo(() => eTagProvider.GetETag(null)).Throws(new Exception("Some Fun Exception"));
-                
+
+
                 StubRepository<AccountEntity> repository = New.StubRepository<AccountEntity>()
                                                               .ResourceIsNeverCreatedOrModified;
                
