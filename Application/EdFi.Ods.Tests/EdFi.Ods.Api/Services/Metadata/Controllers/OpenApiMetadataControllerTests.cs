@@ -5,11 +5,6 @@
 
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Hosting;
-using System.Web.Http.Routing;
 using EdFi.Ods.Api.Providers;
 using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Constants;
@@ -51,34 +46,34 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
                                              .Returns(OpenApiMetadataHelper.GetIdentityContent());
 
                 _controller = new OpenApiMetadataController(_openApiMetadataCacheProvider, configValueProvider);
-                var config = new HttpConfiguration();
-                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/metadata");
-                var route = config.Routes.MapHttpRoute("default", "{controller}");
+                //var config = new HttpConfiguration();
+                //var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/metadata");
+                //var route = config.Routes.MapHttpRoute("default", "{controller}");
 
-                config.Routes.MapHttpRoute(
-                    "OAuthAuthorize",
-                    "oauth/authorize",
-                    new
-                    {
-                        controller = "Authorize"
-                    });
+                //config.Routes.MapHttpRoute(
+                //    "OAuthAuthorize",
+                //    "oauth/authorize",
+                //    new
+                //    {
+                //        controller = "Authorize"
+                //    });
 
-                config.Routes.MapHttpRoute(
-                    "OAuthToken",
-                    "oauth/token",
-                    new
-                    {
-                        controller = "Token"
-                    });
+                //config.Routes.MapHttpRoute(
+                //    "OAuthToken",
+                //    "oauth/token",
+                //    new
+                //    {
+                //        controller = "Token"
+                //    });
 
-                var routeData2 = new HttpRouteData(
-                    route,
-                    new HttpRouteValueDictionary
-                    {
-                        {
-                            "controller", "metadata"
-                        }
-                    });
+                //var routeData2 = new HttpRouteData(
+                //    route,
+                //    new HttpRouteValueDictionary
+                //    {
+                //        {
+                //            "controller", "metadata"
+                //        }
+                //    });
 
                 HttpContext httpContext = A.Fake<HttpContext>();
                 RouteData routeData = new RouteData();
@@ -136,34 +131,34 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
                                              .Returns(OpenApiMetadataHelper.GetIdentityContent());
 
                 _controller = new OpenApiMetadataController(_openApiMetadataCacheProvider, apisetting);
-                var config = new HttpConfiguration();
-                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/metadata");
-                var route = config.Routes.MapHttpRoute("default", "{controller}");
+                //var config = new HttpConfiguration();
+                //var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/metadata");
+                //var route = config.Routes.MapHttpRoute("default", "{controller}");
 
-                config.Routes.MapHttpRoute(
-                    "OAuthAuthorize",
-                    "oauth/authorize",
-                    new
-                    {
-                        controller = "Authorize"
-                    });
+                //config.Routes.MapHttpRoute(
+                //    "OAuthAuthorize",
+                //    "oauth/authorize",
+                //    new
+                //    {
+                //        controller = "Authorize"
+                //    });
 
-                config.Routes.MapHttpRoute(
-                    "OAuthToken",
-                    "oauth/token",
-                    new
-                    {
-                        controller = "Token"
-                    });
+                //config.Routes.MapHttpRoute(
+                //    "OAuthToken",
+                //    "oauth/token",
+                //    new
+                //    {
+                //        controller = "Token"
+                //    });
 
-                var routeData2 = new HttpRouteData(
-                    route,
-                    new HttpRouteValueDictionary
-                    {
-                        {
-                            "controller", "metadata"
-                        }
-                    });
+                //var routeData2 = new HttpRouteData(
+                //    route,
+                //    new HttpRouteValueDictionary
+                //    {
+                //        {
+                //            "controller", "metadata"
+                //        }
+                //    });
 
                 HttpContext httpContext = A.Fake<HttpContext>();
                 RouteData routeData = new RouteData();
@@ -209,34 +204,34 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
                                              .Returns(OpenApiMetadataHelper.GetIdentityContent());
 
                 _controller = new OpenApiMetadataController(_openApiMetadataCacheProvider, configValueProvider);
-                var config = new HttpConfiguration();
-                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/metadata");
-                var route = config.Routes.MapHttpRoute("default", "{controller}");
+                //var config = new HttpConfiguration();
+                //var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/metadata");
+                //var route = config.Routes.MapHttpRoute("default", "{controller}");
 
-                config.Routes.MapHttpRoute(
-                    "OAuthAuthorize",
-                    "oauth/authorize",
-                    new
-                    {
-                        controller = "Authorize"
-                    });
+                //config.Routes.MapHttpRoute(
+                //    "OAuthAuthorize",
+                //    "oauth/authorize",
+                //    new
+                //    {
+                //        controller = "Authorize"
+                //    });
 
-                config.Routes.MapHttpRoute(
-                    "OAuthToken",
-                    "oauth/token",
-                    new
-                    {
-                        controller = "Token"
-                    });
+                //config.Routes.MapHttpRoute(
+                //    "OAuthToken",
+                //    "oauth/token",
+                //    new
+                //    {
+                //        controller = "Token"
+                //    });
 
-                var routeData2 = new HttpRouteData(
-                    route,
-                    new HttpRouteValueDictionary
-                    {
-                        {
-                            "controller", "metadata"
-                        }
-                    });
+                //var routeData2 = new HttpRouteData(
+                //    route,
+                //    new HttpRouteValueDictionary
+                //    {
+                //        {
+                //            "controller", "metadata"
+                //        }
+                //    });
 
                 //_controller.ControllerContext = new HttpControllerContext(config, routeData, request);
                 //_controller.Request = request;

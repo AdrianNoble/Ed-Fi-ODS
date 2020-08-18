@@ -6,7 +6,6 @@
 using System;
 using EdFi.Ods.Api.Providers;
 using FakeItEasy;
-using Http.TestLibrary;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;

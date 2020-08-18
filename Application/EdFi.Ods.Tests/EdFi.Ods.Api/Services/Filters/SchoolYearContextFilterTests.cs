@@ -5,9 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Routing;
 using EdFi.Ods.Api.Filters;
 using EdFi.Ods.Common.Context;
 using EdFi.TestFixture;
