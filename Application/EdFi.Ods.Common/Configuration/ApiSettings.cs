@@ -27,7 +27,7 @@ namespace EdFi.Ods.Common.Configuration
                     {
                         return apiMode;
                     }
-
+                   
                     throw new NotSupportedException(
                         $"Not supported Mode \"{Mode}\". Supported modes: {ApiConfigurationConstants.Sandbox}, {ApiConfigurationConstants.YearSpecific}, and {ApiConfigurationConstants.SharedInstance}.");
                 }

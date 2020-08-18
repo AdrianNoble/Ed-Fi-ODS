@@ -6,32 +6,41 @@ using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Security;
 using FakeItEasy;
 using Shouldly;
+using System.Threading.Tasks;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Api
 {
     internal class ApiClientAuthenticatorHelper
     {
-        public IApiClientAuthenticator Mock()
+       
+        public IApiClientAuthenticator Mock(string key, ApiClientSecret value)
         {
-            var apiClientAuthenticator = A.Fake<IApiClientAuthenticator>();
-            
-            ApiClientIdentity apiClientIdentity;
-            var fakedata = new ApiClientAuthenticatorDelegates.TryAuthenticateDelegate(
-                        (string key, string password, out ApiClientIdentity identity) =>
-                        {
-                            identity = new ApiClientIdentity
-                            {
-                                Key = key
-                            };
+            var _apiClientIdentity = new ApiClientIdentity
+            {
+                Key = key
+            };
 
-                            return true;
-                        });
+          var  _apiClientAuthenticator = A.Fake<IApiClientAuthenticator>();
+            var apiClientIdentityProvider = A.Fake<IApiClientIdentityProvider>();
+
+            A.CallTo(() => apiClientIdentityProvider.GetApiClientIdentity(key))
+                                     .Returns(_apiClientIdentity);
 
 
-            A.CallTo(() => apiClientAuthenticator.TryAuthenticate("good_clientId", "good_clientSecret", out apiClientIdentity))
-               .Returns(true);
-                
-            return apiClientAuthenticator;
+
+            var apiClientSecretProvider = A.Fake<IApiClientSecretProvider>();
+
+            A.CallTo(() => apiClientSecretProvider.GetSecret(key))
+                                    .Returns(value);
+
+            var secretVerifier = A.Fake<ISecretVerifier>();
+
+            A.CallTo(() => secretVerifier.VerifySecret(key, value.Secret, value))
+                                    .Returns(true);
+
+            _apiClientAuthenticator = new ApiClientAuthenticator(apiClientIdentityProvider, apiClientSecretProvider, secretVerifier);
+
+            return _apiClientAuthenticator;
         }
 
         public IApiClientAuthenticator MockFalse()
@@ -49,7 +58,6 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api
             A.CallTo(() => apiClientAuthenticator.TryAuthenticate("badClientId", "badClientSecret", out apiClientIdentity)).Returns(false);
 
             return apiClientAuthenticator;
-
         }
     }
 }

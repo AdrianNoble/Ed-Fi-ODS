@@ -2,7 +2,7 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,16 +13,10 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Routing;
 using System.Xml;
-using EdFi.Ods.Api.Architecture;
-using EdFi.Ods.Api.Common.Configuration;
-using EdFi.Ods.Api.Common.Constants;
-using EdFi.Ods.Api.Common.Models;
-using EdFi.Ods.Api.Common.Models.GraphML;
+using EdFi.Ods.Api.Constants;
+using EdFi.Ods.Api.Models.GraphML;
 using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Extensions;
-using EdFi.Ods.Common.Models;
-using EdFi.Ods.Common.Models.Definitions;
-using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Graphs;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Features.Controllers;
@@ -32,8 +26,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using QuickGraph;
-using Rhino.Mocks;
-using Test.Common;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
 {
@@ -63,7 +55,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
             {
                 var actioncontext = new ActionContext();
 
-                Task t = _controller.Get().ExecuteResultAsync(actioncontext);
+                var t = _controller.Get();
               
 
             }
@@ -104,7 +96,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
 
                 var graph = new BidirectionalGraph<Resource, AssociationViewEdge>();
                 graph.AddVertex(new Resource("Test"));
-                A.CallTo(()=> _resourceLoadGraphFactory.CreateResourceLoadGraph())
+                A.CallTo(() => _resourceLoadGraphFactory.CreateResourceLoadGraph())
                               .Returns(graph);
 
                 _controller = CreateController(_resourceLoadGraphFactory, true);
@@ -112,14 +104,14 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
 
             protected override void Act()
             {
-                _actualResult = _controller.Get().ExecuteResultAsync().GetResultSafely();
+                var result = _controller.Get();
                 _actualResultContent = _actualResult.Content.ReadAsStringAsync().GetResultSafely();
             }
 
             [Test]
             public void Should_call_the_resource_model_provider_to_get_the_model_for_building_the_output()
             {
-                A.CallTo(()=>_resourceLoadGraphFactory.CreateResourceLoadGraph()).MustHaveHappened();
+                A.CallTo(() => _resourceLoadGraphFactory.CreateResourceLoadGraph()).MustHaveHappened();
             }
 
             [Test]
@@ -141,34 +133,35 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Metadata.Controllers
         private static AggregateDependencyController CreateController(IResourceLoadGraphFactory graphFactory,
             bool isGraphRequest = false)
         {
-          
+
             var apiSettings = new ApiSettings { Mode = ApiMode.SharedInstance.Value };
-           
-            apiSettings.Formatters.Add(new GraphMLMediaTypeFormatter());
-
+            Feature item = new Feature();
+            item.IsEnabled = true;
+            item.Name = "aggregatedependency";
+            apiSettings.Features.Add(item);
+          
             var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/metadata/data/v3/dependencies");
-
+           
             if (isGraphRequest)
             {
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(CustomMediaContentTypes.GraphML));
             }
 
-            var route = config.Routes.MapHttpRoute(RouteConstants.Dependencies, "metadata/data/v3/dependencies");
+           // var route = apiSettings.rou.MapHttpRoute(RouteConstants.Dependencies, "metadata/data/v3/dependencies");
 
             var controller = new AggregateDependencyController(apiSettings, graphFactory);
 
-            var routeData = new HttpRouteData(
-                route,
-                new HttpRouteValueDictionary {{"controller", "aggregatedependency"}});
+            //var routeData = new HttpRouteData(
+            //    route,
+            //    new HttpRouteValueDictionary { { "controller", "aggregatedependency" } });
 
-            controller.ControllerContext = new HttpControllerContext(config, routeData, request);
-            controller.Request = request;
-            controller.Url = new UrlHelper(request);
-            controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
-            controller.RequestContext.VirtualPathRoot = "/";
+            //controller.ControllerContext = new HttpControllerContext(config, routeData, request);
+            //controller.Request = request;
+            //controller.Url = new UrlHelper(request);
+            //controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
+            //controller.RequestContext.VirtualPathRoot = "/";
 
             return controller;
         }
     }
 }
-#endif

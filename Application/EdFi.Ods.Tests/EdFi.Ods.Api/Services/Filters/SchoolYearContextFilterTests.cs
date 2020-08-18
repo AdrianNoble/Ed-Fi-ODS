@@ -2,8 +2,9 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
@@ -11,6 +12,11 @@ using EdFi.Ods.Api.Filters;
 using EdFi.Ods.Common.Context;
 using EdFi.TestFixture;
 using FakeItEasy;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
 using NUnit.Framework;
 using Test.Common;
 
@@ -20,27 +26,28 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
     {
         protected SchoolYearContextFilter _schoolYearContextFilter;
         protected ISchoolYearContextProvider _schoolYearContextProvider;
-        protected HttpActionContext _httpActionContext;
+        protected ActionExecutingContext _httpActionContext;
         protected string _schoolYear;
 
-        private HttpActionContext GetActionContext()
+        private ActionExecutingContext GetActionContext()
         {
-            var request =
-                new HttpRequestMessage
-                {
-                    RequestUri = new Uri("http://owin/api/v3/" + _schoolYear + "/controller")
-                };
+            var actioncontext = Stub<ActionContext>();
+            var filtermetadata = Stub<IList<IFilterMetadata>>();
+            var actionArguments = Stub<IDictionary<string, object>>();
+            var controller = Stub<object>();
+       
+            actioncontext.HttpContext = A.Fake<HttpContext>();
+            actioncontext.RouteData = A.Fake<RouteData>();
+           
+            actioncontext.ActionDescriptor = A.Fake<ActionDescriptor>();
+            RouteValueDictionary keyValuePairs = new RouteValueDictionary();
+           
+            keyValuePairs.Add("schoolYearFromRoute", _schoolYear);
+            
+            ActionExecutingContext context = new ActionExecutingContext(actioncontext, filtermetadata, actionArguments, controller);
+            context.HttpContext.Request.RouteValues = keyValuePairs;
+            return context;
 
-            var controllerContext =
-                new HttpControllerContext
-                {
-                    Request = request, RouteData = new HttpRouteData(new HttpRoute())
-                };
-
-            return new HttpActionContext
-                   {
-                       ControllerContext = controllerContext
-                   };
         }
 
         protected override void Arrange()
@@ -129,6 +136,20 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Api.Services.Filters
                A.CallTo(() => _schoolYearContextProvider.SetSchoolYear(A<int>._)).MustNotHaveHappened();
             }
         }
+
+        public class When_School_Year_Is_Valid : SchoolYearContextFilterTests
+        {
+            protected override void Arrange()
+            {
+                _schoolYear = "2020";
+                base.Arrange();
+            }
+
+            [Test]
+            public void Should_Valid_School_Year()
+            {
+                A.CallTo(() => _schoolYearContextProvider.SetSchoolYear(A<int>._)).MustHaveHappened();
+            }
+        }
     }
 }
-#endif

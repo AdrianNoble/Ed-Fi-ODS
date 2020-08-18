@@ -98,6 +98,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="NoAppSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

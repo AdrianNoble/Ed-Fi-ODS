@@ -2,25 +2,32 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
-using Castle.MicroKernel.Registration;
-using EdFi.Ods.Api.Common.ExceptionHandling;
-using EdFi.Ods.Api.Common.Providers;
+using Autofac;
+using Autofac.Core;
 using EdFi.Ods.Api.ExceptionHandling;
 using EdFi.Ods.Api.ExceptionHandling.Translators;
 using EdFi.Ods.Api.ExceptionHandling.Translators.SqlServer;
+using EdFi.Ods.Api.Helpers;
 using EdFi.Ods.Api.Infrastructure.Pipelines.Factories;
+using EdFi.Ods.Api.InversionOfControl;
 using EdFi.Ods.Api.Providers;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Configuration;
+using EdFi.Ods.Common.Constants;
+using EdFi.Ods.Common.Container;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Infrastructure.Pipelines;
 using EdFi.Ods.Common.InversionOfControl;
-using Rhino.Mocks;
+using EdFi.Ods.Common.Providers;
+using FakeItEasy;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Controllers
 {
@@ -55,19 +62,21 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Controllers
         public IndexDetails GetIndexDetails(string indexName)
         {
             return new IndexDetails
-                   {
-                       IndexName = "FK_TableName_IndexId", TableName = "TableName", ColumnNames = new List<string>
+            {
+                IndexName = "FK_TableName_IndexId",
+                TableName = "TableName",
+                ColumnNames = new List<string>
                                                                                                   {
                                                                                                       "TableNameId"
                                                                                                   }
-                   };
+            };
         }
     }
 
     public static class TestControllerBuilder
     {
         public static T GetController<T>(IPipelineFactory factory, string id = null)
-            where T : ApiController
+            where T : ControllerBase
         {
             var translators = new IExceptionTranslator[]
                               {
@@ -81,11 +90,12 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Controllers
                                   new DuplicateNaturalKeyCreateExceptionTranslator(new StubDatabaseMetadataProvider())
                               };
 
-            var schoolYearContextProvider = MockRepository.GenerateStub<ISchoolYearContextProvider>();
+            var schoolYearContextProvider = A.Fake<ISchoolYearContextProvider>();
 
-            schoolYearContextProvider.Stub(x => x.GetSchoolYear())
-                                     .Return(DateTime.Now.Year);
+            A.CallTo(() => schoolYearContextProvider.GetSchoolYear())
+                                     .Returns(DateTime.Now.Year);
 
+            var configvalueprovider = A.Fake<IConfigValueProvider>();
             var controller =
                 (T)
                 Activator.CreateInstance(
@@ -93,40 +103,67 @@ namespace EdFi.Ods.Tests.EdFi.Ods.WebApi.Controllers
                     factory,
                     new StubCurrentSchoolYearContextProvider(),
                     new RESTErrorProvider(translators),
-                    new DefaultPageSizeLimitProvider());
+                    new DefaultPageSizeLimitProvider(configvalueprovider));
 
-            controller.Configuration = new HttpConfiguration();
-            var uri = $@"http://localhost/api/ods/v3/ed-fi/Students/{id}";
+            //controller.Configuration = new HttpConfiguration();
+            //var uri = $@"http://localhost/api/ods/v3/ed-fi/Students/{id}";
 
-            controller.Request = new HttpRequestMessage
-                                 {
-                                     RequestUri = new Uri(uri)
-                                 };
+            //controller.Request = new HttpRequestMessage
+            //{
+            //    RequestUri = new Uri(uri)
+            //};
 
             return controller;
         }
 
-        public static WindsorContainerEx GetWindsorContainer()
+      
+        public static IContainer GetWindsorContainer()
         {
-            var container = new WindsorContainerEx();
-            container.AddSupportForEmptyCollections();
 
-            container.Register(
-                Component
-                   .For<ISchoolYearContextProvider>()
-                   .ImplementedBy<StubCurrentSchoolYearContextProvider>());
+            ContainerBuilder builder = new ContainerBuilder();
+            
+            RegisterModulesDynamically();
 
-            container.Register(
-                Component
-                   .For<IETagProvider>()
-                   .ImplementedBy<StubEtagProviderSinceWeReallyDontCareWhatTheValueIs>());
+            builder.RegisterType<StubCurrentSchoolYearContextProvider>()
+              .As<ISchoolYearContextProvider>();
 
-            container.Register(
-                Classes.FromThisAssembly()
-                       .BasedOn(typeof(IStep<,>)));
+            builder.RegisterType<StubEtagProviderSinceWeReallyDontCareWhatTheValueIs>()
+  .As<IETagProvider>();
 
-            return container;
+            var dataAccess = Assembly.GetExecutingAssembly();
+
+            builder.RegisterAssemblyTypes(dataAccess)
+                .Where(s=>s.BaseType== typeof(IStep<,>))
+                      .AsImplementedInterfaces();
+
+           
+
+
+            void RegisterModulesDynamically()
+            {
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                    .ToList();
+
+                foreach (var type in TypeHelper.GetTypesWithModules())
+                {
+
+                    if (type.IsSubclassOf(typeof(ConditionalModule)))
+                    {
+                        ApiSettings settings = new ApiSettings();
+                        settings.Mode = ApiConfigurationConstants.Sandbox;
+                        settings.Engine = ApiConfigurationConstants.SqlServer;
+                        settings.GetApiMode();
+                        settings.GetDatabaseEngine();
+                        builder.RegisterModule((IModule)Activator.CreateInstance(type, settings));
+                    }
+                    else
+                    {
+                        builder.RegisterModule((IModule)Activator.CreateInstance(type));
+                    }
+                }
+            }
+            return builder.Build();
+          
         }
     }
 }
-#endif

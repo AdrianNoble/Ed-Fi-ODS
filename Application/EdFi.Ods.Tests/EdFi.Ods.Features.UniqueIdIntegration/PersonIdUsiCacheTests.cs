@@ -2,21 +2,21 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.Caching;
 using System.Threading;
 using System.Threading.Tasks;
 using EdFi.Ods.Api.Caching;
-using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Api.IdentityValueMappers;
+using EdFi.Ods.Api.Providers;
 using EdFi.Ods.Common.Providers;
 using EdFi.Ods.Features.UniqueIdIntegration.Caching;
 using EdFi.TestFixture;
 using FakeItEasy;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using Shouldly;
 
@@ -96,7 +96,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+                    
+                     MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _idCache = new PersonUniqueIdToIdCache(
                         _memoryCacheProvider,
@@ -219,7 +222,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
                         }
                     ));
 
-                _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                 _idCache = new PersonUniqueIdToIdCache(
                     _memoryCacheProvider,
@@ -377,7 +383,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _idCache = new PersonUniqueIdToIdCache(
                         _memoryCacheProvider, _edfiOdsInstanceIdentificationProvider, _idValueMapper);
@@ -488,7 +497,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
                 A.CallTo(() => _idValueMapper.GetId(A<string>._, A<string>._))
                     .Returns(new PersonIdentifiersValueMap());
 
-                _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                 _usiCache = new PersonUniqueIdToUsiCache(
                     _memoryCacheProvider, _edFiOdsInstanceIdentificationProvider, _usiValueMapper, _personIdentifiersProvider,
@@ -550,7 +562,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _usiCache = new PersonUniqueIdToUsiCache(
                         _memoryCacheProvider, _edFiOdsInstanceIdentificationProvider, _usiValueMapper, _personIdentifiersProvider,
@@ -617,7 +632,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _usiCache = new PersonUniqueIdToUsiCache(
                         _memoryCacheProvider,
@@ -706,7 +724,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _usiCache = new PersonUniqueIdToUsiCache(
                         _memoryCacheProvider,
@@ -812,7 +833,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _usiCache = new PersonUniqueIdToUsiCache(
                         _memoryCacheProvider,
@@ -907,7 +931,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _usiCache = new PersonUniqueIdToUsiCache(
                         _memoryCacheProvider,
@@ -1003,7 +1030,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _idCache = new PersonUniqueIdToIdCache(
                         _memoryCacheProvider,
@@ -1093,7 +1123,10 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
 
                 void SetupCaching()
                 {
-                    _memoryCacheProvider = new MemoryCacheProvider {MemoryCache = new MemoryCache(IsolatedForUnitTest)};
+                    var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+                    MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+                    _memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
                     _idCache = new PersonUniqueIdToIdCache(
                         _memoryCacheProvider,
@@ -1132,4 +1165,3 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Features.UniqueIdIntegration
         }
     }
 }
-#endif

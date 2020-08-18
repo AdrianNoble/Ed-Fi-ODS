@@ -2,7 +2,6 @@
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
-#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using EdFi.Ods.Api.Caching;
@@ -13,7 +12,10 @@ using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Exceptions;
 using EdFi.Ods.Common.Providers;
 using EdFi.Ods.Common.Utils;
+using EdFi.Ods.Tests.EdFi.Ods.Common._Stubs.Repositories;
 using FakeItEasy;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using Shouldly;
 
@@ -51,11 +53,13 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.NHibernate
 
         protected IDescriptorLookupProvider MockDescriptorCacheDataProvider { get; set; }
 
-        protected ICacheProvider CacheProvider { get; set; }
+        protected MemoryCacheProvider CacheProvider { get; set; }
 
         protected IEdFiOdsInstanceIdentificationProvider MockEdFiOdsInstanceIdentificationProvider { get; set; }
 
         protected IConfigValueProvider MockConfigValueProvider { get; set; }
+
+        protected DescriptorsCache descriptionCache;
 
         private IDescriptorsCache MockNHibernateCallsAndInitializeCache()
         {
@@ -75,7 +79,24 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.NHibernate
                         }
                     });
 
-            CacheProvider = new MemoryCacheProvider();
+            Dictionary<string, IList<DescriptorLookup>> values = new Dictionary<string, IList<DescriptorLookup>>
+                    {
+                        {
+                            TestDescriptorName, new List<DescriptorLookup>
+                            {
+                                TestDescriptorNormal,
+                                TestDescriptorCustom,
+                                TestDescriptorWithCodeValue
+                            }
+                        }
+                    };
+          
+            var memorycacheoption = A.Fake<IOptions<MemoryCacheOptions>>();
+
+            MemoryCache memoryCache = new MemoryCache(memorycacheoption);
+          
+            CacheProvider = new MemoryCacheProvider(memoryCache);
+            CacheProvider.Insert(TestDescriptorName, values, DateTime.MaxValue, TimeSpan.FromMinutes(5));
 
             MockEdFiOdsInstanceIdentificationProvider =
                 A.Fake<IEdFiOdsInstanceIdentificationProvider>();
@@ -83,15 +104,17 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.NHibernate
             A.CallTo(() => MockEdFiOdsInstanceIdentificationProvider.GetInstanceIdentification())
                 .Returns(1);
 
-            return new DescriptorsCache(
+            descriptionCache = new DescriptorsCache(
                 MockDescriptorCacheDataProvider, CacheProvider, MockEdFiOdsInstanceIdentificationProvider);
+            return descriptionCache;
         }
 
         [Test]
         public void GetId_ForDescriptor_ByFullyQualifiedValue_CaseInsensitiveCompare_FindsCorrectId()
         {
             var cache = MockNHibernateCallsAndInitializeCache();
-            var returnedId = cache.GetId(TestDescriptorName, "uri://www.changetest.org/academicSubjectDescriptor#mathematics");
+           
+            var returnedId = descriptionCache.GetId(TestDescriptorName, "uri://www.changetest.org/academicSubjectDescriptor#mathematics");
             Assert.AreEqual(TestDescriptorWithCodeValue.Id, returnedId);
         }
 
@@ -173,4 +196,3 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Entities.NHibernate
         }
     }
 }
-#endif
