@@ -343,10 +343,12 @@ namespace EdFi.Ods.Api.NHibernate.Composites
         {
             var downCastedReference = member as Reference;
             var downCastedEmbeddedObject = member as EmbeddedObject;
-
-            string associationName = downCastedReference != null
-                ? downCastedReference.Association.Name
-                : downCastedEmbeddedObject.Association.Name;
+            var downCastedResourceProperty = member as ResourceProperty;
+            
+            string associationName = 
+                downCastedReference?.Association?.Name
+                ?? downCastedEmbeddedObject?.Association?.Name
+                ?? downCastedResourceProperty?.PropertyName;
 
             // Create a new alias
             builderContext.CurrentAlias = builderContext.AliasGenerator.GetNextAlias();
